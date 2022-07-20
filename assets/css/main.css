@@ -7,6 +7,30 @@
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 */
 
+.navbar {
+	overflow: hidden;
+	background-color: #333;
+	position: fixed;
+	top: 0;
+	width: 100%;
+	z-index: 100;
+  }
+  
+  .navbar a {
+	float: left;
+	display: block;
+	color: #f2f2f2;
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
+	font-size: 17px;
+  }
+  
+  .navbar a:hover {
+	background: #ddd;
+	color: black;
+  }
+
 html, body, div, span, applet, object,
 iframe, h1, h2, h3, h4, h5, h6, p, blockquote,
 pre, a, abbr, acronym, address, big, cite,
@@ -215,7 +239,7 @@ input, select, textarea {
 
 	h1 {
 		font-family: "Source Sans Pro", Helvetica, sans-serif;
-		font-size: 3.5rem;
+		font-size: 2.5rem;
 		font-weight: 700;
 		letter-spacing: -0.05em;
 		line-height: 1.1;
@@ -249,7 +273,7 @@ input, select, textarea {
 	@media screen and (max-width: 736px) {
 
 		h1 {
-			font-size: 4rem;
+			font-size: 2.5rem;
 			line-height: 1.1;
 		}
 
@@ -2526,7 +2550,7 @@ input, select, textarea {
 			height: 100%;
 			left: 0;
 			position: absolute;
-			top: 0;
+			top: 3rem;
 			width: 100%;
 		}
 
@@ -3108,6 +3132,9 @@ input, select, textarea {
 			}
 
 		@media screen and (max-width: 1152px) {
+			.image.fill{
+				top: 0;
+			}
 
 			.gallery a img {
 				height: 20rem;
