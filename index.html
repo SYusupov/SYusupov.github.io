@@ -8,15 +8,20 @@
 		<meta name="description" content="" />
 		<meta name="keywords" content="" />
 		<link rel="stylesheet" href="assets/css/main.css" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	</head>
 	<body class="is-preload">
-		<div class="navbar">
-			<a href="#home">Home</a>
-			<a href="#about">About</a>
-			<a href="#services">Services</a>
-			<a href="#big-fountain">Big</a>
-			<a href="#small-fountain">Small</a>
-			<a href="#contact">Contact</a>
+
+		<div class="topnav" id="myTopnav">
+		<a href="#home" class="active" onclick="closeOtherBars()">Домой</a>
+		<a href="#about" onclick="closeOtherBars()">О нас</a>
+		<a href="#services" onclick="closeOtherBars()">Наши услуги</a>
+		<a href="#big-fountain" onclick="closeOtherBars()">Большой фонтан</a>
+		<a href="#small-fountain" onclick="closeOtherBars()">Маленький фонтан</a>
+		<a href="#contact" onclick="closeOtherBars()">Свяжитесь с нами</a>
+		<a href="javascript:void(0);" class="icon" onclick="openOtherBars()">
+			<i class="fa fa-bars"></i>
+		</a>
 		</div>
 
 		<!-- Wrapper -->
@@ -34,7 +39,7 @@
 						</header>
 						<div class="content">
 							<div class="gallery">
-								<a class="landscape" top=""><img src="images/gallery/fulls/fontan9.jpg" alt="" /></span>
+								<a class="landscape" top="3rem"><img src="images/gallery/fulls/fontan9.jpg" alt="" /></a>
 							</div>
 						</div>
 					</section>
@@ -162,6 +167,22 @@
 			</div>
 
 		<!-- Scripts -->
+			<script>
+				/* Toggle between adding and removing the "responsive" class to topnav when the user clicks on the icon */
+			function openOtherBars() {
+				var x = document.getElementById("myTopnav");
+				if (x.className === "topnav") {
+					x.className += " responsive";
+				} else {
+					x.className = "topnav";
+				}
+			}
+			
+			function closeOtherBars() {
+				var x = document.getElementById("myTopnav");
+				x.className = "topnav";
+			}
+			</script>
 			<script src="assets/js/jquery.min.js"></script>
 			<script src="assets/js/jquery.scrolly.min.js"></script>
 			<script src="assets/js/browser.min.js"></script>
