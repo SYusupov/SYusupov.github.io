@@ -2340,6 +2340,40 @@ input, select, textarea {
 			color: #ffffff;
 		}
 
+		input[type="checkbox"]:checked + label:before,
+		input[type="radio"]:checked#white + label:before {
+			content: '\f00c';
+			background-color: #EDE6D6;
+			border-color: #EDE6D6;
+			color: #431206;
+			box-shadow: 0 0 0 1px #EDE6D6;
+		}
+
+		input[type="checkbox"]:checked + label:before,
+		input[type="radio"]:checked#orange + label:before {
+			content: '\f00c';
+			background-color: #eb8006;
+			border-color: #eb8006;
+			color: #ffffff;
+			box-shadow: 0 0 0 1px #eb8006;
+		}
+		input[type="checkbox"]:checked + label:before,
+		input[type="radio"]:checked#strawberry + label:before {
+			content: '\f00c';
+			background-color: #C54644;
+			border-color: #C54644;
+			color: #ffffff;
+			box-shadow: 0 0 0 1px #C54644;
+		}
+		input[type="checkbox"]:checked + label:before,
+		input[type="radio"]:checked#lime + label:before {
+			content: '\f00c';
+			background-color: #c7ea46;
+			border-color: #c7ea46;
+			color: #ffffff;
+			box-shadow: 0 0 0 1px #c7ea46;
+		}
+
 		input[type="checkbox"]:focus + label:before,
 		input[type="radio"]:focus + label:before {
 			border-color: #431206;
