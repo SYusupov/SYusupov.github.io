@@ -164,35 +164,35 @@
 							<div class="fields">
 								<p><strong>Тариф: </strong></p>
 								<div class="field half" style="float: left; width: 50%;">
-									<input type="radio" value="tarif-optima" id="tarif-optima" name="tarif-small" onclick="updateCostSmall()">
-									<label for="tarif-optima">Оптима</label>
+									<input type="radio" value="tarif-optima-small" id="tarif-optima-small" name="tarif-small" onclick="updateCostSmall()">
+									<label for="tarif-optima-small">Оптима</label>
 								</div>
 								<div class="field half" style="float: left; width: 50%;">
-									<input type="radio" value="tarif-maxima" id="tarif-maxima" name="tarif-small" checked onclick="updateCostSmall()">
-									<label for="tarif-maxima">Maxima</label>
+									<input type="radio" value="tarif-maxima-small" id="tarif-maxima-small" name="tarif-small" checked onclick="updateCostSmall()">
+									<label for="tarif-maxima-small">Maxima</label>
 								</div>
 							</div>
 							<div class="fields">
 								<p><strong>Вид шоколада: </strong></p>
 								<div class="field half" style="float: left; width: 50%;">
-									<input type="radio" id="milk" value="milk" name="choco-type-small" checked onclick="updateCostSmall()">
-									<label for="milk">Молочный</label>
+									<input type="radio" id="milk-small" value="milk-small" name="choco-type-small" checked onclick="updateCostSmall()">
+									<label for="milk-small">Молочный</label>
 								</div>
 								<div class="field half" style="float: left; width: 50%;">
-									<input type="radio" id="white" value="white" name="choco-type-small" onclick="updateCostSmall()">
-									<label for="white">Белый</label>
+									<input type="radio" id="white-small" value="white-small" name="choco-type-small" onclick="updateCostSmall()">
+									<label for="white-small">Белый</label>
 								</div>
 								<div class="field half" style="float: left; width: 50%;">
-									<input type="radio" id="orange" value="orange" name="choco-type-small" onclick="updateCostSmall()">
-									<label for="orange">Апельсиновый</label>
+									<input type="radio" id="orange-small" value="orange-small" name="choco-type-small" onclick="updateCostSmall()">
+									<label for="orange-small">Апельсиновый</label>
 								</div>
 								<div class="field half" style="float: left; width: 50%;">
-									<input type="radio" id="strawberry" value="strawberry" name="choco-type-small" onclick="updateCostSmall()">
-									<label for="strawberry">Клубничный</label>
+									<input type="radio" id="strawberry-small" value="strawberry-small" name="choco-type-small" onclick="updateCostSmall()">
+									<label for="strawberry-small">Клубничный</label>
 								</div>
 								<div class="field half" style="float: left; width: 50%;">
-									<input type="radio" id="lime" value="lime" name="choco-type-small" onclick="updateCostSmall()">
-									<label for="lime">Лайм</label>
+									<input type="radio" id="lime-small" value="lime-small" name="choco-type-small" onclick="updateCostSmall()">
+									<label for="lime-small">Лайм</label>
 								</div>
 							</div>
 							<li class="icon solid fa-solid fa-money-bill-wave" id="cost-small">Стоимость услуги: <b>2 500 000</b> сум</li>
@@ -309,13 +309,13 @@
 						break;
 					}
 				}
-				if(chosen_tarif=="tarif-maxima"){
+				if(chosen_tarif=="tarif-maxima-small"){
 					cost = 1000000
 				}
-				if(chosen_choco=="milk"){
+				if(chosen_choco=="milk-small"){
 					cost += 1500000
 				}
-				else if(chosen_choco=="white" || chosen_choco=="orange" || chosen_choco=="strawberry" || chosen_choco=="lime"){
+				else if(chosen_choco=="white-small" || chosen_choco=="orange-small" || chosen_choco=="strawberry-small" || chosen_choco=="lime-small"){
 					cost += 1700000
 				}
 
