@@ -108,7 +108,52 @@
 								<li class="icon solid fa-layer-group">4 qavat</li>
 								<li class="icon solid fa-arrows-alt-v">Balandligi - 60 sm</li>
 								<li class="icon solid fa-user-friends">60 yoki undan ko'p mehmon bilan bayramlar uchun juda mos keladi</li>
-								<li class="icon solid fa-solid fa-money-bill-wave">Xizmat narxi:</li>
+								<div class="fields">
+									<p><strong>Tariflar: </strong></p>
+									<div class="field half">
+										<input type="radio" value="tarif-optima" id="tarif-optima" name="tarif" onclick="updateCostBig()">
+										<label for="tarif-optima">
+											<b>Optima</b>
+											<br>&#x2022;  5 kg eng yuqori sifatli Belgiya shokoladi
+											<br>&#x2022;  500 gramm kakao moyi
+										</label>
+									</div>
+									<div class="field half">
+										<input type="radio" value="tarif-maxima" id="tarif-maxima" name="tarif" checked onclick="updateCostBig()">
+										<label for="tarif-maxima">
+											<b>Maxima</b>
+											<br>&#x2022;  Optima tarifidagi hammasi +
+											<br>&#x2022;  1 kg marshmellou
+											<br>&#x2022;  5 kg mavsumiy mevalar
+											<br>&#x2022;  2 kg qulupnay
+											<br>&#x2022;  mevalarni chiroyli kesish
+										</label>
+									</div>
+								</div>
+								<div class="fields">
+									<p><strong>Shokolad turi: </strong></p>
+									<div class="field half" style="float: left; width: 50%;">
+										<input type="radio" id="milk" value="milk" name="choco-type" checked onclick="updateCostBig()">
+										<label for="milk">Sutli shokolad</label>
+									</div>
+									<div class="field half" style="float: left; width: 50%;">
+										<input type="radio" id="white" value="white" name="choco-type" onclick="updateCostBig()">
+										<label for="white">Oq shokolad</label>
+									</div>
+									<div class="field half" style="float: left; width: 50%;">
+										<input type="radio" id="orange" value="orange" name="choco-type" onclick="updateCostBig()">
+										<label for="orange">Apelsin shokolad</label>
+									</div>
+									<div class="field half" style="float: left; width: 50%;">
+										<input type="radio" id="strawberry" value="strawberry" name="choco-type" onclick="updateCostBig()">
+										<label for="strawberry">Qulupnay shokolad</label>
+									</div>
+									<div class="field half" style="float: left; width: 50%;">
+										<input type="radio" id="lime" value="lime" name="choco-type" onclick="updateCostBig()">
+										<label for="lime">Laym shokolad</label>
+									</div>
+								</div>
+								<li class="icon solid fa-solid fa-money-bill-wave" id="cost-big">Xizmat narxi: <b>3 900 000</b> so'm</li>
 							</ul>
 						</div>
 					</section>
@@ -129,7 +174,53 @@
 							<li class="icon solid fa-layer-group">3 qavat</li>
 							<li class="icon solid fa-arrows-alt-v">Balandligi - 40 sm</li>
 							<li class="icon solid fa-user-friends">30 tagacha mehmon bo'lgan partiyalar uchun juda mos keladi</li>
-							<li class="icon solid fa-solid fa-money-bill-wave">Xizmat narxi:</li>
+							<div class="fields">
+								<p><strong>Tariflar: </strong></p>
+								<div class="field half">
+									<input type="radio" value="tarif-optima-small" id="tarif-optima-small" name="tarif-small" onclick="updateCostSmall()">
+									<label for="tarif-optima-small">
+										<b>Optima</b>
+										<br>&#x2022;  2.5 kilogramm eng yuqori sifatli Belgiya shokoladi
+										<br>&#x2022;  250 gramm kakao moyi
+									</label>
+								</div>
+								<div class="field half">
+									<input type="radio" value="tarif-maxima-small" id="tarif-maxima-small" name="tarif-small" checked onclick="updateCostSmall()">
+									<label for="tarif-maxima-small">
+										<b>Maxima</b>
+										<br>&#x2022;  Optima tarifidagi hammasi +
+										<br>&#x2022;  500 gramm marshmellou
+										<br>&#x2022;  2.5 kg mavsumiy mevalar
+										<br>&#x2022;  1 kg qulupnay
+										<br>&#x2022;  mevalarni chiroyli kesish
+									</label>
+								</div>
+							</div>
+							<div class="fields">
+								<p><strong>Shokolad turi: </strong></p>
+								<div class="field half" style="float: left; width: 50%;">
+									<input type="radio" id="milk-small" value="milk-small" name="choco-type-small" checked onclick="updateCostSmall()">
+									<label for="milk-small">Sutli shokolad</label>
+								</div>
+								<div class="field half" style="float: left; width: 50%;">
+									<input type="radio" id="white-small" value="white-small" name="choco-type-small" onclick="updateCostSmall()">
+									<label for="white-small">Oq shokolad</label>
+								</div>
+								<div class="field half" style="float: left; width: 50%;">
+									<input type="radio" id="orange-small" value="orange-small" name="choco-type-small" onclick="updateCostSmall()">
+									<label for="orange-small">Apelsin shokolad</label>
+								</div>
+								<div class="field half" style="float: left; width: 50%;">
+									<input type="radio" id="strawberry-small" value="strawberry-small" name="choco-type-small" onclick="updateCostSmall()">
+									<label for="strawberry-small">Qulupnay shokolad</label>
+								</div>
+								<div class="field half" style="float: left; width: 50%;">
+									<input type="radio" id="lime-small" value="lime-small" name="choco-type-small" onclick="updateCostSmall()">
+									<label for="lime-small">Laym shokolad</label>
+								</div>
+							</div>
+							<li class="icon solid fa-solid fa-money-bill-wave" id="cost-small-uz">Xizmat narxi: <b>2 500 000</b> so'm</li>
+						</ul>
 					</div>
 				</section>
 
@@ -186,6 +277,71 @@
 				var x = document.getElementById("myTopnav");
 				x.className = "topnav";
 			}
+
+			function numberWithSpaces(x) {
+				return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+			}
+			function updateCostBig() {
+				var tarif = document.getElementsByName('tarif');
+				var choco_type = document.getElementsByName('choco-type');
+				var chosen_tarif = ""
+				var chosen_choco = ""
+				var cost = 0
+				
+				for(i = 0; i < tarif.length; i++) {
+					if(tarif[i].checked){
+						chosen_tarif = tarif[i].value;
+						break;
+					}
+				}
+				for(i = 0; i < choco_type.length; i++) {
+					if(choco_type[i].checked){
+						chosen_choco = choco_type[i].value;
+						break;
+					}
+				}
+				if(chosen_tarif=="tarif-maxima"){
+					cost = 1000000
+				}
+				if(chosen_choco=="milk"){
+					cost += 2900000
+				}
+				else if(chosen_choco=="white" || chosen_choco=="orange" || chosen_choco=="strawberry" || chosen_choco=="lime"){
+					cost += 3200000
+				}
+
+				document.getElementById("cost-big").innerHTML = "Xizmat narxi: "+"<b>"+numberWithSpaces(cost)+"</b> so'm";
+        	}
+			function updateCostSmall() {
+				var tarif = document.getElementsByName('tarif-small');
+				var choco_type = document.getElementsByName('choco-type-small');
+				var chosen_tarif = ""
+				var chosen_choco = ""
+				var cost = 0
+				
+				for(i = 0; i < tarif.length; i++) {
+					if(tarif[i].checked){
+						chosen_tarif = tarif[i].value;
+						break;
+					}
+				}
+				for(i = 0; i < choco_type.length; i++) {
+					if(choco_type[i].checked){
+						chosen_choco = choco_type[i].value;
+						break;
+					}
+				}
+				if(chosen_tarif=="tarif-maxima-small"){
+					cost = 1000000
+				}
+				if(chosen_choco=="milk-small"){
+					cost += 1500000
+				}
+				else if(chosen_choco=="white-small" || chosen_choco=="orange-small" || chosen_choco=="strawberry-small" || chosen_choco=="lime-small"){
+					cost += 1700000
+				}
+				document.getElementById("cost-small-uz").innerHTML = "Xizmat narxi: "+"<b>"+numberWithSpaces(cost)+"</b> so'm";
+        	}
 			</script>
 			<script src="assets/js/jquery.min.js"></script>
 			<script src="assets/js/jquery.scrolly.min.js"></script>
