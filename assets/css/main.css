@@ -2342,7 +2342,7 @@ input, select, textarea {
 		}
 
 		input[type="checkbox"]:checked + label:before,
-		input[type="radio"]:checked#tarif-maxima+ label:before, :checked#tarif-maxima-small + label:before {
+		input[type="radio"]:checked#tarif-maxima+ label:before, :checked#tarif-maxima-small + label:before, :checked#tarif-maxima-extra + label:before {
 			content: '\f00c';
 			background-color: #228B22;
 			border-color: #228B22;
@@ -2350,7 +2350,7 @@ input, select, textarea {
 			box-shadow: 0 0 0 1px #228B22;
 		}
 		input[type="checkbox"]:checked + label:before,
-		input[type="radio"]:checked#tarif-optima+ label:before, :checked#tarif-optima-small + label:before {
+		input[type="radio"]:checked#tarif-optima+ label:before, :checked#tarif-optima-small + label:before, :checked#tarif-optima-extra + label:before {
 			content: '\f00c';
 			background-color: #FFEA00;
 			border-color: #FFEA00;
@@ -2358,7 +2358,7 @@ input, select, textarea {
 			box-shadow: 0 0 0 1px #FFEA00;
 		}
 		input[type="checkbox"]:checked + label:before,
-		input[type="radio"]:checked#white+ label:before, :checked#white-small + label:before {
+		input[type="radio"]:checked#white+ label:before, :checked#white-small + label:before, :checked#white-small + label:before, :checked#white-extra + label:before {
 			content: '\f00c';
 			background-color: #EDE6D6;
 			border-color: #EDE6D6;
@@ -2366,7 +2366,7 @@ input, select, textarea {
 			box-shadow: 0 0 0 1px #EDE6D6;
 		}
 		input[type="checkbox"]:checked + label:before,
-		input[type="radio"]:checked#orange+ label:before, :checked#orange-small + label:before {
+		input[type="radio"]:checked#orange+ label:before, :checked#orange-small + label:before, :checked#orange-extra + label:before {
 			content: '\f00c';
 			background-color: #eb8006;
 			border-color: #eb8006;
@@ -2374,7 +2374,7 @@ input, select, textarea {
 			box-shadow: 0 0 0 1px #eb8006;
 		}
 		input[type="checkbox"]:checked + label:before,
-		input[type="radio"]:checked#strawberry+ label:before, :checked#strawberry-small + label:before {
+		input[type="radio"]:checked#strawberry+ label:before, :checked#strawberry-small + label:before, :checked#strawberry-extra + label:before {
 			content: '\f00c';
 			background-color: #C54644;
 			border-color: #C54644;
@@ -2382,7 +2382,7 @@ input, select, textarea {
 			box-shadow: 0 0 0 1px #C54644;
 		}
 		input[type="checkbox"]:checked + label:before,
-		input[type="radio"]:checked#lime+ label:before, :checked#lime-small + label:before {
+		input[type="radio"]:checked#lime+ label:before, :checked#lime-small + label:before, :checked#lime-extra + label:before {
 			content: '\f00c';
 			background-color: #c7ea46;
 			border-color: #c7ea46;

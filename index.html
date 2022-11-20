@@ -17,7 +17,8 @@
 		<a href="#home" class="active" onclick="closeOtherBars()"><img src="images/logo.png" alt="Наш Логотип" width="40"></a>
 		<a href="#about" onclick="closeOtherBars()">О нас</a>
 		<a href="#services" onclick="closeOtherBars()">Наши услуги</a>
-		<a href="#big-fountain" onclick="closeOtherBars()">Большой фонтан</a>
+		<a href="#extra-big-fountain" onclick="closeOtherBars()">Большой фонтан</a>
+		<a href="#big-fountain" onclick="closeOtherBars()">Средний фонтан</a>
 		<a href="#small-fountain" onclick="closeOtherBars()">Маленький фонтан</a>
 		<a href="#contact" onclick="closeOtherBars()">Свяжитесь с нами</a>
 		<a href="index_uz.html" class="lang">O'z</a>
@@ -91,10 +92,77 @@
 				</section>
 
 				<!-- Section -->
-					<section id="big-fountain">
+					<section id="extra-big-fountain">
 						<header>
 							<br><br><br>
 							<h2>Большой шоколадный фонтан</h2>
+						</header>
+						<div class="content">
+							<br><br><br>
+							<div class="gallery">
+								<a href="images/gallery/fulls/fountain_5tier_0.jpg" class="landscape"><img src="images/gallery/fulls/fountain_5tier_0.jpg" alt="" /></a>
+							</div>
+							<ul class="feature-icons">
+								<li class="icon solid fa-balance-scale-right">Вместимость шоколада - <b>8 кг</b>.</li>
+								<li class="icon solid fa-layer-group">5 ярусов</li>
+								<li class="icon solid fa-arrows-alt-v">Высота - <b>80 см</b></li>
+								<li class="icon solid fa-user-friends">Для торжест с количеством гостей <b>100 персон</b> и более</li>
+								<div class="fields">
+									<p><strong>Тариф: </strong></p>
+									<div class="field half">
+										<input type="radio" value="tarif-optima-extra" id="tarif-optima-extra" name="tarif-extra" onclick="updateCostXBig()">
+										<label for="tarif-optima-extra">
+											<b>Оптима</b>
+											<br>&#x2022;  8 кг лучшего бельгийского шоколада
+											<br>&#x2022;  1 кг бельгийского какао масла
+										</label>
+									</div>
+									<div class="field half">
+										<input type="radio" value="tarif-maxima-extra" id="tarif-maxima-extra" name="tarif-extra" checked onclick="updateCostXBig()">
+										<label for="tarif-maxima-extra">
+											<b>Максима</b>
+											<br>&#x2022;  8 кг лучшего бельгийского шоколада
+											<br>&#x2022;  1 кг бельгийского какао масла
+											<br>&#x2022;  1.5 кг маршмеллоу из натурального сока
+											<br>&#x2022;  1.5 кг профитролей
+											<br>&#x2022;  8 кг сезонных фруктов
+											<br>&#x2022;  3.5 кг клубники
+											<br>&#x2022;  красивая нарезка фруктов
+										</label>
+									</div>
+								</div>
+								<div class="fields">
+									<p><strong>Вид шоколада: </strong></p>
+									<div class="field half" style="float: left; width: 50%;">
+										<input type="radio" id="milk-extra" value="milk-extra" name="choco-type-extra" checked onclick="updateCostBig()">
+										<label for="milk-extra">Молочный</label>
+									</div>
+									<div class="field half" style="float: left; width: 50%;">
+										<input type="radio" id="white-extra" value="white-extra" name="choco-type-extra" onclick="updateCostBig()">
+										<label for="white-extra">Белый</label>
+									</div>
+									<div class="field half" style="float: left; width: 50%;">
+										<input type="radio" id="orange-extra" value="orange-extra" name="choco-type-extra" onclick="updateCostBig()">
+										<label for="orange-extra">Апельсиновый</label>
+									</div>
+									<div class="field half" style="float: left; width: 50%;">
+										<input type="radio" id="strawberry-extra" value="strawberry-extra" name="choco-type-extra" onclick="updateCostBig()">
+										<label for="strawberry-extra">Клубничный</label>
+									</div>
+									<div class="field half" style="float: left; width: 50%;">
+										<input type="radio" id="lime-extra" value="lime-extra" name="choco-type-extra" onclick="updateCostBig()">
+										<label for="lime-extra">Лайм</label>
+									</div>
+								</div>
+								<li class="icon solid fa-solid fa-money-bill-wave" id="cost-extra-big">Стоимость услуги: <b>6 200 000</b> сум</li>
+							</ul>
+						</div>
+					</section>
+
+					<section id="big-fountain">
+						<header>
+							<br><br><br>
+							<h2>Средний шоколадный фонтан</h2>
 						</header>
 						<div class="content">
 							<br><br><br>
@@ -112,17 +180,18 @@
 										<input type="radio" value="tarif-optima" id="tarif-optima" name="tarif" onclick="updateCostBig()">
 										<label for="tarif-optima">
 											<b>Оптима</b>
-											<br>&#x2022;  5 килограмм лучшего бельгийского шоколада
-											<br>&#x2022;  500 грамм бельгийского какао масла
+											<br>&#x2022;  5 кг лучшего бельгийского шоколада
+											<br>&#x2022;  0.5 кг бельгийского какао масла
 										</label>
 									</div>
 									<div class="field half">
 										<input type="radio" value="tarif-maxima" id="tarif-maxima" name="tarif" checked onclick="updateCostBig()">
 										<label for="tarif-maxima">
 											<b>Максима</b>
-											<br>&#x2022;  5 килограмм лучшего бельгийского шоколада
-											<br>&#x2022;  500 грамм бельгийского какао масла
-											<br>&#x2022;  1 кг маршмеллоу
+											<br>&#x2022;  5 кг лучшего бельгийского шоколада
+											<br>&#x2022;  0.5 кг бельгийского какао масла
+											<br>&#x2022;  1 кг маршмеллоу из натурального сока
+											<br>&#x2022;  1 кг профитролей
 											<br>&#x2022;  5 кг сезонных фруктов
 											<br>&#x2022;  2 кг клубники
 											<br>&#x2022;  красивая нарезка фруктов
@@ -180,16 +249,17 @@
 									<label for="tarif-optima-small">
 										<b>Оптима</b>
 										<br>&#x2022;  2.5 килограмм лучшего бельгийского шоколада
-										<br>&#x2022;  250 грамм бельгийского какао масла
+										<br>&#x2022;  0.25 кг бельгийского какао масла
 									</label>
 								</div>
 								<div class="field half">
 									<input type="radio" value="tarif-maxima-small" id="tarif-maxima-small" name="tarif-small" checked onclick="updateCostSmall()">
 									<label for="tarif-maxima-small">
 										<b>Maxima</b>
-										<br>&#x2022;  2.5 килограмм лучшего бельгийского шоколада
-										<br>&#x2022;  250 грамм бельгийского какао масла
-										<br>&#x2022;  500 грамм маршмеллоу
+										<br>&#x2022;  2.5 кг лучшего бельгийского шоколада
+										<br>&#x2022;  0.25 кг бельгийского какао масла
+										<br>&#x2022;  0.5 кг маршмеллоу из натурального сока
+										<br>&#x2022;  0.5 кг профитролей
 										<br>&#x2022;  2.5 кг сезонных фруктов
 										<br>&#x2022;  1 кг клубники
 										<br>&#x2022;  красивая нарезка фруктов
@@ -256,6 +326,24 @@
 						</div>
 					</section>
 
+					<section id="services">
+						<header>
+							<br><br><br>
+							<h2>Галлерея</h2>
+						</header>
+						<div class="content">
+							<br><br><br>
+							<div class="gallery">
+								<!-- <a href="images/gallery/fulls/fontan2.jpg" class="portrait"><img src="images/gallery/thumbs/fontan2.jpg" alt="" /></a> -->
+								<a href="images/gallery/fulls/event1_0.jpg" class="portrait"><img src="images/gallery/thumbs/event1_0.jpg" alt="" /></a>
+								<a href="images/gallery/fulls/event1_1.jpg" class="portrait"><img src="images/gallery/thumbs/event1_1.jpg" alt="" /></a>
+								<a href="images/gallery/fulls/event1_5.jpg" class="portrait"><img src="images/gallery/thumbs/event1_5.jpg" alt="" /></a>
+								<a href="images/gallery/fulls/event1_6.jpg" class="portrait"><img src="images/gallery/thumbs/event1_6.jpg" alt="" /></a>
+							</div>
+	
+						</div>
+					</section>
+
 				<!-- Copyright -->
 					<div class="copyright">&copy; ChocoParty 2022.</div>
 
@@ -311,6 +399,38 @@
 				}
 
 				document.getElementById("cost-big").innerHTML
+							= "Стоимость услуги: "+"<b>"+numberWithSpaces(cost)+"</b> сум";
+        	}
+			function updateCostXBig() {
+				var tarif = document.getElementsByName('tarif-extra');
+				var choco_type = document.getElementsByName('choco-type-extra');
+				var chosen_tarif = ""
+				var chosen_choco = ""
+				var cost = 0
+				
+				for(i = 0; i < tarif.length; i++) {
+					if(tarif[i].checked){
+						chosen_tarif = tarif[i].value;
+						break;
+					}
+				}
+				for(i = 0; i < choco_type.length; i++) {
+					if(choco_type[i].checked){
+						chosen_choco = choco_type[i].value;
+						break;
+					}
+				}
+				if(chosen_tarif=="tarif-maxima-extra"){
+					cost = 1600000
+				}
+				if(chosen_choco=="milk-extra"){
+					cost += 4600000
+				}
+				else if(chosen_choco=="white-extra" || chosen_choco=="orange-extra" || chosen_choco=="strawberry-extra" || chosen_choco=="lime-extra"){
+					cost += 5100000
+				}
+
+				document.getElementById("cost-extra-big").innerHTML
 							= "Стоимость услуги: "+"<b>"+numberWithSpaces(cost)+"</b> сум";
         	}
 			function updateCostSmall() {
