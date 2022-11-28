@@ -30,15 +30,14 @@
   }
   
   /* Change the color of links on hover */
-  .topnav a:not(.brand):hover{
+  .topnav a:hover {
 	background-color: #ddd;
 	color: black;
 	font-weight: bold;
   }
 
-  
   /* Less padding for the Home button (logo) */
-  .topnav a.active{
+  .topnav a.active {
 	padding: 7px 8px;
   }
   
@@ -72,7 +71,6 @@
 /* When the screen is less than 950 pixels wide, hide all links, except for the first one ("Home"). Show the link that contains should open and close the topnav (.icon) */
 @media screen and (max-width: 1250px) {
 	.topnav a:not(:first-child) {display: none;}
-	.topnav a.brand {display: block;}
 	.topnav a.icon {
 	  float: right;
 	  display: block;
@@ -92,11 +90,6 @@
 	  display: block;
 	  text-align: left;
 	}
-  }
-
-  /*For Chocoparty Co.*/
-  @media screen and (min-width: 1251px) {
-	.topnav a.brand {display: none;}
   }
 
 html, body, div, span, applet, object,
@@ -270,7 +263,7 @@ input, select, textarea {
 		transition: border-bottom-color 0.25s ease-in-out;
 		text-decoration: none;
 		color: #000000;
-		border-bottom: dotted 1px;
+		/* border-bottom: dotted 1px; */
 	}
 
 		a:hover {
