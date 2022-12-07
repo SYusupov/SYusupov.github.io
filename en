@@ -1,0 +1,477 @@
+<!DOCTYPE HTML>
+
+<html lang="en">
+	<head>
+		<title>Chocolate Fountain in Tashkent ChocoParty</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="icon" href="images/logo.png">
+	</head>
+	<body class="is-preload">
+
+		<div class="topnav" id="myTopnav">
+		<a href="#home" class="active" onclick="closeOtherBars()"><img src="images/logo.png" alt="Наш Логотип" width="40"></a>
+		<a href="#about" onclick="closeOtherBars()">About Us</a>
+		<a href="#services" onclick="closeOtherBars()">Our Services</a>
+		<a href="#small-fountain" onclick="closeOtherBars()">Small fountain</a>
+		<a href="#big-fountain" onclick="closeOtherBars()">Medium fountain</a>
+		<a href="#extra-big-fountain" onclick="closeOtherBars()">Large fountain</a>
+		<a href="#contact" onclick="closeOtherBars()">Contact Us</a>
+		<a href="#our_works" onclick="closeOtherBars()">Our Works</a>
+		<a href="uz" class="lang">O'z</a>
+		<a href="index.html" class="lang">Ру</a>
+        <a href="en" class="lang1">En</a>
+		<a href="javascript:void(0);" class="icon" onclick="openOtherBars()">
+			<i class="fa fa-bars"></i>
+		</a>
+		</div>
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Intro -->
+					<section id="home">
+						<header>
+							<br><br><br>
+							<h1>Chocolate Fountain in Tashkent ChocoParty</h1>
+							<p></p>
+							<ul class="actions">
+								<li><a href="#first" class="arrow scrolly"><span class="label">Next</span></a></li>
+							</ul>
+						</header>
+						<div class="content">
+							<div class="gallery">
+								<a class="landscape" top="3rem"><img src="images/gallery/fulls/fontan9.jpg" alt="" /></a>
+							</div>
+						</div>
+					</section>
+
+				<!-- Section -->
+					<section id="about">
+						<header>
+						<br><br><br>
+							<h2>Renting Chocolate Fountain</h2>
+						</header>
+						<div class="content">
+							<br><br><br>
+							<p><b><i>Dear Ladies and Gentlemen!</i></b></br>Our company <b><i>ChocoParty</i></b> is glad to offer you an ingenious way to make your celebration brighter and more memorable!
+							!</p>
+							<p>What is a chocolate fountain?<br/><i><b>Chocolate Fountain</b></i> is a genuine fountain, but the tastiest Belgian chocolate is flowing through it, not water. Like fondue, you can dip pieces of various fruits, biscuits, marshmallows, etc. into the chocolate.
+							<br/>Chocolate Fountain will be a great addition to your wedding banquet, birthday party, corporate party, banquet, or any other celebration and will leave your guests with sweet and unforgettable memories of your holiday.</p>
+							
+							<span class="image medium"><img src="images/logo.png" alt="Наш Логотип" width="50"></span>
+						</div>
+					</section>
+
+				<!-- Section -->
+				<section id="services">
+					<header>
+						<br><br><br>
+						<h2>Our services</h2>
+					</header>
+					<div class="content">
+						<br><br><br>
+						<p><strong>Our services include:</strong></p>
+						<div class="content">
+							<ul>
+								<li>delivery and assembly</li>
+								<li>professional service</li>
+								<li>table decoration and fruit cutting</li>
+								<li>napkins, skewers, dishes</li>
+							</ul>
+						<div class="gallery">
+							<a href="images/gallery/fulls/fontan4.jpg" class="landscape"><img src="images/gallery/thumbs/fontan4.jpg" alt="" /></a>
+							<a href="images/gallery/fulls/fontan2.jpg" class="portrait"><img src="images/gallery/thumbs/fontan2.jpg" alt="" /></a>
+							<a href="images/gallery/fulls/fontan8.jpg" class="portrait"><img src="images/gallery/thumbs/fontan8.jpg" alt="" /></a>
+						</div>
+
+					</div>
+				</section>
+
+				<!-- Section -->
+				<section id="small-fountain">
+					<header>
+						<br><br><br>
+						<h2>Small chocolate fountain</h2>
+					</header>
+					<div class="content">
+						<br><br><br>
+						<div class="gallery">
+							<a href="images/gallery/fulls/fontan18.jpg" class="landscape"><img src="images/gallery/thumbs/fontan18.jpg" alt="" /></a>
+						</div>
+						<ul class="feature-icons">
+							<li class="icon solid fa-balance-scale-right">Chocolate capacity - 2.5 kg.</li>
+							<li class="icon solid fa-layer-group">3 tiers</li>
+							<li class="icon solid fa-arrows-alt-v">Height - 40 cm.</li>
+							<li class="icon solid fa-user-friends">Perfect for parties with up to 30 guests</li>
+							<div class="fields">
+								<p><strong>Tariff: </strong></p>
+								<div class="field half">
+									<input type="radio" value="tarif-optima-small" id="tarif-optima-small" name="tarif-small" onclick="updateCostSmall()">
+									<label for="tarif-optima-small">
+										<b>Optima</b>
+										<br>&#x2022;  2.5 kg of the best Belgian Chocolate
+										<br>&#x2022;  0.25 kg Belgian cocoa butter
+									</label>
+								</div>
+								<div class="field half">
+									<input type="radio" value="tarif-maxima-small" id="tarif-maxima-small" name="tarif-small" checked onclick="updateCostSmall()">
+									<label for="tarif-maxima-small">
+										<b>Maxima</b>
+										<br>&#x2022; 2.5 kg of the best Belgian chocolate
+                                        <br>&#x2022; 0.25 kg Belgian cocoa butter
+                                        <br>&#x2022; 0.5 kg natural juice marshmallow
+                                        <br>&#x2022; 0.5 kg profiteroles
+                                        <br>&#x2022; 2.5 kg seasonal fruits
+                                        <br>&#x2022; 1 kg strawberries
+                                        <br>&#x2022; beautiful cutting of fruits
+									</label>
+								</div>
+							</div>
+							<div class="fields">
+								<p><strong>Chocolate Type: </strong></p>
+								<div class="field half" style="float: left; width: 50%;">
+									<input type="radio" id="milk-small" value="milk-small" name="choco-type-small" checked onclick="updateCostSmall()">
+									<label for="milk-small">Milk</label>
+								</div>
+								<div class="field half" style="float: left; width: 50%;">
+									<input type="radio" id="white-small" value="white-small" name="choco-type-small" onclick="updateCostSmall()">
+									<label for="white-small">White</label>
+								</div>
+								<div class="field half" style="float: left; width: 50%;">
+									<input type="radio" id="orange-small" value="orange-small" name="choco-type-small" onclick="updateCostSmall()">
+									<label for="orange-small">Orange</label>
+								</div>
+								<div class="field half" style="float: left; width: 50%;">
+									<input type="radio" id="strawberry-small" value="strawberry-small" name="choco-type-small" onclick="updateCostSmall()">
+									<label for="strawberry-small">Straweberry</label>
+								</div>
+								<div class="field half" style="float: left; width: 50%;">
+									<input type="radio" id="lime-small" value="lime-small" name="choco-type-small" onclick="updateCostSmall()">
+									<label for="lime-small">Lime</label>
+								</div>
+							</div>
+							<li class="icon solid fa-solid fa-money-bill-wave" id="cost-small">Service Price: <b>2 500 000</b> som</li>
+						</ul>
+					</div>
+				</section>
+
+				<section id="big-fountain">
+					<header>
+						<br><br><br>
+						<h2>Medium chocolate fountain</h2>
+					</header>
+					<div class="content">
+						<br><br><br>
+						<div class="gallery">
+							<a href="images/gallery/fulls/fontan17.jpg" class="landscape"><img src="images/gallery/thumbs/fontan17.jpg" alt="" /></a>
+						</div>
+						<ul class="feature-icons">
+							<li class="icon solid fa-balance-scale-right">Chocolate capacity - 5 kg.</li>
+							<li class="icon solid fa-layer-group">4 tiers</li>
+							<li class="icon solid fa-arrows-alt-v">Height - 60 cm</li>
+							<li class="icon solid fa-user-friends">Perfect for celebrations with 60 guests or more</li>
+							<div class="fields">
+								<p><strong>Tarriff: </strong></p>
+								<div class="field half">
+									<input type="radio" value="tarif-optima" id="tarif-optima" name="tarif" onclick="updateCostBig()">
+									<label for="tarif-optima">
+										<b>Optima</b>
+										<br>&#x2022; 5 kg of the best Belgian chocolate
+                                        <br>&#x2022; 0.5 kg Belgian cocoa butter
+									</label>
+								</div>
+								<div class="field half">
+									<input type="radio" value="tarif-maxima" id="tarif-maxima" name="tarif" checked onclick="updateCostBig()">
+									<label for="tarif-maxima">
+										<b>Maxima</b>
+                                        <br>&#x2022; 5 kg of the best Belgian chocolate
+                                        <br>&#x2022; 0.5 kg Belgian cocoa butter
+                                        <br>&#x2022; 1 kg natural juice marshmallow
+                                        <br>&#x2022; 1 kg profiteroles
+                                        <br>&#x2022; 5 kg seasonal fruits
+                                        <br>&#x2022; 2 kg strawberries
+                                        <br>&#x2022; beautiful cutting of fruits
+									</label>
+								</div>
+							</div>
+							<div class="fields">
+								<p><strong>Chocolate Type: </strong></p>
+								<div class="field half" style="float: left; width: 50%;">
+									<input type="radio" id="milk" value="milk" name="choco-type" checked onclick="updateCostBig()">
+									<label for="milk">Milk</label>
+								</div>
+								<div class="field half" style="float: left; width: 50%;">
+									<input type="radio" id="white" value="white" name="choco-type" onclick="updateCostBig()">
+									<label for="white">White</label>
+								</div>
+								<div class="field half" style="float: left; width: 50%;">
+									<input type="radio" id="orange" value="orange" name="choco-type" onclick="updateCostBig()">
+									<label for="orange">Orange</label>
+								</div>
+								<div class="field half" style="float: left; width: 50%;">
+									<input type="radio" id="strawberry" value="strawberry" name="choco-type" onclick="updateCostBig()">
+									<label for="strawberry">Strawberry</label>
+								</div>
+								<div class="field half" style="float: left; width: 50%;">
+									<input type="radio" id="lime" value="lime" name="choco-type" onclick="updateCostBig()">
+									<label for="lime">Lime</label>
+								</div>
+							</div>
+							<li class="icon solid fa-solid fa-money-bill-wave" id="cost-big">Service Price: <b>3 900 000</b> som</li>
+						</ul>
+					</div>
+				</section>
+
+				<section id="extra-big-fountain">
+					<header>
+						<br><br><br>
+						<h2>Big Chocolate Fountain</h2>
+					</header>
+					<div class="content">
+						<br><br><br>
+						<div class="gallery">
+							<a href="images/gallery/fulls/fountain_5tier_0.jpg" class="landscape"><img src="images/gallery/fulls/fountain_5tier_0.jpg" alt="" /></a>
+						</div>
+						<ul class="feature-icons">
+							<li class="icon solid fa-balance-scale-right">Chocolate Capactiy - <b>8 kg</b>.</li>
+							<li class="icon solid fa-layer-group">5 tiers</li>
+							<li class="icon solid fa-arrows-alt-v">Height - <b>80 sm</b></li>
+							<li class="icon solid fa-user-friends">For celebrations with <b>100 guests</b> and more</li>
+							<div class="fields">
+								<p><strong>Tarriff: </strong></p>
+								<div class="field half">
+									<input type="radio" value="tarif-optima-extra" id="tarif-optima-extra" name="tarif-extra" onclick="updateCostXBig()">
+									<label for="tarif-optima-extra">
+										<b>Optima</b>
+										<br>&#x2022;  7 kg of the best Belgian chocolate
+										<br>&#x2022;  1 kg Belgian cocoa butter
+									</label>
+								</div>
+                                <div class="field half">
+									<input type="radio" value="tarif-maxima-extra" id="tarif-maxima-extra" name="tarif-extra" checked onclick="updateCostXBig()">
+									<label for="tarif-maxima-extra">
+										<b>Maxima</b>
+                                        <br>&#x2022; 7 kg of the best Belgian chocolate
+                                        <br>&#x2022; 1 kg Belgian cocoa butter
+                                        <br>&#x2022; 1.5 kg natural juice marshmallow
+                                        <br>&#x2022; 1.5 kg profiteroles
+                                        <br>&#x2022; 8 kg seasonal fruits
+                                        <br>&#x2022; 3.5 kg strawberries
+                                        <br>&#x2022; beautiful cutting of fruits
+									</label>
+								</div>
+							</div>
+                            
+							<div class="fields">
+								<p><strong>Chocolate Type: </strong></p>
+								<div class="field half" style="float: left; width: 50%;">
+									<input type="radio" id="milk-extra" value="milk-extra" name="choco-type-extra" checked onclick="updateCostXBig()">
+									<label for="milk-extra">Milk</label>
+								</div>
+								<div class="field half" style="float: left; width: 50%;">
+									<input type="radio" id="white-extra" value="white-extra" name="choco-type-extra" onclick="updateCostXBig()">
+									<label for="white-extra">White</label>
+								</div>
+								<div class="field half" style="float: left; width: 50%;">
+									<input type="radio" id="orange-extra" value="orange-extra" name="choco-type-extra" onclick="updateCostXBig()">
+									<label for="orange-extra">Orange</label>
+								</div>
+								<div class="field half" style="float: left; width: 50%;">
+									<input type="radio" id="strawberry-extra" value="strawberry-extra" name="choco-type-extra" onclick="updateCostXBig()">
+									<label for="strawberry-extra">Straweberry</label>
+								</div>
+								<div class="field half" style="float: left; width: 50%;">
+									<input type="radio" id="lime-extra" value="lime-extra" name="choco-type-extra" onclick="updateCostXBig()">
+									<label for="lime-extra">Lime</label>
+								</div>
+							</div>
+							<li class="icon solid fa-solid fa-money-bill-wave" id="cost-extra-big">Service Price: <b>6 200 000</b> som</li>
+						</ul>
+					</div>
+				</section>
+
+				<!-- Section -->
+					<section id="contact">
+						<header>
+							<br><br><br><br>
+							<h2>Contact Us</h2>
+						</header>
+						<div class="content">
+							<br><br><br><br>
+							<ul class="items">
+								<li>
+									<h3>Email</h3>
+									<a href=mailto:info@chocoparty.uz>info@chocoparty.uz</a>
+								</li>
+								<li>
+									<h3>Phone</h3>
+									<!-- <a href="#">(000) 000-0000</a> -->
+									+998(90)-0976567
+								</li>
+								<li>
+									<h3>Name</h3>
+									Temur
+								</li>
+								<li>
+									<ul class="icons">
+										<li><a href="https://telegram.me/choco_party" class="icon brands fa-telegram"><span class="label">Telegram</span></a></li>
+									</ul>
+								</li>
+							</ul>
+						</div>
+					</section>
+
+					<section id="our_works">
+						<header>
+							<br><br><br>
+							<h2>Our Works</h2>
+						</header>
+						<div class="content">
+							<br><br><br>
+							<div class="gallery">
+								<!-- <a href="images/gallery/fulls/fontan2.jpg" class="portrait"><img src="images/gallery/thumbs/fontan2.jpg" alt="" /></a> -->
+								<a href="images/gallery/fulls/event1_0.jpg" class="portrait"><img src="images/gallery/thumbs/event1_0.jpg" alt="" /></a>
+								<a href="images/gallery/fulls/event1_1.jpg" class="portrait"><img src="images/gallery/thumbs/event1_1.jpg" alt="" /></a>
+								<a href="images/gallery/fulls/event1_5.jpg" class="portrait"><img src="images/gallery/thumbs/event1_5.jpg" alt="" /></a>
+								<a href="images/gallery/fulls/event1_6.jpg" class="portrait"><img src="images/gallery/thumbs/event1_6.jpg" alt="" /></a>
+							</div>
+	
+						</div>
+					</section>
+
+				<!-- Copyright -->
+					<div class="copyright">&copy; ChocoParty 2022.</div>
+
+			</div>
+
+		<!-- Scripts -->
+			<script>
+				/* Toggle between adding and removing the "responsive" class to topnav when the user clicks on the icon */
+			function openOtherBars() {
+				var x = document.getElementById("myTopnav");
+				if (x.className === "topnav") {
+					x.className += " responsive";
+				} else {
+					x.className = "topnav";
+				}
+			}
+			
+			function closeOtherBars() {
+				var x = document.getElementById("myTopnav");
+				x.className = "topnav";
+			}
+
+			function numberWithSpaces(x) {
+				return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+			}
+			function updateCostBig() {
+				var tarif = document.getElementsByName('tarif');
+				var choco_type = document.getElementsByName('choco-type');
+				var chosen_tarif = ""
+				var chosen_choco = ""
+				var cost = 0
+				
+				for(i = 0; i < tarif.length; i++) {
+					if(tarif[i].checked){
+						chosen_tarif = tarif[i].value;
+						break;
+					}
+				}
+				for(i = 0; i < choco_type.length; i++) {
+					if(choco_type[i].checked){
+						chosen_choco = choco_type[i].value;
+						break;
+					}
+				}
+				if(chosen_tarif=="tarif-maxima"){
+					cost = 1000000
+				}
+				if(chosen_choco=="milk"){
+					cost += 2900000
+				}
+				else if(chosen_choco=="white" || chosen_choco=="orange" || chosen_choco=="strawberry" || chosen_choco=="lime"){
+					cost += 3200000
+				}
+
+				document.getElementById("cost-big").innerHTML
+							= "Стоимость услуги: "+"<b>"+numberWithSpaces(cost)+"</b> сум";
+        	}
+			function updateCostXBig() {
+				var tarif = document.getElementsByName('tarif-extra');
+				var choco_type = document.getElementsByName('choco-type-extra');
+				var chosen_tarif = ""
+				var chosen_choco = ""
+				var cost = 0
+				
+				for(i = 0; i < tarif.length; i++) {
+					if(tarif[i].checked){
+						chosen_tarif = tarif[i].value;
+						break;
+					}
+				}
+				for(i = 0; i < choco_type.length; i++) {
+					if(choco_type[i].checked){
+						chosen_choco = choco_type[i].value;
+						break;
+					}
+				}
+				if(chosen_tarif=="tarif-maxima-extra"){
+					cost = 1600000
+				}
+				if(chosen_choco=="milk-extra"){
+					cost += 4600000
+				}
+				else if(chosen_choco=="white-extra" || chosen_choco=="orange-extra" || chosen_choco=="strawberry-extra" || chosen_choco=="lime-extra"){
+					cost += 5100000
+				}
+
+				document.getElementById("cost-extra-big").innerHTML
+							= "Стоимость услуги: "+"<b>"+numberWithSpaces(cost)+"</b> сум";
+        	}
+			function updateCostSmall() {
+				var tarif = document.getElementsByName('tarif-small');
+				var choco_type = document.getElementsByName('choco-type-small');
+				var chosen_tarif = ""
+				var chosen_choco = ""
+				var cost = 0
+				
+				for(i = 0; i < tarif.length; i++) {
+					if(tarif[i].checked){
+						chosen_tarif = tarif[i].value;
+						break;
+					}
+				}
+				for(i = 0; i < choco_type.length; i++) {
+					if(choco_type[i].checked){
+						chosen_choco = choco_type[i].value;
+						break;
+					}
+				}
+				if(chosen_tarif=="tarif-maxima-small"){
+					cost = 1000000
+				}
+				if(chosen_choco=="milk-small"){
+					cost += 1500000
+				}
+				else if(chosen_choco=="white-small" || chosen_choco=="orange-small" || chosen_choco=="strawberry-small" || chosen_choco=="lime-small"){
+					cost += 1700000
+				}
+
+				document.getElementById("cost-small").innerHTML
+							= "Стоимость услуги: "+"<b>"+numberWithSpaces(cost)+"</b> сум";
+        	}
+			</script>
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>

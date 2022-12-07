@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 
-<html>
+<html lang="uz">
 	<head>
 		<title>Shokoladli Favvora Toshkentda ChocoParty</title>
 		<meta charset="utf-8" />
@@ -22,9 +22,9 @@
 		<a href="#extra-big-fountain" onclick="closeOtherBars()">Katta favvora</a>
 		<a href="#contact" onclick="closeOtherBars()">Aloqa</a>
 		<a href="#our_works" onclick="closeOtherBars()">Ishlarimiz</a>
-		<a href="index_uz.html" class="lang1">O'z</a>
-		<p class="underline">|</p>
+		<a href="uz" class="lang1">O'z</a>
 		<a href="index.html" class="lang">Ру</a>
+		<a href="en" class="lang">En</a>
 		<a href="javascript:void(0);" class="icon" onclick="openOtherBars()">
 			<i class="fa fa-bars"></i>
 		</a>
@@ -62,7 +62,7 @@
 							<p><b><i>Xonimlar va janoblar!</i></b></br>Bizning <b><i>ChocoParty</i></b> kompaniyamiz sizga bayramingizni 
 								yanada yorqinroq va unutilmas qilishning original usulini taklif qilishdan mamnun!
 							</p>
-							<p>Shokoladli favvora nima?<br/><i><b>Shokoladli favvorasi </b></i> - bu haqiqiy favvora, lekin unda suv o'rniga mazali shokolad aylanadi. Fondu printsipiga ko'ra, siz shokoladga turli xil mevalar, pechene, marshmallow va hokazo bo'laklarini botirishingiz mumkin.
+							<p>Shokoladli favvora nima?<br/><i><b>Shokoladli favvorasi </b></i> - bu haqiqiy favvora, lekin unda suv o'rniga mazali Belgiya shokolad aylanadi. Fondu printsipiga ko'ra, siz shokoladga turli xil mevalar, pechene, marshmallow va hokazo bo'laklarini botirishingiz mumkin.
 							<br/>Shokolad favvorasi to'y, tug'ilgan kun, korporativ ziyofat, banket yoki boshqa bayramlarni bezatadi va mehmonlaringizga bayramingizning shirin va unutilmas xotiralarini qoldiradi.</p>
 							
 							<span class="image medium"><img src="images/logo.png" alt="Наш Логотип" width="50"></span>
@@ -252,7 +252,7 @@
 									<input type="radio" value="tarif-optima-extra" id="tarif-optima-extra" name="tarif-extra" onclick="updateCostXBig()">
 									<label for="tarif-optima-extra">
 										<b>Optima</b>
-										<br>&#x2022;  8 kg eng yuqori sifatli Belgiya shokoladi
+										<br>&#x2022;  7 kg eng yuqori sifatli Belgiya shokoladi
 										<br>&#x2022;  1 kg Belgiya kakao moyi
 									</label>
 								</div>
@@ -260,7 +260,7 @@
 									<input type="radio" value="tarif-maxima-extra" id="tarif-maxima-extra" name="tarif-extra" checked onclick="updateCostXBig()">
 									<label for="tarif-maxima-extra">
 										<b>Maxima</b>
-										<br>&#x2022;  8 kg eng yuqori sifatli Belgiya shokoladi
+										<br>&#x2022;  7 kg eng yuqori sifatli Belgiya shokoladi
 										<br>&#x2022;  1 kg Belgiya kakao moyi
 										<br>&#x2022;  1.5 kg tabiiy sharbatli marshmellou
 										<br>&#x2022;  1.5 kg profiterol
@@ -322,7 +322,7 @@
 								</li>
 								<li>
 									<ul class="icons">
-										<li><a href="https://telegram.me/timyusupov" class="icon brands fa-telegram"><span class="label">Telegram</span></a></li>
+										<li><a href="https://telegram.me/choco_party" class="icon brands fa-telegram"><span class="label">Telegram</span></a></li>
 									</ul>
 								</li>
 							</ul>
