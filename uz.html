@@ -66,14 +66,10 @@
 							<h2>Shokoladli favvora ijarasi</h2>
 						</header>
 						<div class="content">
-						
-							<p><b><i>Xonimlar va janoblar!</i></b></br>Bizning <b><i>ChocoParty</i></b> kompaniyamiz sizga bayramingizni 
-								yanada yorqinroq va unutilmas qilishning original usulini taklif qilishdan mamnun!
-							</p>
-							<p>Shokoladli favvora nima?<br/><i><b>Shokoladli favvorasi </b></i> - bu haqiqiy favvora, lekin unda suv o'rniga mazali Belgiya shokolad aylanadi. Fondu printsipiga ko'ra, siz shokoladga turli xil mevalar, pechene, marshmallow va hokazo bo'laklarini botirishingiz mumkin.
-							<br/>Shokolad favvorasi to'y, tug'ilgan kun, korporativ ziyofat, banket yoki boshqa bayramlarni bezatadi va mehmonlaringizga bayramingizning shirin va unutilmas xotiralarini qoldiradi.</p>
-							
-							<span class="image medium"><img src="images/logo.png" alt="Наш Логотип" width="50"></span>
+							<p>Bizning <b><i>ChocoParty</i></b> kompaniyamiz sizga bayramingizni yanada yorqinroq va unutilmas qilishning original usulini taklif qilishdan mamnun!</p>
+							<p><strong>Shokoladli favvora nima?</strong></p>
+							<p><b>Shokoladli favvorasi</b> - bu haqiqiy favvora, lekin unda suv o'rniga mazali Belgiya shokolad aylanadi. Fondu printsipiga ko'ra, siz shokoladga turli xil mevalar, pechene, marshmallow va hokazo bo'laklarini botirishingiz mumkin.</p>
+							<p>Shokolad favvorasi to'y, tug'ilgan kun, korporativ ziyofat, banket yoki boshqa bayramlarni bezatadi va mehmonlaringizga bayramingizning shirin va unutilmas xotiralarini qoldiradi.</p>
 						</div>
 					</section>
 
@@ -83,14 +79,14 @@
 						<h2>Bizning hizmatlarimiz</h2>
 					</header>
 					<div class="content">
-						<p><strong>Bizning xizmatlarimizga quyidagilar kiradi:</strong></p>
+						<p><strong>Narxiga quyidagilar kiradi:</strong></p>
 						<div class="content">
 							<ul>
-								<li>yetkazib berish, yig'ish</li>
-								<li>professional xizmat</li>
+								<li>yetkazib berish va o'rnatish</li>
 								<li>stol bezash va mevalarni kesish</li>
-								<li>salfetkalar, sihlar, idishlar</li>
+								<li>salfetkalar, sihlar va idishlar</li>
 							</ul>
+							<p style="font-size: 0.8em;"><i>Professional xizmat qo'shimcha to'lov uchun taqdim etiladi.</i></p>
 						<div class="gallery">
 							<a href="images/gallery/fulls/fontan4.jpg" class="landscape"><img src="images/gallery/thumbs/fontan4.jpg" alt="" /></a>
 							<a href="images/gallery/fulls/fontan29.jpg" class="portrait"><img src="images/gallery/fulls/fontan29.jpg" alt="" /></a>
@@ -137,8 +133,14 @@
 										<br>&#x2022;  1 kg qulupnay
 										<br>&#x2022;  mevalarni chiroyli kesish
 									</label>
-								</div>
-							</div>
+								</div>									<div class="field half">
+										<input type="radio" value="tarif-light-small" id="tarif-light-small" name="tarif-small" onclick="updateCostSmall()">
+										<label for="tarif-light-small">
+											<b>Light</b>
+											<br>&#x2022;  Faqat favvora ijari
+											<br>&#x2022;  To'ldirimasiz
+										</label>
+									</div>							</div>
 							<div class="fields">
 								<p><strong>Shokolad turi: </strong></p>
 								<div class="field half" style="float: left; width: 50%;">
@@ -203,8 +205,14 @@
 										<br>&#x2022;  2 kg qulupnay
 										<br>&#x2022;  mevalarni chiroyli kesish
 									</label>
-								</div>
-							</div>
+								</div>									<div class="field half">
+										<input type="radio" value="tarif-light" id="tarif-light" name="tarif" onclick="updateCostBig()">
+										<label for="tarif-light">
+											<b>Light</b>
+											<br>&#x2022;  Faqat favvora ijari
+											<br>&#x2022;  To'ldirimasiz
+										</label>
+									</div>							</div>
 							<div class="fields">
 								<p><strong>Shokolad turi: </strong></p>
 								<div class="field half" style="float: left; width: 50%;">
@@ -269,8 +277,14 @@
 										<br>&#x2022;  3.5 kg qulupnay
 										<br>&#x2022;  mevalarni chiroyli kesish
 									</label>
-								</div>
-							</div>
+								</div>									<div class="field half">
+										<input type="radio" value="tarif-light-extra" id="tarif-light-extra" name="tarif-extra" onclick="updateCostXBig()">
+										<label for="tarif-light-extra">
+											<b>Light</b>
+											<br>&#x2022;  Faqat favvora ijari
+											<br>&#x2022;  To'ldirimasiz
+										</label>
+									</div>							</div>
 							<div class="fields">
 								<p><strong>Shokolad turi: </strong></p>
 								<div class="field half" style="float: left; width: 50%;">
@@ -383,20 +397,25 @@
 						break;
 					}
 				}
-				for(i = 0; i < choco_type.length; i++) {
-					if(choco_type[i].checked){
-						chosen_choco = choco_type[i].value;
-						break;
-					}
-				}
-				if(chosen_tarif=="tarif-maxima"){
+				if(chosen_tarif=="tarif-light"){
 					cost = 1000000
 				}
-				if(chosen_choco=="milk"){
-					cost += 2900000
-				}
-				else if(chosen_choco=="white" || chosen_choco=="orange" || chosen_choco=="strawberry" || chosen_choco=="lime"){
-					cost += 3200000
+				else {
+					for(i = 0; i < choco_type.length; i++) {
+						if(choco_type[i].checked){
+							chosen_choco = choco_type[i].value;
+							break;
+						}
+					}
+					if(chosen_tarif=="tarif-maxima"){
+						cost = 1000000
+					}
+					if(chosen_choco=="milk"){
+						cost += 2900000
+					}
+					else if(chosen_choco=="white" || chosen_choco=="orange" || chosen_choco=="strawberry" || chosen_choco=="lime"){
+						cost += 3200000
+					}
 				}
 
 				document.getElementById("cost-big").innerHTML = "Xizmat narxi: "+"<b>"+numberWithSpaces(cost)+"</b> so'm";
@@ -414,20 +433,25 @@
 						break;
 					}
 				}
-				for(i = 0; i < choco_type.length; i++) {
-					if(choco_type[i].checked){
-						chosen_choco = choco_type[i].value;
-						break;
+				if(chosen_tarif=="tarif-light-small"){
+					cost = 500000
+				}
+				else {
+					for(i = 0; i < choco_type.length; i++) {
+						if(choco_type[i].checked){
+							chosen_choco = choco_type[i].value;
+							break;
+						}
 					}
-				}
-				if(chosen_tarif=="tarif-maxima-small"){
-					cost = 1000000
-				}
-				if(chosen_choco=="milk-small"){
-					cost += 1500000
-				}
-				else if(chosen_choco=="white-small" || chosen_choco=="orange-small" || chosen_choco=="strawberry-small" || chosen_choco=="lime-small"){
-					cost += 1700000
+					if(chosen_tarif=="tarif-maxima-small"){
+						cost = 1000000
+					}
+					if(chosen_choco=="milk-small"){
+						cost += 1500000
+					}
+					else if(chosen_choco=="white-small" || chosen_choco=="orange-small" || chosen_choco=="strawberry-small" || chosen_choco=="lime-small"){
+						cost += 1700000
+					}
 				}
 				document.getElementById("cost-small-uz").innerHTML = "Xizmat narxi: "+"<b>"+numberWithSpaces(cost)+"</b> so'm";
         	}
@@ -444,20 +468,25 @@
 						break;
 					}
 				}
-				for(i = 0; i < choco_type.length; i++) {
-					if(choco_type[i].checked){
-						chosen_choco = choco_type[i].value;
-						break;
+				if(chosen_tarif=="tarif-light-extra"){
+					cost = 1500000
+				}
+				else {
+					for(i = 0; i < choco_type.length; i++) {
+						if(choco_type[i].checked){
+							chosen_choco = choco_type[i].value;
+							break;
+						}
 					}
-				}
-				if(chosen_tarif=="tarif-maxima-extra"){
-					cost = 1600000
-				}
-				if(chosen_choco=="milk-extra"){
-					cost += 4600000
-				}
-				else if(chosen_choco=="white-extra" || chosen_choco=="orange-extra" || chosen_choco=="strawberry-extra" || chosen_choco=="lime-extra"){
-					cost += 5100000
+					if(chosen_tarif=="tarif-maxima-extra"){
+						cost = 1600000
+					}
+					if(chosen_choco=="milk-extra"){
+						cost += 4600000
+					}
+					else if(chosen_choco=="white-extra" || chosen_choco=="orange-extra" || chosen_choco=="strawberry-extra" || chosen_choco=="lime-extra"){
+						cost += 5100000
+					}
 				}
 
 				document.getElementById("cost-extra-big").innerHTML

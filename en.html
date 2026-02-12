@@ -66,12 +66,10 @@
 							<h2>Renting Chocolate Fountain</h2>
 						</header>
 						<div class="content">
-							<p><b><i>Dear Ladies and Gentlemen!</i></b></br>Our company <b><i>ChocoParty</i></b> is glad to offer you an ingenious way to make your celebration brighter and more memorable!
-							!</p>
-							<p>What is a chocolate fountain?<br/><i><b>Chocolate Fountain</b></i> is a genuine fountain, but the tastiest Belgian chocolate is flowing through it, not water. Like fondue, you can dip pieces of various fruits, biscuits, marshmallows, etc. into the chocolate.
-							<br/>Chocolate Fountain will be a great addition to your wedding banquet, birthday party, corporate party, banquet, or any other celebration and will leave your guests with sweet and unforgettable memories of your holiday.</p>
-							
-							<span class="image medium"><img src="images/logo.png" alt="Наш Логотип" width="50"></span>
+							<p>Our company <b><i>ChocoParty</i></b> is glad to offer you an original way to make your celebration even brighter and more memorable!</p>
+							<p><strong>What is a chocolate fountain?</strong></p>
+							<p><b>Chocolate Fountain</b> is a genuine fountain, but the tastiest Belgian chocolate flows through it instead of water. Like fondue, you can dip pieces of fresh fruits, biscuits, marshmallows, and other sweets into the chocolate.</p>
+							<p>Chocolate Fountain will be an effective decoration for your wedding, birthday, corporate party, banquet, or any other celebration and will give your guests sweet and truly unforgettable memories of your holiday.</p>
 						</div>
 					</section>
 
@@ -81,14 +79,14 @@
 						<h2>Our services</h2>
 					</header>
 					<div class="content">
-						<p><strong>Our services include:</strong></p>
+						<p><strong>The cost includes:</strong></p>
 						<div class="content">
 							<ul>
-								<li>delivery and assembly</li>
-								<li>professional service</li>
+								<li>delivery and equipment assembly</li>
 								<li>table decoration and fruit cutting</li>
-								<li>napkins, skewers, dishes</li>
+								<li>napkins, skewers, and dishes</li>
 							</ul>
+							<p style="font-size: 0.8em;"><i>Professional service is provided for an additional fee.</i></p>
 						<div class="gallery">
 							<a href="images/gallery/fulls/fontan4.jpg" class="landscape"><img src="images/gallery/thumbs/fontan4.jpg" alt="" /></a>
 							<a href="images/gallery/fulls/fontan29.jpg" class="portrait"><img src="images/gallery/fulls/fontan29.jpg" alt="" /></a>
@@ -134,8 +132,14 @@
                                         <br>&#x2022; 1 kg strawberries
                                         <br>&#x2022; beautiful cutting of fruits
 									</label>
-								</div>
-							</div>
+								</div>									<div class="field half">
+										<input type="radio" value="tarif-light-small" id="tarif-light-small" name="tarif-small" onclick="updateCostSmall()">
+										<label for="tarif-light-small">
+											<b>Light</b>
+											<br>&#x2022;  Only fountain rental
+											<br>&#x2022;  Without filling
+										</label>
+									</div>							</div>
 							<div class="fields">
 								<p><strong>Chocolate Type: </strong></p>
 								<div class="field half" style="float: left; width: 50%;">
@@ -198,6 +202,14 @@
                                         <br>&#x2022; 5 kg seasonal fruits
                                         <br>&#x2022; 2 kg strawberries
                                         <br>&#x2022; beautiful cutting of fruits
+									</label>
+								</div>
+								<div class="field half">
+									<input type="radio" value="tarif-light" id="tarif-light" name="tarif" onclick="updateCostBig()">
+									<label for="tarif-light">
+										<b>Light</b>
+										<br>&#x2022;  Only fountain rental
+										<br>&#x2022;  Without filling
 									</label>
 								</div>
 							</div>
@@ -264,6 +276,14 @@
                                         <br>&#x2022; 8 kg seasonal fruits
                                         <br>&#x2022; 3.5 kg strawberries
                                         <br>&#x2022; beautiful cutting of fruits
+									</label>
+								</div>
+								<div class="field half">
+									<input type="radio" value="tarif-light-extra" id="tarif-light-extra" name="tarif-extra" onclick="updateCostXBig()">
+									<label for="tarif-light-extra">
+										<b>Light</b>
+										<br>&#x2022;  Only fountain rental
+										<br>&#x2022;  Without filling
 									</label>
 								</div>
 							</div>
@@ -379,24 +399,29 @@
 						break;
 					}
 				}
-				for(i = 0; i < choco_type.length; i++) {
-					if(choco_type[i].checked){
-						chosen_choco = choco_type[i].value;
-						break;
-					}
-				}
-				if(chosen_tarif=="tarif-maxima"){
+				if(chosen_tarif=="tarif-light"){
 					cost = 1000000
 				}
-				if(chosen_choco=="milk"){
-					cost += 2900000
-				}
-				else if(chosen_choco=="white" || chosen_choco=="orange" || chosen_choco=="strawberry" || chosen_choco=="lime"){
-					cost += 3200000
+				else {
+					for(i = 0; i < choco_type.length; i++) {
+						if(choco_type[i].checked){
+							chosen_choco = choco_type[i].value;
+							break;
+						}
+					}
+					if(chosen_tarif=="tarif-maxima"){
+						cost = 1000000
+					}
+					if(chosen_choco=="milk"){
+						cost += 2900000
+					}
+					else if(chosen_choco=="white" || chosen_choco=="orange" || chosen_choco=="strawberry" || chosen_choco=="lime"){
+						cost += 3200000
+					}
 				}
 
 				document.getElementById("cost-big").innerHTML
-							= "Стоимость услуги: "+"<b>"+numberWithSpaces(cost)+"</b> сум";
+							= "Service Price: "+"<b>"+numberWithSpaces(cost)+"</b> som";
         	}
 			function updateCostXBig() {
 				var tarif = document.getElementsByName('tarif-extra');
@@ -411,24 +436,29 @@
 						break;
 					}
 				}
-				for(i = 0; i < choco_type.length; i++) {
-					if(choco_type[i].checked){
-						chosen_choco = choco_type[i].value;
-						break;
+				if(chosen_tarif=="tarif-light-extra"){
+					cost = 1500000
+				}
+				else {
+					for(i = 0; i < choco_type.length; i++) {
+						if(choco_type[i].checked){
+							chosen_choco = choco_type[i].value;
+							break;
+						}
 					}
-				}
-				if(chosen_tarif=="tarif-maxima-extra"){
-					cost = 1600000
-				}
-				if(chosen_choco=="milk-extra"){
-					cost += 4600000
-				}
-				else if(chosen_choco=="white-extra" || chosen_choco=="orange-extra" || chosen_choco=="strawberry-extra" || chosen_choco=="lime-extra"){
-					cost += 5100000
+					if(chosen_tarif=="tarif-maxima-extra"){
+						cost = 1600000
+					}
+					if(chosen_choco=="milk-extra"){
+						cost += 4600000
+					}
+					else if(chosen_choco=="white-extra" || chosen_choco=="orange-extra" || chosen_choco=="strawberry-extra" || chosen_choco=="lime-extra"){
+						cost += 5100000
+					}
 				}
 
 				document.getElementById("cost-extra-big").innerHTML
-							= "Стоимость услуги: "+"<b>"+numberWithSpaces(cost)+"</b> сум";
+							= "Service Price: "+"<b>"+numberWithSpaces(cost)+"</b> som";
         	}
 			function updateCostSmall() {
 				var tarif = document.getElementsByName('tarif-small');
@@ -443,24 +473,29 @@
 						break;
 					}
 				}
-				for(i = 0; i < choco_type.length; i++) {
-					if(choco_type[i].checked){
-						chosen_choco = choco_type[i].value;
-						break;
+				if(chosen_tarif=="tarif-light-small"){
+					cost = 500000
+				}
+				else {
+					for(i = 0; i < choco_type.length; i++) {
+						if(choco_type[i].checked){
+							chosen_choco = choco_type[i].value;
+							break;
+						}
 					}
-				}
-				if(chosen_tarif=="tarif-maxima-small"){
-					cost = 1000000
-				}
-				if(chosen_choco=="milk-small"){
-					cost += 1500000
-				}
-				else if(chosen_choco=="white-small" || chosen_choco=="orange-small" || chosen_choco=="strawberry-small" || chosen_choco=="lime-small"){
-					cost += 1700000
+					if(chosen_tarif=="tarif-maxima-small"){
+						cost = 1000000
+					}
+					if(chosen_choco=="milk-small"){
+						cost += 1500000
+					}
+					else if(chosen_choco=="white-small" || chosen_choco=="orange-small" || chosen_choco=="strawberry-small" || chosen_choco=="lime-small"){
+						cost += 1700000
+					}
 				}
 
 				document.getElementById("cost-small").innerHTML
-							= "Стоимость услуги: "+"<b>"+numberWithSpaces(cost)+"</b> сум";
+							= "Service Price: "+"<b>"+numberWithSpaces(cost)+"</b> som";
         	}
 			</script>
 			<script src="assets/js/jquery.min.js"></script>
