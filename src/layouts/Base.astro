@@ -8,7 +8,7 @@ import PromoStrip from '../components/PromoStrip.astro';
 import StickyCta from '../components/StickyCta.astro';
 import { dictionaryFor } from '../i18n';
 import { getPromotions, getSite } from '../lib/content';
-import { DEFAULT_LOCALE, LOCALES, type Locale } from '../lib/domain';
+import { DEFAULT_LOCALE, LOCALES, SITE_VERIFICATION, type Locale } from '../lib/domain';
 import { absoluteUrl, alternatesFor, pathFor, type Page } from '../lib/routes';
 import '../styles/global.css';
 
@@ -29,7 +29,10 @@ interface Props {
 
 const { locale, page, title, description, image, jsonLd = [], noindex = false, sticky } = Astro.props;
 const t = dictionaryFor(locale);
-const url = absoluteUrl(pathFor(locale, page));
+const path = pathFor(locale, page);
+const url = absoluteUrl(path);
+// Search Console and Yandex Webmaster look for their tags on the page served at «/».
+const isSiteRoot = path === '/' && !noindex;
 const alternates = alternatesFor(page);
 const bookHref = `${pathFor(locale, { kind: 'home' })}#prices`;
 const bar = sticky ?? { label: t.cta.bookDate, href: bookHref };
@@ -46,6 +49,20 @@ const preview = await getImage({
 });
 const OG_LOCALES: Record<Locale, string> = { ru: 'ru_RU', uz: 'uz_UZ', en: 'en_US' };
 const analytics = { gaId: site.gaId ?? '', metrikaId: site.metrikaId ?? '' };
+// Yandex Metrika's own counter code (Webvisor off), unchanged but for the number: Yandex asks for it
+// as is, near the top of the page. The schema lets only digits into metrikaId.
+const metrikaCode =
+  analytics.metrikaId &&
+  `
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=${analytics.metrikaId}', 'ym');
+
+    ym(${analytics.metrikaId}, 'init', {ssr:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+`;
 ---
 
 <!doctype html>
@@ -55,6 +72,8 @@ const analytics = { gaId: site.gaId ?? '', metrikaId: site.metrikaId ?? '' };
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {isSiteRoot && <meta name="google-site-verification" content={SITE_VERIFICATION.google} />}
+    {isSiteRoot && <meta name="yandex-verification" content={SITE_VERIFICATION.yandex} />}
     {noindex && <meta name="robots" content="noindex" />}
     {!noindex && <link rel="canonical" href={url} />}
     {
@@ -87,8 +106,24 @@ const analytics = { gaId: site.gaId ?? '', metrikaId: site.metrikaId ?? '' };
     <Font cssVariable="--font-display" preload={[{ subset: fontSubset, weight: 600 }]} />
     <Font cssVariable="--font-body" preload={[{ subset: fontSubset, weight: 400 }]} />
     {jsonLd.map((data) => <script type="application/ld+json" set:html={JSON.stringify(data)} />)}
+    {metrikaCode && <script type="text/javascript" set:html={metrikaCode} />}
   </head>
   <body>
+    {
+      /* The counter's <noscript> pixel lives in <body>: a <div> inside <head> would end <head> early
+         for readers without JavaScript, and the tags after it would land in <body>. */
+      analytics.metrikaId && (
+        <noscript>
+          <div>
+            <img
+              src={`https://mc.yandex.ru/watch/${analytics.metrikaId}`}
+              style="position:absolute; left:-9999px;"
+              alt=""
+            />
+          </div>
+        </noscript>
+      )
+    }
     <PromoStrip locale={locale} promotions={promotions} />
     <Header locale={locale} page={page} bookHref={bookHref} />
     <main>
@@ -99,34 +134,19 @@ const analytics = { gaId: site.gaId ?? '', metrikaId: site.metrikaId ?? '' };
     {
       (analytics.gaId || analytics.metrikaId) && (
         <script is:inline define:vars={analytics}>
-          // Analytics load after the page is shown, so they never slow down the first screen.
-          // Taps on Telegram and phone links are counted as contacts.
-          function startAnalytics() {
-            if (gaId) {
-              window.dataLayer = window.dataLayer || [];
-              window.gtag = function () {
-                window.dataLayer.push(arguments);
-              };
-              window.gtag('js', new Date());
-              window.gtag('config', gaId);
-              var ga = document.createElement('script');
-              ga.async = true;
-              ga.src = 'https://www.googletagmanager.com/gtag/js?id=' + gaId;
-              document.head.appendChild(ga);
-            }
-            if (metrikaId) {
-              window.ym =
-                window.ym ||
-                function () {
-                  (window.ym.a = window.ym.a || []).push(arguments);
-                };
-              window.ym.l = Date.now();
-              var ym = document.createElement('script');
-              ym.async = true;
-              ym.src = 'https://mc.yandex.ru/metrika/tag.js';
-              document.head.appendChild(ym);
-              window.ym(Number(metrikaId), 'init', { clickmap: true, trackLinks: true, accurateTrackBounce: true });
-            }
+          // Google Analytics loads after the page is shown, so it never slows down the first screen
+          // (Metrika's own code is in <head>). Taps on Telegram and phone links count as contacts.
+          function startGoogleAnalytics() {
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = function () {
+              window.dataLayer.push(arguments);
+            };
+            window.gtag('js', new Date());
+            window.gtag('config', gaId);
+            var ga = document.createElement('script');
+            ga.async = true;
+            ga.src = 'https://www.googletagmanager.com/gtag/js?id=' + gaId;
+            document.head.appendChild(ga);
           }
           document.addEventListener('click', function (event) {
             var link = event.target.closest && event.target.closest('a[href^="https://t.me/"], a[href^="tel:"]');
@@ -135,11 +155,13 @@ const analytics = { gaId: site.gaId ?? '', metrikaId: site.metrikaId ?? '' };
             if (window.gtag) window.gtag('event', 'contact', { method: method });
             if (window.ym && metrikaId) window.ym(Number(metrikaId), 'reachGoal', 'contact_' + method);
           });
-          if (document.readyState === 'complete') setTimeout(startAnalytics, 1500);
-          else
-            window.addEventListener('load', function () {
-              setTimeout(startAnalytics, 1500);
-            });
+          if (gaId) {
+            if (document.readyState === 'complete') setTimeout(startGoogleAnalytics, 1500);
+            else
+              window.addEventListener('load', function () {
+                setTimeout(startGoogleAnalytics, 1500);
+              });
+          }
         </script>
       )
     }

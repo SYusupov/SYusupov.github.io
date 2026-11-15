@@ -61,7 +61,11 @@ export const siteSchema = z.object({
   ordersCount: z.number({ error: 'укажите число заказов' }).int().min(0, 'число заказов не может быть отрицательным'),
   foundedYear: z.number().int().min(1990).max(2100),
   gaId: optionalText,
-  metrikaId: optionalText,
+  // The number goes straight into the counter code on every page, so only digits pass.
+  metrikaId: z.preprocess(
+    blankToUndefined,
+    z.string().trim().regex(/^\d+$/, 'номер счётчика: только цифры, без пробелов').optional(),
+  ),
 });
 
 export type SiteSettings = z.infer<typeof siteSchema>;

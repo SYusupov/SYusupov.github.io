@@ -4,12 +4,14 @@
  *   - language versions link to each other both ways;
  *   - every event has a page in three languages, is linked from the list of all events and
  *     from its occasion page, and the five newest are on the home page;
- *   - schema.org markup parses; the admin panel publishes to the main branch on GitHub.
+ *   - schema.org markup parses; the admin panel publishes to the main branch on GitHub;
+ *   - the home page keeps the Google and Yandex ownership tags in <head> (the services re-check
+ *     them), and every page carries the Metrika counter when site.json names one.
  * Usage: tsx scripts/audit-dist.ts   (CONTENT_ROOT switches to fixture content and dist-test)
  */
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
-import { LOCALES, OCCASION_TYPES, SITE_URL } from '../src/lib/domain';
+import { LOCALES, OCCASION_TYPES, SITE_URL, SITE_VERIFICATION } from '../src/lib/domain';
 import { pathFor } from '../src/lib/routes';
 
 const root = process.env.CONTENT_ROOT ?? 'src/content';
@@ -105,6 +107,33 @@ else {
   const { backend } = JSON.parse(readFileSync(adminConfig, 'utf8')) as { backend?: { name?: string; branch?: string } };
   if (backend?.name !== 'github' || backend.branch !== 'main') {
     problems.push(`админка публикует не в main на GitHub: ${JSON.stringify(backend)}`);
+  }
+}
+
+// 5. Ownership tags and the Metrika counter.
+const headOf = (html: string) => html.slice(0, html.indexOf('</head>'));
+const bodyOf = (html: string) => html.slice(html.indexOf('<body'));
+const ownership = [
+  ['google-site-verification', SITE_VERIFICATION.google],
+  ['yandex-verification', SITE_VERIFICATION.yandex],
+];
+for (const [name, content] of ownership) {
+  if (!headOf(pages.get('/') ?? '').includes(`<meta name="${name}" content="${content}">`)) {
+    problems.push(`нет метатега подтверждения в <head> главной: ${name}`);
+  }
+}
+const { metrikaId } = JSON.parse(readFileSync(join(root, 'settings', 'site.json'), 'utf8')) as { metrikaId?: string };
+if (metrikaId) {
+  for (const [page, html] of pages) {
+    // Only pages built from the site layout; the admin panel and the old-address redirects are not counted.
+    if (!html.includes('property="og:site_name"')) continue;
+    const head = headOf(html);
+    if (!head.includes(`mc.yandex.ru/metrika/tag.js?id=${metrikaId}'`) || !head.includes(`ym(${metrikaId}, 'init'`)) {
+      problems.push(`нет кода счётчика Метрики в <head>: ${page}`);
+    }
+    if (!bodyOf(html).includes(`<img src="https://mc.yandex.ru/watch/${metrikaId}"`)) {
+      problems.push(`нет пикселя Метрики в <body>: ${page}`);
+    }
   }
 }
 

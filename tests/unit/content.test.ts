@@ -26,6 +26,7 @@ describe('content check before the build', () => {
       'site-telegram-with-at',
       'settings/site.json: «Telegram для заказов» — имя пользователя Telegram: латинские буквы, цифры и _, от 5 до 32 знаков, без @',
     ],
+    ['site-metrika-with-spaces', 'settings/site.json: «Яндекс Метрика» — номер счётчика: только цифры, без пробелов'],
   ])('%s stops the publication with a clear message', (fixture, message) => {
     expect(checkContentRoot(invalid(fixture)).errors).toContain(message);
   });

@@ -2,6 +2,15 @@
 
 export const SITE_URL = 'https://chocoparty.uz';
 
+/**
+ * Ownership proofs for Google Search Console and Yandex Webmaster, kept in <head> of the home page
+ * for good: both services re-check them, and the built-site audit stops a publication without them.
+ */
+export const SITE_VERIFICATION = {
+  google: '_H0W1cv0lXvYjHswRHsfZ3d9v3Xm_6RqmBv40eZiMeY',
+  yandex: '41d5f9ccab706f3f',
+} as const;
+
 export const LOCALES = ['ru', 'uz', 'en'] as const;
 export type Locale = (typeof LOCALES)[number];
 export const DEFAULT_LOCALE: Locale = 'ru';
