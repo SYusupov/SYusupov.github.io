@@ -29,6 +29,9 @@ jobs:
       - run: npm ci
       - name: Unit tests
         run: npm test
+      - name: Check content
+        shell: bash
+        run: npm run check:content 2>&1 | tee check-content.log; exit "${PIPESTATUS[0]}"
       - name: Restore processed images
         id: image-cache
         uses: actions/cache/restore@v6

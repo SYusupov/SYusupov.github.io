@@ -24,3 +24,18 @@ export const DEFAULT_SELECTION: { size: Size; tariff: Tariff } = { size: 'medium
 /** Accepted range for one price, in sum. */
 export const PRICE_MIN = 100_000;
 export const PRICE_MAX = 100_000_000;
+
+/** Event types; every type but `other` has its own occasion page. */
+export const EVENT_TYPES = ['wedding', 'birthday', 'kids-party', 'corporate', 'exhibition', 'opening', 'other'] as const;
+export type EventType = (typeof EVENT_TYPES)[number];
+export const OCCASION_TYPES = EVENT_TYPES.filter((type) => type !== 'other');
+export type OccasionType = Exclude<EventType, 'other'>;
+
+/** The fountain seen at an event. */
+export const FOUNTAINS = ['small', 'medium', 'large', 'several'] as const;
+export type Fountain = (typeof FOUNTAINS)[number];
+
+export const GALLERY_MAX = 15;
+export const VIDEOS_MAX = 2;
+/** Largest video file the admin may upload; the build compresses it for the site. */
+export const VIDEO_MAX_BYTES = 20 * 1024 * 1024;

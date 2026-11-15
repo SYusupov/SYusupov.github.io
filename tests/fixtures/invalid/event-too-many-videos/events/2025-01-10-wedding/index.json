@@ -1,0 +1,13 @@
+{
+  "date": "2025-01-10",
+  "type": "wedding",
+  "cover": "cover.webp",
+  "gallery": [
+    "01.webp"
+  ],
+  "videos": [
+    "a.mp4",
+    "b.mp4",
+    "c.mp4"
+  ]
+}

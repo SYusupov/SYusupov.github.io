@@ -1,0 +1,31 @@
+{
+  "date": "2025-12-14",
+  "type": "corporate",
+  "client": "Coca-Cola",
+  "venue": "Hyatt Regency Tashkent",
+  "fountain": "large",
+  "cover": "normal-1p6mb.webp",
+  "gallery": [
+    "gallery-02.webp",
+    "gallery-01.webp",
+    "gallery-03.webp",
+    "gallery-04.webp",
+    "gallery-05.webp",
+    "large-upscaled.webp",
+    "rotated-exif6.webp",
+    "small-1066x1600.webp",
+    "synthetic-single.webp",
+    "extra-1.webp",
+    "extra-2.webp",
+    "extra-3.webp",
+    "extra-4.webp",
+    "extra-5.webp",
+    "extra-6.webp"
+  ],
+  "videos": [
+    "clip-6s.mp4"
+  ],
+  "description": {
+    "ru": "Корпоратив с большим фонтаном и молочным шоколадом."
+  }
+}

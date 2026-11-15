@@ -37,6 +37,8 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
+      - name: Check the real content
+        run: npm run check:content
       - name: Build the real site
         run: npm run build
       - name: Upload as a Pages artifact

@@ -1,6 +1,8 @@
+import { readdirSync, readFileSync } from 'node:fs';
+import { z } from 'astro/zod';
 import { describe, expect, it } from 'vitest';
 import { buildCmsConfig, type CmsField } from '../../src/admin/config';
-import { pricesSchema } from '../../src/lib/schemas';
+import { makeSchemas, pricesSchema } from '../../src/lib/schemas';
 
 /**
  * Seam 7: everything an admin form can save passes the content schema, and every field the
@@ -27,9 +29,13 @@ function sampleValue(field: CmsField, mode: Mode, path: string): unknown {
     case 'datetime':
       return mode === 'smallest' ? '2015-01-01' : '2030-12-31';
     case 'image':
+    case 'file': {
+      const extension = field.widget === 'image' ? 'webp' : 'mp4';
+      const name = (i: number) => `${String(i + 1).padStart(2, '0')}.${extension}`;
       return field.multiple
-        ? Array.from({ length: mode === 'smallest' ? 1 : (field.max ?? 1) }, (_, i) => `${String(i + 1).padStart(2, '0')}.webp`)
-        : '01.webp';
+        ? Array.from({ length: mode === 'smallest' ? 1 : (field.max ?? 1) }, (_, i) => name(i))
+        : name(0);
+    }
     case 'string':
     case 'text':
       return PATTERN_SAMPLES[path] ?? (mode === 'smallest' ? 'А' : 'Длинный текст. '.repeat(20).trim());
@@ -79,7 +85,12 @@ const formNamed = (name: string) => {
   return form;
 };
 
-const cases = [{ form: 'prices', schema: pricesSchema }];
+const { event: eventSchema } = makeSchemas(z.string().min(1));
+
+const cases = [
+  { form: 'prices', schema: pricesSchema },
+  { form: 'events', schema: eventSchema },
+] as const;
 
 describe('admin forms match the content schema', () => {
   for (const { form: name, schema } of cases) {
@@ -103,6 +114,26 @@ describe('admin forms match the content schema', () => {
       });
     });
   }
+
+  describe('event files saved by the real admin panel (tests/fixtures/cms-saved)', () => {
+    const folder = 'tests/fixtures/cms-saved/events';
+    for (const name of readdirSync(folder)) {
+      it(`${name} passes the schema`, () => {
+        const result = eventSchema.safeParse(JSON.parse(readFileSync(`${folder}/${name}`, 'utf8')));
+        expect(result.error?.issues ?? []).toEqual([]);
+      });
+    }
+  });
+
+  it('events are saved one folder each, photos next to the file, where the site reads them', () => {
+    expect(formNamed('events')).toMatchObject({
+      folder: 'src/content/events',
+      path: '{{slug}}/index',
+      media_folder: '',
+      public_folder: '',
+      format: 'json',
+    });
+  });
 
   it('the price form writes the price file the site reads', () => {
     expect(formNamed('prices')).toMatchObject({ file: 'src/content/settings/prices.json', format: 'json' });

@@ -15,7 +15,8 @@
     "serve:test": "tsx scripts/serve.ts dist-test 4322",
     "test": "vitest run",
     "e2e": "playwright test",
-    "typecheck": "astro check"
+    "typecheck": "astro check",
+    "check:content": "tsx scripts/check-content.ts"
   },
   "dependencies": {
     "astro": "7.4.12"
