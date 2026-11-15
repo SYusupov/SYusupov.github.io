@@ -24,7 +24,7 @@ export function formatSum(amount: number, locale: Locale): string {
   return `${groupThousands(amount, style.thousands)}${NBSP}${style.unit}`;
 }
 
-/** «+998 90 097 65 67» for «+998900976567»; other numbers stay as they are. */
+/** «+998 77 800 65 67» for «+998778006567»; other numbers stay as they are. */
 export function formatPhone(phone: string): string {
   const match = /^\+998(\d{2})(\d{3})(\d{2})(\d{2})$/.exec(phone);
   return match ? `+998 ${match[1]} ${match[2]} ${match[3]} ${match[4]}` : phone;
