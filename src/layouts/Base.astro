@@ -1,7 +1,12 @@
 ---
-import LangSwitch from '../components/LangSwitch.astro';
+import { Font } from 'astro:assets';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import StickyCta from '../components/StickyCta.astro';
 import { DEFAULT_LOCALE, type Locale } from '../lib/domain';
 import { absoluteUrl, alternatesFor, pathFor, type Page } from '../lib/routes';
+import { DEFAULT_THEME } from '../lib/theme';
+import '../styles/global.css';
 
 interface Props {
   locale: Locale;
@@ -13,13 +18,16 @@ interface Props {
 const { locale, page, title, description } = Astro.props;
 const canonical = absoluteUrl(pathFor(locale, page));
 const alternates = alternatesFor(page);
+const bookHref = `${pathFor(locale, { kind: 'home' })}#prices`;
+// Only the two font files the first screen needs are fetched early; the rest load on demand.
+const fontSubset = locale === 'ru' ? 'cyrillic' : 'latin';
 ---
 
 <!doctype html>
-<html lang={locale}>
+<html lang={locale} data-theme={DEFAULT_THEME}>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
@@ -29,13 +37,27 @@ const alternates = alternatesFor(page);
       ))
     }
     <link rel="alternate" hreflang="x-default" href={absoluteUrl(pathFor(DEFAULT_LOCALE, page))} />
+    <link rel="icon" href="/brand/logo.svg" type="image/svg+xml" />
+    <Font cssVariable="--font-display" preload={[{ subset: fontSubset, weight: 600 }]} />
+    <Font cssVariable="--font-body" preload={[{ subset: fontSubset, weight: 400 }]} />
+    <script is:inline>
+      // Style preview while the owner chooses: ?theme=light or ?theme=dark, kept for the visit.
+      (function () {
+        try {
+          var chosen = new URLSearchParams(location.search).get('theme');
+          if (chosen === 'light' || chosen === 'dark') sessionStorage.setItem('theme', chosen);
+          var theme = sessionStorage.getItem('theme');
+          if (theme) document.documentElement.dataset.theme = theme;
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
-    <header class="site-header">
-      <LangSwitch locale={locale} page={page} />
-    </header>
+    <Header locale={locale} page={page} bookHref={bookHref} />
     <main>
       <slot />
     </main>
+    <Footer locale={locale} />
+    <StickyCta locale={locale} bookHref={bookHref} />
   </body>
 </html>

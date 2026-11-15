@@ -1,7 +1,14 @@
 ---
+import card1 from '../assets/placeholder/card-1.webp';
+import card2 from '../assets/placeholder/card-2.webp';
+import card3 from '../assets/placeholder/card-3.webp';
+import heroImage from '../assets/placeholder/hero.webp';
+import EventCard from '../components/EventCard.astro';
+import Hero from '../components/Hero.astro';
 import { dictionaryFor } from '../i18n';
 import Base from '../layouts/Base.astro';
 import type { Locale } from '../lib/domain';
+import { pathFor } from '../lib/routes';
 
 interface Props {
   locale: Locale;
@@ -9,8 +16,86 @@ interface Props {
 
 const { locale } = Astro.props;
 const t = dictionaryFor(locale);
+const home = pathFor(locale, { kind: 'home' });
+
+// Style sample until stage 5 brings real events.
+const sampleEvents = [
+  { image: card1, type: 'corporate', year: '2025' },
+  { image: card2, type: 'exhibition', year: '2025' },
+  { image: card3, type: 'birthday', year: '2024' },
+] as const;
 ---
 
 <Base locale={locale} page={{ kind: 'home' }} title={t.meta.homeTitle} description={t.meta.homeDescription}>
-  <h1>ChocoParty</h1>
+  <Hero
+    locale={locale}
+    image={heroImage}
+    imageAlt=""
+    foundedYear={2015}
+    ordersCount={500}
+    bookHref={`${home}#prices`}
+    pricesHref={`${home}#prices`}
+  />
+
+  <section class="section" id="events" aria-labelledby="events-title">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-head__text">
+          <h2 id="events-title">{t.events.title}</h2>
+          <p>{t.events.lead}</p>
+        </div>
+        <a class="link-arrow" href={`${home}#events`}>{t.events.all}</a>
+      </div>
+      <ul class="cards" role="list">
+        {
+          sampleEvents.map((event) => (
+            <li>
+              <EventCard
+                href={`${home}#events`}
+                image={event.image}
+                imageAlt={t.eventTypes[event.type]}
+                title={t.eventTypes[event.type]}
+                dateLabel={event.year}
+              />
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
 </Base>
+
+<style>
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-5);
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (max-width: 1000px) {
+    .cards {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 720px) {
+    .cards {
+      grid-auto-flow: column;
+      grid-template-columns: none;
+      grid-auto-columns: 82%;
+      gap: var(--space-4);
+      margin-inline: -1rem;
+      padding-inline: 1rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-padding-inline: 1rem;
+      scrollbar-width: none;
+    }
+
+    .cards > li {
+      scroll-snap-align: start;
+    }
+  }
+</style>

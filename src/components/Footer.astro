@@ -1,0 +1,35 @@
+---
+import { dictionaryFor, fill } from '../i18n';
+import type { Locale } from '../lib/domain';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = dictionaryFor(locale);
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container site-footer__inner">
+    <img src="/brand/logo.svg" width="56" height="56" alt="" />
+    <p>{fill(t.footer.rights, { year })}</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--c-line);
+    background: var(--c-bg-2);
+  }
+
+  .site-footer__inner {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    padding-block: var(--space-6);
+    color: var(--c-muted);
+    font-size: var(--text-s);
+  }
+</style>

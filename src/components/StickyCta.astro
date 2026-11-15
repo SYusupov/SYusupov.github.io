@@ -1,0 +1,64 @@
+---
+import { dictionaryFor } from '../i18n';
+import type { Locale } from '../lib/domain';
+
+interface Props {
+  locale: Locale;
+  bookHref: string;
+}
+
+const { locale, bookHref } = Astro.props;
+const t = dictionaryFor(locale);
+---
+
+<div class="sticky-cta" data-sticky-cta>
+  <a class="btn btn--primary" href={bookHref}>{t.cta.bookDate}</a>
+</div>
+
+<script>
+  // On phones the bar steps aside only while the first screen's own buttons are on screen.
+  const bar = document.querySelector<HTMLElement>('[data-sticky-cta]');
+  const heroActions = document.querySelector('[data-hero-actions]');
+  if (bar && heroActions && 'IntersectionObserver' in window) {
+    new IntersectionObserver(
+      ([entry]) => {
+        bar.classList.toggle('is-hidden', entry.intersectionRatio >= 0.5);
+      },
+      { threshold: [0, 0.5, 1] },
+    ).observe(heroActions);
+  }
+</script>
+
+<style>
+  .sticky-cta {
+    display: none;
+  }
+
+  @media (max-width: 720px) {
+    .sticky-cta {
+      position: fixed;
+      inset: auto 0 0;
+      z-index: 60;
+      display: flex;
+      gap: var(--space-2);
+      padding: var(--space-3) 1rem calc(var(--space-3) + env(safe-area-inset-bottom));
+      background: var(--c-header-bg);
+      border-top: 1px solid var(--c-line);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      transition: transform 0.3s var(--ease);
+    }
+
+    .sticky-cta.is-hidden {
+      transform: translateY(110%);
+    }
+
+    .sticky-cta .btn {
+      flex: 1;
+    }
+
+    :global(body) {
+      padding-bottom: 5rem;
+    }
+  }
+</style>
