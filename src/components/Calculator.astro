@@ -1,0 +1,386 @@
+---
+import { dictionaryFor } from '../i18n';
+import { DEFAULT_SELECTION, SIZES, TARIFFS, type Locale, type Size, type Tariff } from '../lib/domain';
+import { formatSum } from '../lib/format';
+import { packageStrings } from '../lib/order-link';
+import { packageText, telegramLink } from '../lib/order-text';
+import { priceFor, type PriceTable } from '../lib/pricing';
+
+interface Props {
+  locale: Locale;
+  prices: PriceTable;
+  telegram: string;
+}
+
+const { locale, prices, telegram } = Astro.props;
+const t = dictionaryFor(locale);
+const strings = packageStrings(locale);
+const { size, tariff } = DEFAULT_SELECTION;
+const price = priceFor(prices, size, tariff);
+const orderHref = telegramLink(telegram, packageText(strings, locale, { size, tariff, price }));
+const contentsOf = (s: Size, tr: Tariff) => (tr === 'light' ? t.contents.light : t.contents[s][tr]);
+
+// Little fountain drawings: 3, 4 and 5 tiers, widest at the bottom.
+const TIERS: Record<Size, number> = { small: 3, medium: 4, large: 5 };
+const tiers = (count: number) =>
+  Array.from({ length: count }, (_, index) => {
+    const width = 10 + (index * 26) / (count - 1);
+    return { x: (40 - width) / 2, y: 44 - (count - index) * 8, width };
+  });
+---
+
+<section class="section section--alt" id="prices" aria-labelledby="prices-title">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-head__text">
+        <p class="eyebrow">{t.calculator.eyebrow}</p>
+        <h2 id="prices-title">{t.calculator.title}</h2>
+        <p>{t.calculator.lead}</p>
+      </div>
+    </div>
+
+    <div
+      class="calculator"
+      data-calculator
+      data-locale={locale}
+      data-telegram={telegram}
+      data-prices={JSON.stringify(prices)}
+      data-strings={JSON.stringify(strings)}
+    >
+      <form class="calculator__form">
+        <fieldset>
+          <legend>{t.calculator.sizeLegend}</legend>
+          <div class="options">
+            {
+              SIZES.map((option) => (
+                <label class="option">
+                  <input type="radio" name="size" value={option} checked={option === size} />
+                  <svg class="option__icon" viewBox="0 0 40 46" width="40" height="46" aria-hidden="true">
+                    {tiers(TIERS[option]).map((tier) => (
+                      <rect x={tier.x} y={tier.y} width={tier.width} height="6" rx="2" />
+                    ))}
+                  </svg>
+                  <span class="option__name">{t.sizes[option].name}</span>
+                  <span class="option__meta">{t.sizes[option].details}</span>
+                  <span class="option__meta">{t.sizes[option].guests}</span>
+                </label>
+              ))
+            }
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>{t.calculator.tariffLegend}</legend>
+          <div class="options options--tariffs">
+            {
+              TARIFFS.map((option) => (
+                <label class="option">
+                  <input type="radio" name="tariff" value={option} checked={option === tariff} />
+                  <span class="option__name">{t.tariffs[option].name}</span>
+                  <span class="option__meta">{t.tariffs[option].summary}</span>
+                  <span class="option__price" data-tariff-price={option}>
+                    {formatSum(priceFor(prices, size, option), locale)}
+                  </span>
+                </label>
+              ))
+            }
+          </div>
+        </fieldset>
+        <p class="calculator__flavours">{t.calculator.flavours}</p>
+      </form>
+
+      <aside class="calculator__summary" aria-live="polite">
+        <p class="calculator__label">{t.calculator.total}</p>
+        <p class="calculator__total" data-total>{formatSum(price, locale)}</p>
+        <p class="calculator__choice" data-choice>
+          {strings.sizeNames[size]} · {strings.tariffNames[tariff]}
+        </p>
+        <div class="calculator__contents">
+          <p class="calculator__label">{t.calculator.contents}</p>
+          {
+            SIZES.flatMap((s) =>
+              TARIFFS.map((tr) => (
+                <ul data-contents={`${s}-${tr}`} hidden={!(s === size && tr === tariff)}>
+                  {contentsOf(s, tr).map((item) => (
+                    <li>{item}</li>
+                  ))}
+                </ul>
+              )),
+            )
+          }
+        </div>
+        <a
+          class="btn btn--primary calculator__order"
+          data-order
+          data-hides-sticky
+          href={orderHref}
+          target="_blank"
+          rel="noopener"
+        >
+          {t.order.button}
+        </a>
+        <p class="calculator__note">{t.calculator.note}</p>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<script>
+  import type { Locale, Size, Tariff } from '../lib/domain';
+  import { formatSum } from '../lib/format';
+  import { packageText, telegramLink, type PackageStrings } from '../lib/order-text';
+  import { priceFor, type PriceTable } from '../lib/pricing';
+
+  for (const root of document.querySelectorAll<HTMLElement>('[data-calculator]')) {
+    const locale = root.dataset.locale as Locale;
+    const telegram = root.dataset.telegram ?? '';
+    const prices = JSON.parse(root.dataset.prices ?? '{}') as PriceTable;
+    const strings = JSON.parse(root.dataset.strings ?? '{}') as PackageStrings;
+    const form = root.querySelector('form');
+    const total = root.querySelector('[data-total]');
+    const choice = root.querySelector('[data-choice]');
+    const order = root.querySelector<HTMLAnchorElement>('[data-order]');
+    if (!form || !total || !choice || !order) continue;
+
+    const update = () => {
+      const data = new FormData(form);
+      const size = data.get('size') as Size;
+      const tariff = data.get('tariff') as Tariff;
+      const price = priceFor(prices, size, tariff);
+      total.textContent = formatSum(price, locale);
+      choice.textContent = `${strings.sizeNames[size]} · ${strings.tariffNames[tariff]}`;
+      order.href = telegramLink(telegram, packageText(strings, locale, { size, tariff, price }));
+      root.querySelectorAll<HTMLElement>('[data-contents]').forEach((list) => {
+        list.hidden = list.dataset.contents !== `${size}-${tariff}`;
+      });
+      root.querySelectorAll<HTMLElement>('[data-tariff-price]').forEach((cell) => {
+        cell.textContent = formatSum(priceFor(prices, size, cell.dataset.tariffPrice as Tariff), locale);
+      });
+    };
+
+    form.addEventListener('change', update);
+    update(); // the browser may restore a previous choice on «back»
+  }
+</script>
+
+<style>
+  .calculator {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 24rem);
+    gap: var(--space-6);
+    align-items: start;
+  }
+
+  fieldset {
+    margin: 0 0 var(--space-6);
+    padding: 0;
+    border: 0;
+  }
+
+  legend {
+    margin-bottom: var(--space-3);
+    color: var(--c-muted);
+    font-size: var(--text-xs);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .options {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-3);
+  }
+
+  .option {
+    position: relative;
+    display: grid;
+    align-content: start;
+    gap: var(--space-1);
+    padding: var(--space-4) var(--space-4) var(--space-5);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-m);
+    background: var(--c-surface);
+    cursor: pointer;
+    transition:
+      border-color 0.2s var(--ease),
+      background-color 0.2s var(--ease);
+  }
+
+  /* The real radio covers the whole card, invisible: a tap anywhere on the card selects it. */
+  .option input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  .option:hover {
+    border-color: var(--c-ghost-line);
+  }
+
+  .option:has(input:checked) {
+    border-color: var(--c-accent);
+    background: var(--c-surface-2);
+    box-shadow: inset 0 0 0 1px var(--c-accent);
+  }
+
+  .option:has(input:focus-visible) {
+    outline: 2px solid var(--c-accent);
+    outline-offset: 3px;
+  }
+
+  .option__icon {
+    margin-bottom: var(--space-2);
+    fill: var(--c-accent);
+  }
+
+  .option__name {
+    font-family: var(--font-display), Georgia, serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  .option__meta {
+    color: var(--c-muted);
+    font-size: var(--text-s);
+    line-height: 1.4;
+  }
+
+  .option__price {
+    margin-top: var(--space-2);
+    font-weight: 700;
+  }
+
+  .calculator__flavours {
+    color: var(--c-muted);
+    font-size: var(--text-s);
+  }
+
+  .calculator__summary {
+    position: sticky;
+    top: calc(var(--header-height) + var(--space-4));
+    display: grid;
+    gap: var(--space-2);
+    padding: var(--space-6);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-l);
+    background: var(--c-surface);
+    box-shadow: var(--shadow-card);
+  }
+
+  .calculator__label {
+    color: var(--c-muted);
+    font-size: var(--text-xs);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .calculator__total {
+    font-family: var(--font-display), Georgia, serif;
+    font-size: clamp(2rem, 1.6rem + 1.4vw, 2.6rem);
+    font-weight: 600;
+    font-variant-numeric: lining-nums;
+    line-height: 1.1;
+  }
+
+  .calculator__choice {
+    color: var(--c-accent-text);
+    font-weight: 600;
+  }
+
+  .calculator__contents {
+    margin-block: var(--space-4);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--c-line);
+  }
+
+  .calculator__contents ul {
+    display: grid;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+    padding: 0;
+    list-style: none;
+    font-size: var(--text-s);
+  }
+
+  .calculator__contents li {
+    display: flex;
+    gap: var(--space-2);
+  }
+
+  .calculator__contents li::before {
+    content: '✓';
+    color: var(--c-accent-text);
+    font-weight: 700;
+  }
+
+  .calculator__order {
+    width: 100%;
+  }
+
+  .calculator__note {
+    color: var(--c-muted);
+    font-size: var(--text-xs);
+    text-align: center;
+  }
+
+  @media (max-width: 960px) {
+    .calculator {
+      grid-template-columns: 1fr;
+    }
+
+    .calculator__summary {
+      position: static;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .options {
+      gap: var(--space-2);
+    }
+
+    .option {
+      padding: var(--space-3) var(--space-3) var(--space-4);
+    }
+
+    .option__name {
+      font-size: 1.05rem;
+    }
+
+    .option__meta {
+      font-size: var(--text-xs);
+    }
+
+    .option__price {
+      font-size: var(--text-s);
+    }
+
+    /* Tariffs as a list on phones: name and summary on the left, price on the right. */
+    .options--tariffs {
+      grid-template-columns: 1fr;
+    }
+
+    .options--tariffs .option {
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      column-gap: var(--space-3);
+      padding: var(--space-3) var(--space-4);
+    }
+
+    .options--tariffs .option__meta {
+      grid-column: 1;
+    }
+
+    .options--tariffs .option__price {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+      margin-top: 0;
+      white-space: nowrap;
+    }
+  }
+</style>

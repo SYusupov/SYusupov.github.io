@@ -3,10 +3,12 @@ import card1 from '../assets/placeholder/card-1.webp';
 import card2 from '../assets/placeholder/card-2.webp';
 import card3 from '../assets/placeholder/card-3.webp';
 import heroImage from '../assets/placeholder/hero.webp';
+import Calculator from '../components/Calculator.astro';
 import EventCard from '../components/EventCard.astro';
 import Hero from '../components/Hero.astro';
 import { dictionaryFor } from '../i18n';
 import Base from '../layouts/Base.astro';
+import { getPrices, getSite } from '../lib/content';
 import type { Locale } from '../lib/domain';
 import { pathFor } from '../lib/routes';
 
@@ -17,6 +19,7 @@ interface Props {
 const { locale } = Astro.props;
 const t = dictionaryFor(locale);
 const home = pathFor(locale, { kind: 'home' });
+const [site, prices] = await Promise.all([getSite(), getPrices()]);
 
 // Style sample until stage 5 brings real events.
 const sampleEvents = [
@@ -31,8 +34,8 @@ const sampleEvents = [
     locale={locale}
     image={heroImage}
     imageAlt=""
-    foundedYear={2015}
-    ordersCount={500}
+    foundedYear={site.foundedYear}
+    ordersCount={site.ordersCount}
     bookHref={`${home}#prices`}
     pricesHref={`${home}#prices`}
   />
@@ -63,6 +66,8 @@ const sampleEvents = [
       </ul>
     </div>
   </section>
+
+  <Calculator locale={locale} prices={prices} telegram={site.telegram} />
 </Base>
 
 <style>

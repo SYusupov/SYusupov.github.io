@@ -16,16 +16,23 @@ const t = dictionaryFor(locale);
 </div>
 
 <script>
-  // On phones the bar steps aside only while the first screen's own buttons are on screen.
+  // On phones the bar steps aside while another booking button (marked data-hides-sticky)
+  // is at least half on screen, so the same action never shows twice.
   const bar = document.querySelector<HTMLElement>('[data-sticky-cta]');
-  const heroActions = document.querySelector('[data-hero-actions]');
-  if (bar && heroActions && 'IntersectionObserver' in window) {
-    new IntersectionObserver(
-      ([entry]) => {
-        bar.classList.toggle('is-hidden', entry.intersectionRatio >= 0.5);
+  const buttons = document.querySelectorAll('[data-hides-sticky]');
+  if (bar && buttons.length && 'IntersectionObserver' in window) {
+    const visible = new Set<Element>();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.intersectionRatio >= 0.5) visible.add(entry.target);
+          else visible.delete(entry.target);
+        }
+        bar.classList.toggle('is-hidden', visible.size > 0);
       },
       { threshold: [0, 0.5, 1] },
-    ).observe(heroActions);
+    );
+    buttons.forEach((button) => observer.observe(button));
   }
 </script>
 
