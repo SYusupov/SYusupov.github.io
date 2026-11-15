@@ -12,6 +12,7 @@ interface Props {
 
 const { locale, photos, videos } = Astro.props;
 const t = dictionaryFor(locale);
+// Phones: `sizes` is set below the real width on purpose, so 3× screens fetch ~2× images (half the bytes).
 ---
 
 <ul class="gallery" role="list" data-gallery>
@@ -31,8 +32,8 @@ const t = dictionaryFor(locale);
           <Image
             src={photo.image}
             alt={photo.alt}
-            widths={[480, 960]}
-            sizes="(max-width: 720px) 50vw, (max-width: 1100px) 33vw, 380px"
+            widths={[320, 480, 640, 960]}
+            sizes="(max-width: 720px) 33vw, (max-width: 1100px) 33vw, 380px"
             format="webp"
             quality={72}
             loading="lazy"

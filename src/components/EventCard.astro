@@ -15,6 +15,7 @@ interface Props {
 const { event, locale, headingLevel = 'h3' } = Astro.props;
 const t = dictionaryFor(locale);
 const Heading = headingLevel;
+// Phones: `sizes` is set below the real width on purpose, so 3× screens fetch ~2× images (half the bytes).
 ---
 
 <article class="event-card">
@@ -23,8 +24,8 @@ const Heading = headingLevel;
       <Image
         src={event.data.cover}
         alt={eventPhotoAlt(event.data, locale, 1)}
-        widths={[480, 960]}
-        sizes="(max-width: 720px) 82vw, (max-width: 1000px) 45vw, 380px"
+        widths={[400, 640, 960]}
+        sizes="(max-width: 720px) 55vw, (max-width: 1000px) 45vw, 380px"
         format="webp"
         quality={72}
         loading="lazy"

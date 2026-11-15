@@ -44,6 +44,7 @@ const crumbs = [
   { name: t.events.title, path: eventsPath },
   { name: title, path: pathFor(locale, page) },
 ];
+// Phones: `sizes` is set below the real width on purpose, so 3× screens fetch ~2× images (half the bytes).
 ---
 
 <Base
@@ -74,8 +75,8 @@ const crumbs = [
       <Image
         src={data.cover}
         alt={eventPhotoAlt(data, locale, 1)}
-        widths={[640, 960, 1280, 1600]}
-        sizes="(max-width: 1232px) calc(100vw - 2rem), 1200px"
+        widths={[640, 800, 1200, 1600]}
+        sizes="(max-width: 720px) 66vw, (max-width: 1232px) calc(100vw - 2rem), 1200px"
         format="webp"
         quality={75}
         loading="eager"
