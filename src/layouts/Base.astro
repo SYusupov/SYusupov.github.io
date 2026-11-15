@@ -5,7 +5,6 @@ import Header from '../components/Header.astro';
 import StickyCta from '../components/StickyCta.astro';
 import { DEFAULT_LOCALE, type Locale } from '../lib/domain';
 import { absoluteUrl, alternatesFor, pathFor, type Page } from '../lib/routes';
-import { DEFAULT_THEME } from '../lib/theme';
 import '../styles/global.css';
 
 interface Props {
@@ -24,7 +23,7 @@ const fontSubset = locale === 'ru' ? 'cyrillic' : 'latin';
 ---
 
 <!doctype html>
-<html lang={locale} data-theme={DEFAULT_THEME}>
+<html lang={locale}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -40,17 +39,6 @@ const fontSubset = locale === 'ru' ? 'cyrillic' : 'latin';
     <link rel="icon" href="/brand/logo.svg" type="image/svg+xml" />
     <Font cssVariable="--font-display" preload={[{ subset: fontSubset, weight: 600 }]} />
     <Font cssVariable="--font-body" preload={[{ subset: fontSubset, weight: 400 }]} />
-    <script is:inline>
-      // Style preview while the owner chooses: ?theme=light or ?theme=dark, kept for the visit.
-      (function () {
-        try {
-          var chosen = new URLSearchParams(location.search).get('theme');
-          if (chosen === 'light' || chosen === 'dark') sessionStorage.setItem('theme', chosen);
-          var theme = sessionStorage.getItem('theme');
-          if (theme) document.documentElement.dataset.theme = theme;
-        } catch (e) {}
-      })();
-    </script>
   </head>
   <body>
     <Header locale={locale} page={page} bookHref={bookHref} />
