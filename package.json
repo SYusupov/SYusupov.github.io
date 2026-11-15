@@ -10,7 +10,7 @@
     "dev": "astro dev",
     "build": "astro build && tsx scripts/prepare-videos.ts",
     "preview": "astro preview",
-    "build:test": "CONTENT_ROOT=tests/fixtures/content astro build && CONTENT_ROOT=tests/fixtures/content tsx scripts/prepare-videos.ts",
+    "build:test": "CONTENT_ROOT=tests/fixtures/content BUILD_NOW=2025-12-15T12:00:00+05:00 astro build && CONTENT_ROOT=tests/fixtures/content tsx scripts/prepare-videos.ts",
     "serve": "tsx scripts/serve.ts dist 4321",
     "serve:test": "tsx scripts/serve.ts dist-test 4322",
     "test": "vitest run",

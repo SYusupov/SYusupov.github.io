@@ -255,6 +255,56 @@ function reviewsForm(): CmsForm {
   };
 }
 
+function promotionsForm(): CmsForm {
+  const languages = (widget: 'string' | 'text', russianHint: string): CmsField[] => [
+    { name: 'ru', label: 'По-русски', widget, hint: russianHint },
+    { name: 'uz', label: "O'zbekcha", widget, required: false },
+    { name: 'en', label: 'English', widget, required: false },
+  ];
+  return {
+    name: 'promotions',
+    label: 'Акции',
+    label_singular: 'Акция',
+    icon: 'sell',
+    folder: `${CONTENT}/promotions`,
+    path: '{{slug}}/index',
+    media_folder: '',
+    public_folder: '',
+    format: 'json',
+    create: true,
+    delete: true,
+    slug: '{{year}}-{{month}}-{{day}}-{{uuid_shorter}}',
+    summary: "{{title.ru}} · {{start | date('DD.MM')}}–{{end | date('DD.MM.YYYY')}}",
+    sortable_fields: { fields: ['start'], default: { field: 'start', direction: 'descending' } },
+    fields: [
+      {
+        name: 'title',
+        label: 'Заголовок',
+        widget: 'object',
+        collapsed: false,
+        fields: languages('string', 'Например «Новогодняя акция».'),
+      },
+      {
+        name: 'text',
+        label: 'Текст',
+        widget: 'object',
+        collapsed: false,
+        hint: 'На узбекской и английской страницах акция видна, если есть перевод.',
+        fields: languages('text', 'Коротко: что получает клиент.'),
+      },
+      { name: 'photo', label: 'Фото', widget: 'image', required: false, choose_url: false },
+      { name: 'start', label: 'Первый день', widget: 'datetime', type: 'date' },
+      {
+        name: 'end',
+        label: 'Последний день',
+        widget: 'datetime',
+        type: 'date',
+        hint: 'Включительно. На следующий день акция исчезнет с сайта сама.',
+      },
+    ],
+  };
+}
+
 function pricesForm(): CmsForm {
   return {
     name: 'prices',
@@ -299,7 +349,7 @@ export function buildCmsConfig(options: CmsOptions = {}) {
         },
       },
     },
-    collections: [eventsForm(), companiesForm(), reviewsForm()],
+    collections: [eventsForm(), promotionsForm(), companiesForm(), reviewsForm()],
     singletons: [pricesForm()],
   };
 }

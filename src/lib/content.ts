@@ -1,7 +1,9 @@
 /** The only place pages read content from. */
+import type { ImageMetadata } from 'astro';
 import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
 import type { Locale, OccasionType } from './domain';
 import type { PriceTable } from './pricing';
+import { buildTime, promoWindow } from './promo';
 import type { SiteSettings } from './schemas';
 
 export type EventEntry = CollectionEntry<'events'>;
@@ -44,6 +46,41 @@ export async function getWallCompanies(): Promise<CompanyEntry[]> {
         (a.data.order ?? Number.MAX_SAFE_INTEGER) - (b.data.order ?? Number.MAX_SAFE_INTEGER) ||
         a.data.name.localeCompare(b.data.name, 'ru'),
     );
+}
+
+export interface PromotionView {
+  id: string;
+  title: string;
+  text: string;
+  photo?: ImageMetadata;
+  end: string;
+  /** Window in epoch milliseconds, `until` exclusive. */
+  from: number;
+  until: number;
+}
+
+/** Promotions not over at build time, with title and text in the page's language, soonest first. */
+export async function getPromotions(locale: Locale): Promise<PromotionView[]> {
+  const now = buildTime();
+  const promotions = await getCollection('promotions');
+  return promotions
+    .map((promotion) => ({ promotion, window: promoWindow(promotion.data.start, promotion.data.end) }))
+    .filter(
+      ({ promotion, window }) =>
+        window.from < window.until &&
+        window.until > now &&
+        promotion.data.title[locale] &&
+        promotion.data.text[locale],
+    )
+    .sort((a, b) => a.window.from - b.window.from)
+    .map(({ promotion, window }) => ({
+      id: promotion.id,
+      title: promotion.data.title[locale] ?? '',
+      text: promotion.data.text[locale] ?? '',
+      photo: promotion.data.photo,
+      end: promotion.data.end,
+      ...window,
+    }));
 }
 
 export interface ReviewView {

@@ -6,7 +6,7 @@ import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { z } from 'astro/zod';
 import { buildCmsConfig, type CmsField } from '../admin/config';
-import { companyWarnings, eventWarnings, makeSchemas, type ContentWarning } from './schemas';
+import { companyWarnings, eventWarnings, makeSchemas, promotionWarnings, type ContentWarning } from './schemas';
 
 export interface CheckReport {
   errors: string[];
@@ -142,6 +142,18 @@ export function checkContentRoot(root: string): CheckReport {
     report,
   );
   checkFolders(root, { folder: 'reviews', form: 'reviews', schema: schemas.review, place: 'папке отзыва' }, report);
+  checkFolders(
+    root,
+    {
+      folder: 'promotions',
+      form: 'promotions',
+      schema: schemas.promotion,
+      place: 'папке акции',
+      warnings: promotionWarnings,
+      files: (promotion) => (promotion.photo ? [{ name: promotion.photo, field: 'photo' }] : []),
+    },
+    report,
+  );
 
   return report;
 }

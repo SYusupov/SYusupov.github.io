@@ -51,6 +51,7 @@ export const uz: Dictionary = {
   },
   dates: {
     months: ['yanvar', 'fevral', 'mart', 'aprel', 'may', 'iyun', 'iyul', 'avgust', 'sentabr', 'oktabr', 'noyabr', 'dekabr'],
+    monthsGenitive: ['yanvar', 'fevral', 'mart', 'aprel', 'may', 'iyun', 'iyul', 'avgust', 'sentabr', 'oktabr', 'noyabr', 'dekabr'],
     monthYear: '{year}-yil {month}',
   },
   eventNames: {
@@ -162,6 +163,11 @@ export const uz: Dictionary = {
   reviews: {
     title: 'Fikrlar',
     lead: 'Mijozlar bayramdan keyin nima deydi.',
+  },
+  promo: {
+    label: 'Aksiya',
+    until: '{day}-{month}gacha',
+    book: "Aksiya bo'yicha band qilish",
   },
   sizes: {
     small: { name: 'Kichik', guests: '30 nafargacha mehmon', details: '3 qavat · taxminan 40 sm' },

@@ -2,8 +2,10 @@
 import { Font } from 'astro:assets';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
+import PromoStrip from '../components/PromoStrip.astro';
 import StickyCta from '../components/StickyCta.astro';
 import { dictionaryFor } from '../i18n';
+import { getPromotions } from '../lib/content';
 import { DEFAULT_LOCALE, type Locale } from '../lib/domain';
 import { absoluteUrl, alternatesFor, pathFor, type Page } from '../lib/routes';
 import '../styles/global.css';
@@ -25,6 +27,7 @@ const bookHref = `${pathFor(locale, { kind: 'home' })}#prices`;
 const bar = sticky ?? { label: t.cta.bookDate, href: bookHref };
 // Only the two font files the first screen needs are fetched early; the rest load on demand.
 const fontSubset = locale === 'ru' ? 'cyrillic' : 'latin';
+const promotions = await getPromotions(locale);
 ---
 
 <!doctype html>
@@ -46,6 +49,7 @@ const fontSubset = locale === 'ru' ? 'cyrillic' : 'latin';
     <Font cssVariable="--font-body" preload={[{ subset: fontSubset, weight: 400 }]} />
   </head>
   <body>
+    <PromoStrip locale={locale} promotions={promotions} />
     <Header locale={locale} page={page} bookHref={bookHref} />
     <main>
       <slot />

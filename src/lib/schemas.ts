@@ -95,6 +95,20 @@ export function makeSchemas<Photo extends z.ZodType>(photo: Photo) {
     ),
   });
 
+  const promotion = z.object({
+    title: z.preprocess(
+      (value) => blankToUndefined(value) ?? {},
+      z.object({ ru: requiredText('напишите заголовок по-русски'), uz: optionalText, en: optionalText }),
+    ),
+    text: z.preprocess(
+      (value) => blankToUndefined(value) ?? {},
+      z.object({ ru: requiredText('напишите текст по-русски'), uz: optionalText, en: optionalText }),
+    ),
+    photo: z.preprocess(blankToUndefined, photo.optional()),
+    start: date,
+    end: date,
+  });
+
   const event = z.object({
     date,
     type: z.enum(EVENT_TYPES, { error: 'выберите тип из списка' }),
@@ -111,7 +125,16 @@ export function makeSchemas<Photo extends z.ZodType>(photo: Photo) {
     description: localizedText,
   });
 
-  return { event, company, review, prices: pricesSchema, site: siteSchema };
+  return { event, company, review, promotion, prices: pricesSchema, site: siteSchema };
+}
+
+/** A promotion whose last day comes before its first day is kept but never shown. */
+export function promotionWarnings(raw: unknown): ContentWarning[] {
+  if (!raw || typeof raw !== 'object') return [];
+  const { start, end } = raw as Record<string, unknown>;
+  return typeof start === 'string' && typeof end === 'string' && end < start
+    ? [{ path: ['end'], message: 'он раньше первого дня, акция не показывается' }]
+    : [];
 }
 
 /** A company without a logo stays in the files but off the wall. */

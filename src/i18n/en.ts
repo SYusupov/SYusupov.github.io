@@ -51,6 +51,7 @@ export const en: Dictionary = {
   },
   dates: {
     months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+    monthsGenitive: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
     monthYear: '{month} {year}',
   },
   eventNames: {
@@ -162,6 +163,11 @@ export const en: Dictionary = {
   reviews: {
     title: 'Reviews',
     lead: 'What clients say after the celebration.',
+  },
+  promo: {
+    label: 'Special offer',
+    until: 'until {day} {month}',
+    book: 'Book with this offer',
   },
   sizes: {
     small: { name: 'Small', guests: 'up to 30 guests', details: '3 tiers · about 40 cm' },

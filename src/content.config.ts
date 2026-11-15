@@ -22,6 +22,10 @@ export const collections = {
     loader: folders('reviews'),
     schema: ({ image }) => makeSchemas(image()).review,
   }),
+  promotions: defineCollection({
+    loader: folders('promotions'),
+    schema: ({ image }) => makeSchemas(image()).promotion,
+  }),
   prices: defineCollection({
     loader: glob({ pattern: 'prices.json', base: `${root}/settings` }),
     schema: pricesSchema,

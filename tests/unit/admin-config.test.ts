@@ -87,11 +87,17 @@ const formNamed = (name: string) => {
   return form;
 };
 
-const { event: eventSchema, company: companySchema, review: reviewSchema } = makeSchemas(z.string().min(1));
+const {
+  event: eventSchema,
+  company: companySchema,
+  review: reviewSchema,
+  promotion: promotionSchema,
+} = makeSchemas(z.string().min(1));
 
 const cases = [
   { form: 'prices', schema: pricesSchema },
   { form: 'events', schema: eventSchema },
+  { form: 'promotions', schema: promotionSchema },
   { form: 'companies', schema: companySchema },
   { form: 'reviews', schema: reviewSchema },
 ] as const;

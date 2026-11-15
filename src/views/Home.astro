@@ -4,11 +4,12 @@ import Calculator from '../components/Calculator.astro';
 import EventGrid from '../components/EventGrid.astro';
 import Hero from '../components/Hero.astro';
 import OccasionCards from '../components/OccasionCards.astro';
+import PromoBlock from '../components/PromoBlock.astro';
 import Reviews from '../components/Reviews.astro';
 import TrustSection from '../components/TrustSection.astro';
 import { dictionaryFor } from '../i18n';
 import Base from '../layouts/Base.astro';
-import { getEvents, getPrices, getReviews, getSite, getWallCompanies } from '../lib/content';
+import { getEvents, getPrices, getPromotions, getReviews, getSite, getWallCompanies } from '../lib/content';
 import type { Locale } from '../lib/domain';
 import { pathFor } from '../lib/routes';
 
@@ -19,12 +20,13 @@ interface Props {
 const { locale } = Astro.props;
 const t = dictionaryFor(locale);
 const home = pathFor(locale, { kind: 'home' });
-const [site, prices, events, companies, reviews] = await Promise.all([
+const [site, prices, events, companies, reviews, promotions] = await Promise.all([
   getSite(),
   getPrices(),
   getEvents(),
   getWallCompanies(),
   getReviews(locale),
+  getPromotions(locale),
 ]);
 const latest = events.slice(0, 5);
 ---
@@ -74,6 +76,8 @@ const latest = events.slice(0, 5);
   }
 
   <Calculator locale={locale} prices={prices} telegram={site.telegram} />
+
+  <PromoBlock locale={locale} promotions={promotions} />
 
   {reviews.length > 0 && <Reviews locale={locale} reviews={reviews} />}
 </Base>

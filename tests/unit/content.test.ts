@@ -21,6 +21,7 @@ describe('content check before the build', () => {
     ['company-without-name', 'companies/no-name/index.json: «Название» — укажите название компании'],
     ['company-missing-logo', 'companies/luna/index.json: «Логотип» — нет файла logo.png в папке компании'],
     ['review-without-russian-text', 'reviews/2025-01-10-anna/index.json: «Отзыв → По-русски» — напишите текст отзыва по-русски'],
+    ['promotion-without-russian-title', 'promotions/2025-12-offer/index.json: «Заголовок → По-русски» — напишите заголовок по-русски'],
   ])('%s stops the publication with a clear message', (fixture, message) => {
     expect(checkContentRoot(invalid(fixture)).errors).toContain(message);
   });
@@ -50,6 +51,15 @@ describe('content check before the build', () => {
     expect(checkContentRoot(invalid('soft-company-without-logo'))).toEqual({
       errors: [],
       warnings: ['companies/luna/index.json: «Логотип» — логотипа нет, компания не показывается на стене'],
+    });
+  });
+
+  it('a promotion ending before it starts passes with a warning and is not shown', () => {
+    expect(checkContentRoot(invalid('soft-promotion-ends-before-start'))).toEqual({
+      errors: [],
+      warnings: [
+        'promotions/2025-12-offer/index.json: «Последний день» — он раньше первого дня, акция не показывается',
+      ],
     });
   });
 
