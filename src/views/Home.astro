@@ -1,14 +1,12 @@
 ---
-import card1 from '../assets/placeholder/card-1.webp';
-import card2 from '../assets/placeholder/card-2.webp';
-import card3 from '../assets/placeholder/card-3.webp';
 import heroImage from '../assets/placeholder/hero.webp';
 import Calculator from '../components/Calculator.astro';
-import EventCard from '../components/EventCard.astro';
+import EventGrid from '../components/EventGrid.astro';
 import Hero from '../components/Hero.astro';
+import OccasionCards from '../components/OccasionCards.astro';
 import { dictionaryFor } from '../i18n';
 import Base from '../layouts/Base.astro';
-import { getPrices, getSite } from '../lib/content';
+import { getEvents, getPrices, getSite } from '../lib/content';
 import type { Locale } from '../lib/domain';
 import { pathFor } from '../lib/routes';
 
@@ -19,14 +17,8 @@ interface Props {
 const { locale } = Astro.props;
 const t = dictionaryFor(locale);
 const home = pathFor(locale, { kind: 'home' });
-const [site, prices] = await Promise.all([getSite(), getPrices()]);
-
-// Style sample until stage 5 brings real events.
-const sampleEvents = [
-  { image: card1, type: 'corporate', year: '2025' },
-  { image: card2, type: 'exhibition', year: '2025' },
-  { image: card3, type: 'birthday', year: '2024' },
-] as const;
+const [site, prices, events] = await Promise.all([getSite(), getPrices(), getEvents()]);
+const latest = events.slice(0, 5);
 ---
 
 <Base locale={locale} page={{ kind: 'home' }} title={t.meta.homeTitle} description={t.meta.homeDescription}>
@@ -40,67 +32,36 @@ const sampleEvents = [
     pricesHref={`${home}#prices`}
   />
 
-  <section class="section" id="events" aria-labelledby="events-title">
+  <section class="section section--alt" id="occasions" aria-labelledby="occasions-title">
     <div class="container">
       <div class="section-head">
         <div class="section-head__text">
-          <h2 id="events-title">{t.events.title}</h2>
-          <p>{t.events.lead}</p>
+          <h2 id="occasions-title">{t.occasions.title}</h2>
+          <p>{t.occasions.lead}</p>
         </div>
-        <a class="link-arrow" href={`${home}#events`}>{t.events.all}</a>
       </div>
-      <ul class="cards" role="list">
-        {
-          sampleEvents.map((event) => (
-            <li>
-              <EventCard
-                href={`${home}#events`}
-                image={event.image}
-                imageAlt={t.eventTypes[event.type]}
-                title={t.eventTypes[event.type]}
-                dateLabel={event.year}
-              />
-            </li>
-          ))
-        }
-      </ul>
+      <OccasionCards locale={locale} events={events} fallbackImage={heroImage} />
     </div>
   </section>
 
+  {
+    latest.length > 0 && (
+      <section class="section" id="events" aria-labelledby="events-title">
+        <div class="container">
+          <div class="section-head">
+            <div class="section-head__text">
+              <h2 id="events-title">{t.events.title}</h2>
+              <p>{t.events.lead}</p>
+            </div>
+            <a class="link-arrow" href={pathFor(locale, { kind: 'events' })}>
+              {t.events.all}
+            </a>
+          </div>
+          <EventGrid events={latest} locale={locale} layout="carousel" />
+        </div>
+      </section>
+    )
+  }
+
   <Calculator locale={locale} prices={prices} telegram={site.telegram} />
 </Base>
-
-<style>
-  .cards {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: var(--space-5);
-    padding: 0;
-    list-style: none;
-  }
-
-  @media (max-width: 1000px) {
-    .cards {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-
-  @media (max-width: 720px) {
-    .cards {
-      grid-auto-flow: column;
-      grid-template-columns: none;
-      grid-auto-columns: 82%;
-      gap: var(--space-4);
-      margin-inline: -1rem;
-      padding-inline: 1rem;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      scroll-padding-inline: 1rem;
-      scrollbar-width: none;
-    }
-
-    .cards > li {
-      scroll-snap-align: start;
-    }
-  }
-</style>

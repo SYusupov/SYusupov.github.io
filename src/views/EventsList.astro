@@ -1,0 +1,163 @@
+---
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import EventGrid from '../components/EventGrid.astro';
+import { dictionaryFor } from '../i18n';
+import Base from '../layouts/Base.astro';
+import { eventYear, getEvents } from '../lib/content';
+import { EVENT_TYPES, type Locale } from '../lib/domain';
+import { pathFor } from '../lib/routes';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = dictionaryFor(locale);
+const events = await getEvents();
+const types = EVENT_TYPES.filter((type) => events.some((event) => event.data.type === type));
+const years = [...new Set(events.map(eventYear))];
+---
+
+<Base locale={locale} page={{ kind: 'events' }} title={t.eventsPage.metaTitle} description={t.eventsPage.metaDescription}>
+  <section class="section events-page">
+    <div class="container">
+      <Breadcrumbs
+        label={t.eventPage.breadcrumbs}
+        items={[{ name: t.nav.home, href: pathFor(locale, { kind: 'home' }) }, { name: t.events.title }]}
+      />
+      <div class="section-head">
+        <div class="section-head__text">
+          <h1>{t.events.title}</h1>
+          <p>{t.events.lead}</p>
+        </div>
+      </div>
+
+      <div class="filters" data-filters hidden>
+        <div class="filters__group" role="group" aria-label={t.eventsPage.typeFilter}>
+          <button type="button" data-filter="type" data-value="" aria-pressed="true">{t.eventsPage.allTypes}</button>
+          {
+            types.map((type) => (
+              <button type="button" data-filter="type" data-value={type} aria-pressed="false">
+                {t.eventTypes[type]}
+              </button>
+            ))
+          }
+        </div>
+        <div class="filters__group" role="group" aria-label={t.eventsPage.yearFilter}>
+          <button type="button" data-filter="year" data-value="" aria-pressed="true">{t.eventsPage.allYears}</button>
+          {
+            years.map((year) => (
+              <button type="button" data-filter="year" data-value={year} aria-pressed="false">
+                {year}
+              </button>
+            ))
+          }
+        </div>
+      </div>
+
+      <EventGrid events={events} locale={locale} layout="grid" />
+      <p class="filters__empty" data-filters-empty hidden>{t.eventsPage.empty}</p>
+    </div>
+  </section>
+</Base>
+
+<script>
+  // Filters work in the browser and live in the address (?type=wedding&year=2025), so a filtered
+  // list can be shared. Without JavaScript the filters stay hidden and every event is listed.
+  const root = document.querySelector<HTMLElement>('[data-filters]');
+  if (root) {
+    const cards = [...document.querySelectorAll<HTMLElement>('[data-event-list] [data-event-card]')];
+    const empty = document.querySelector<HTMLElement>('[data-filters-empty]');
+    const buttons = [...root.querySelectorAll<HTMLButtonElement>('button[data-filter]')];
+    const known = (key: string, value: string) =>
+      buttons.some((button) => button.dataset.filter === key && button.dataset.value === value);
+    const params = new URLSearchParams(location.search);
+    const state: Record<string, string> = {};
+    for (const key of ['type', 'year']) {
+      const value = params.get(key) ?? '';
+      state[key] = known(key, value) ? value : '';
+    }
+
+    const apply = () => {
+      let shown = 0;
+      for (const card of cards) {
+        const match =
+          (!state.type || card.dataset.type === state.type) && (!state.year || card.dataset.year === state.year);
+        card.hidden = !match;
+        if (match) shown += 1;
+      }
+      if (empty) empty.hidden = shown > 0;
+      for (const button of buttons) {
+        button.setAttribute('aria-pressed', String(state[button.dataset.filter ?? ''] === button.dataset.value));
+      }
+    };
+
+    root.addEventListener('click', (event) => {
+      const button = (event.target as HTMLElement).closest<HTMLButtonElement>('button[data-filter]');
+      if (!button?.dataset.filter) return;
+      state[button.dataset.filter] = button.dataset.value ?? '';
+      const url = new URL(location.href);
+      for (const key of ['type', 'year']) {
+        if (state[key]) url.searchParams.set(key, state[key]);
+        else url.searchParams.delete(key);
+      }
+      history.replaceState(null, '', url);
+      apply();
+    });
+
+    root.hidden = false;
+    apply();
+  }
+</script>
+
+<style>
+  .events-page {
+    padding-top: var(--space-6);
+  }
+
+  .events-page .section-head {
+    margin-top: var(--space-5);
+  }
+
+  .filters {
+    display: grid;
+    gap: var(--space-3);
+    margin-bottom: var(--space-6);
+  }
+
+  .filters__group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .filters button {
+    min-height: 2.5rem;
+    padding: 0.45rem 1rem;
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-pill);
+    background: var(--c-surface);
+    color: var(--c-text);
+    font-size: var(--text-s);
+    font-weight: 500;
+    cursor: pointer;
+    transition:
+      background-color 0.2s var(--ease),
+      border-color 0.2s var(--ease);
+  }
+
+  .filters button:hover {
+    border-color: var(--c-ghost-line);
+  }
+
+  .filters button[aria-pressed='true'] {
+    border-color: var(--c-cta-bg);
+    background: var(--c-cta-bg);
+    color: var(--c-cta-text);
+  }
+
+  .filters__empty {
+    padding: var(--space-6) 0;
+    color: var(--c-muted);
+  }
+</style>

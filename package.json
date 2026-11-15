@@ -8,9 +8,9 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && tsx scripts/prepare-videos.ts",
     "preview": "astro preview",
-    "build:test": "CONTENT_ROOT=tests/fixtures/content astro build",
+    "build:test": "CONTENT_ROOT=tests/fixtures/content astro build && CONTENT_ROOT=tests/fixtures/content tsx scripts/prepare-videos.ts",
     "serve": "tsx scripts/serve.ts dist 4321",
     "serve:test": "tsx scripts/serve.ts dist-test 4322",
     "test": "vitest run",

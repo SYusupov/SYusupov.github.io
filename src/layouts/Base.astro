@@ -3,6 +3,7 @@ import { Font } from 'astro:assets';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import StickyCta from '../components/StickyCta.astro';
+import { dictionaryFor } from '../i18n';
 import { DEFAULT_LOCALE, type Locale } from '../lib/domain';
 import { absoluteUrl, alternatesFor, pathFor, type Page } from '../lib/routes';
 import '../styles/global.css';
@@ -12,12 +13,16 @@ interface Props {
   page: Page;
   title: string;
   description: string;
+  /** The phone booking bar; by default it leads to the calculator. */
+  sticky?: { label: string; href: string; external?: boolean };
 }
 
-const { locale, page, title, description } = Astro.props;
+const { locale, page, title, description, sticky } = Astro.props;
+const t = dictionaryFor(locale);
 const canonical = absoluteUrl(pathFor(locale, page));
 const alternates = alternatesFor(page);
 const bookHref = `${pathFor(locale, { kind: 'home' })}#prices`;
+const bar = sticky ?? { label: t.cta.bookDate, href: bookHref };
 // Only the two font files the first screen needs are fetched early; the rest load on demand.
 const fontSubset = locale === 'ru' ? 'cyrillic' : 'latin';
 ---
@@ -46,6 +51,6 @@ const fontSubset = locale === 'ru' ? 'cyrillic' : 'latin';
       <slot />
     </main>
     <Footer locale={locale} />
-    <StickyCta locale={locale} bookHref={bookHref} />
+    <StickyCta {...bar} />
   </body>
 </html>

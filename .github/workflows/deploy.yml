@@ -32,6 +32,15 @@ jobs:
       - name: Check content
         shell: bash
         run: npm run check:content 2>&1 | tee check-content.log; exit "${PIPESTATUS[0]}"
+      - name: ffmpeg for event videos
+        run: command -v ffmpeg >/dev/null || (sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends ffmpeg)
+      - name: Restore compressed videos
+        id: video-cache
+        uses: actions/cache/restore@v6
+        with:
+          path: .video-cache
+          key: videos-${{ hashFiles('src/content/events/**/*.mp4', 'src/content/events/**/*.MP4', 'src/content/events/**/*.mov', 'src/content/events/**/*.MOV', 'src/content/events/**/*.webm', 'src/content/events/**/*.m4v') }}
+          restore-keys: videos-
       - name: Restore processed images
         id: image-cache
         uses: actions/cache/restore@v6
@@ -42,6 +51,12 @@ jobs:
       - name: Build
         shell: bash
         run: npm run build 2>&1 | tee build.log; exit "${PIPESTATUS[0]}"
+      - name: Save compressed videos
+        if: steps.video-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v6
+        with:
+          path: .video-cache
+          key: ${{ steps.video-cache.outputs.cache-primary-key }}
       - name: Save processed images
         if: steps.image-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@v6

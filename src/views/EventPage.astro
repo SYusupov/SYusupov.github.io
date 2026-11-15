@@ -1,0 +1,201 @@
+---
+import { Image } from 'astro:assets';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import EventGrid from '../components/EventGrid.astro';
+import Gallery from '../components/Gallery.astro';
+import { dictionaryFor, fill } from '../i18n';
+import Base from '../layouts/Base.astro';
+import { getEvents, getSite, type EventEntry } from '../lib/content';
+import type { Locale } from '../lib/domain';
+import { eventDateLabel, eventPhotoAlt, eventSentence, eventTitle } from '../lib/event-title';
+import { eventOrderLink } from '../lib/order-link';
+import { absoluteUrl, pathFor } from '../lib/routes';
+import { videoUrls } from '../lib/video';
+
+interface Props {
+  locale: Locale;
+  event: EventEntry;
+}
+
+const { locale, event } = Astro.props;
+const t = dictionaryFor(locale);
+const data = event.data;
+const site = await getSite();
+const title = eventTitle(data, locale);
+const dateLabel = eventDateLabel(data, locale);
+const sentence = eventSentence(data, locale);
+const page = { kind: 'event', slug: event.id } as const;
+const home = pathFor(locale, { kind: 'home' });
+const eventsPath = pathFor(locale, { kind: 'events' });
+const orderHref = eventOrderLink({ locale, telegram: site.telegram, title, url: absoluteUrl(pathFor(locale, page)) });
+const description = data.description[locale];
+// The cover is photo 1 in captions; the gallery follows it.
+const photos = data.gallery.map((image, index) => ({ image, alt: eventPhotoAlt(data, locale, index + 2) }));
+const videos = data.videos.map((file, index) => ({
+  ...videoUrls(event.id, file),
+  label: `${title} — ${t.eventsPage.video.toLowerCase()} ${index + 1}`,
+}));
+const others = (await getEvents()).filter((item) => item.id !== event.id);
+const sameType = others.filter((item) => item.data.type === data.type);
+const related = (sameType.length ? sameType : others).slice(0, 3);
+---
+
+<Base
+  locale={locale}
+  page={page}
+  title={fill(t.eventPage.metaTitle, { title, date: dateLabel })}
+  description={description ? `${sentence} ${description}` : sentence}
+  sticky={{ label: t.eventPage.sameAsThis, href: orderHref, external: true }}
+>
+  <article class="event">
+    <header class="container event__head">
+      <Breadcrumbs
+        label={t.eventPage.breadcrumbs}
+        items={[{ name: t.nav.home, href: home }, { name: t.events.title, href: eventsPath }, { name: title }]}
+      />
+      <p class="eyebrow">{t.eventTypes[data.type]} · {dateLabel}</p>
+      <h1>{title}</h1>
+      <p class="event__sentence">{sentence}</p>
+      <div class="event__actions" data-hides-sticky>
+        <a class="btn btn--primary" href={orderHref} target="_blank" rel="noopener">{t.eventPage.sameAsThis}</a>
+        <a class="btn btn--ghost" href={`${home}#prices`}>{t.cta.prices}</a>
+      </div>
+    </header>
+
+    <div class="container event__cover">
+      <Image
+        src={data.cover}
+        alt={eventPhotoAlt(data, locale, 1)}
+        widths={[640, 960, 1280, 1600]}
+        sizes="(max-width: 1232px) calc(100vw - 2rem), 1200px"
+        format="webp"
+        quality={75}
+        loading="eager"
+        fetchpriority="high"
+      />
+    </div>
+
+    {
+      description && (
+        <div class="container event__description">
+          <p>{description}</p>
+        </div>
+      )
+    }
+
+    {
+      (photos.length > 0 || videos.length > 0) && (
+        <section class="section container" aria-labelledby="gallery-title">
+          <h2 id="gallery-title" class="event__gallery-title">
+            {t.eventPage.gallery}
+          </h2>
+          <Gallery locale={locale} photos={photos} videos={videos} />
+        </section>
+      )
+    }
+
+    <section class="cta-band">
+      <div class="container cta-band__inner">
+        <h2>{t.eventPage.ctaTitle}</h2>
+        <p>{t.eventPage.ctaText}</p>
+        <a class="btn btn--primary" href={orderHref} target="_blank" rel="noopener">{t.eventPage.sameAsThis}</a>
+      </div>
+    </section>
+
+    {
+      related.length > 0 && (
+        <section class="section" aria-labelledby="more-title">
+          <div class="container">
+            <div class="section-head">
+              <h2 id="more-title">{t.eventPage.more}</h2>
+              <a class="link-arrow" href={eventsPath}>
+                {t.events.all}
+              </a>
+            </div>
+            <EventGrid events={related} locale={locale} layout="carousel" />
+          </div>
+        </section>
+      )
+    }
+  </article>
+</Base>
+
+<style>
+  .event__head {
+    padding-top: var(--space-6);
+    padding-bottom: var(--space-6);
+  }
+
+  .event__head .eyebrow {
+    margin-top: var(--space-6);
+  }
+
+  .event__head h1 {
+    margin-top: var(--space-3);
+    max-width: 22ch;
+  }
+
+  .event__sentence {
+    max-width: 44rem;
+    margin-top: var(--space-4);
+    color: var(--c-muted);
+    font-size: var(--text-l);
+  }
+
+  .event__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-5);
+  }
+
+  .event__cover :global(img) {
+    width: 100%;
+    max-height: 42rem;
+    object-fit: cover;
+    border-radius: var(--radius-l);
+  }
+
+  .event__description {
+    max-width: 48rem;
+    margin-top: var(--space-6);
+    font-size: var(--text-l);
+  }
+
+  .event__gallery-title {
+    margin-bottom: var(--space-5);
+  }
+
+  .cta-band {
+    padding-block: var(--space-8);
+    background: var(--c-cta-bg);
+    color: var(--c-cta-text);
+    text-align: center;
+  }
+
+  .cta-band__inner {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-4);
+    max-width: 44rem;
+  }
+
+  .cta-band p {
+    opacity: 0.85;
+  }
+
+  .cta-band .btn--primary {
+    background: var(--c-accent);
+    color: var(--c-text);
+  }
+
+  .cta-band .btn--primary:hover {
+    background: #ffd69e;
+  }
+
+  @media (max-width: 720px) {
+    .event__actions .btn {
+      flex: 1 1 100%;
+    }
+  }
+</style>

@@ -1,18 +1,17 @@
 ---
-import { dictionaryFor } from '../i18n';
-import type { Locale } from '../lib/domain';
-
 interface Props {
-  locale: Locale;
-  bookHref: string;
+  label: string;
+  href: string;
+  external?: boolean;
 }
 
-const { locale, bookHref } = Astro.props;
-const t = dictionaryFor(locale);
+const { label, href, external = false } = Astro.props;
 ---
 
 <div class="sticky-cta" data-sticky-cta>
-  <a class="btn btn--primary" href={bookHref}>{t.cta.bookDate}</a>
+  <a class="btn btn--primary" href={href} target={external ? '_blank' : undefined} rel={external ? 'noopener' : undefined}>
+    {label}
+  </a>
 </div>
 
 <script>

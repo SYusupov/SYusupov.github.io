@@ -14,7 +14,7 @@ const { locale, page, bookHref } = Astro.props;
 const t = dictionaryFor(locale);
 const home = pathFor(locale, { kind: 'home' });
 const links = [
-  { href: `${home}#events`, label: t.nav.events },
+  { href: pathFor(locale, { kind: 'events' }), label: t.nav.events },
   { href: `${home}#prices`, label: t.nav.prices },
   { href: `${home}#how`, label: t.nav.how },
   { href: `${home}#contacts`, label: t.nav.contacts },

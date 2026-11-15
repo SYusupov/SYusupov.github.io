@@ -1,0 +1,11 @@
+{
+  "date": "2024-11-30",
+  "type": "birthday",
+  "fountain": "medium",
+  "cover": "cover.webp",
+  "gallery": [
+    "01.webp",
+    "02.webp",
+    "03.webp"
+  ]
+}
