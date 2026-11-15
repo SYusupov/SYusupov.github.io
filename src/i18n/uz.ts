@@ -154,6 +154,15 @@ export const uz: Dictionary = {
       },
     },
   },
+  trust: {
+    title: 'Bizga ishonishadi',
+    lead: "ChocoParty favvoralarini o'z tadbirlari uchun buyurtma qilgan kompaniyalar.",
+    showAll: "Barchasini ko'rsatish ({count})",
+  },
+  reviews: {
+    title: 'Fikrlar',
+    lead: 'Mijozlar bayramdan keyin nima deydi.',
+  },
   sizes: {
     small: { name: 'Kichik', guests: '30 nafargacha mehmon', details: '3 qavat · taxminan 40 sm' },
     medium: { name: "O'rtacha", guests: '60 nafar va undan ortiq mehmon', details: '4 qavat · taxminan 60 sm' },

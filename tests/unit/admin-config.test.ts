@@ -13,7 +13,9 @@ import { makeSchemas, pricesSchema } from '../../src/lib/schemas';
 type Mode = 'smallest' | 'largest';
 
 /** Fields with a pattern need a value that matches it; it cannot be generated from the regex. */
-const PATTERN_SAMPLES: Record<string, string> = {};
+const PATTERN_SAMPLES: Record<string, string> = {
+  url: 'https://www.example.com',
+};
 
 function sampleValue(field: CmsField, mode: Mode, path: string): unknown {
   switch (field.widget) {
@@ -85,11 +87,13 @@ const formNamed = (name: string) => {
   return form;
 };
 
-const { event: eventSchema } = makeSchemas(z.string().min(1));
+const { event: eventSchema, company: companySchema, review: reviewSchema } = makeSchemas(z.string().min(1));
 
 const cases = [
   { form: 'prices', schema: pricesSchema },
   { form: 'events', schema: eventSchema },
+  { form: 'companies', schema: companySchema },
+  { form: 'reviews', schema: reviewSchema },
 ] as const;
 
 describe('admin forms match the content schema', () => {

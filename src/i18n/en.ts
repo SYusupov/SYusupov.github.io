@@ -154,6 +154,15 @@ export const en: Dictionary = {
       },
     },
   },
+  trust: {
+    title: 'Trusted by',
+    lead: 'Companies that ordered ChocoParty fountains for their events.',
+    showAll: 'Show all ({count})',
+  },
+  reviews: {
+    title: 'Reviews',
+    lead: 'What clients say after the celebration.',
+  },
   sizes: {
     small: { name: 'Small', guests: 'up to 30 guests', details: '3 tiers · about 40 cm' },
     medium: { name: 'Medium', guests: '60 guests and more', details: '4 tiers · about 60 cm' },

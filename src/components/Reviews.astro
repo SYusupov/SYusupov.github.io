@@ -1,0 +1,94 @@
+---
+import { dictionaryFor } from '../i18n';
+import type { ReviewView } from '../lib/content';
+import type { Locale } from '../lib/domain';
+
+interface Props {
+  locale: Locale;
+  reviews: ReviewView[];
+}
+
+const { locale, reviews } = Astro.props;
+const t = dictionaryFor(locale);
+---
+
+<section class="section" id="reviews" data-reviews aria-labelledby="reviews-title">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-head__text">
+        <h2 id="reviews-title">{t.reviews.title}</h2>
+        <p>{t.reviews.lead}</p>
+      </div>
+    </div>
+    <ul class="reviews" role="list">
+      {
+        reviews.slice(0, 6).map((review) => (
+          <li>
+            <figure class="review">
+              <blockquote>
+                <p>{review.text}</p>
+              </blockquote>
+              <figcaption>
+                <span class="review__author">{review.author}</span>
+                {review.role && <span class="review__role">{review.role}</span>}
+              </figcaption>
+            </figure>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .reviews {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+    gap: var(--space-4);
+    padding: 0;
+    list-style: none;
+  }
+
+  .review {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    height: 100%;
+    margin: 0;
+    padding: var(--space-6);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-l);
+    background: var(--c-surface);
+  }
+
+  blockquote {
+    flex: 1;
+    margin: 0;
+    font-size: var(--text-l);
+    line-height: 1.55;
+  }
+
+  blockquote p::before {
+    content: '«';
+    color: var(--c-accent-text);
+  }
+
+  blockquote p::after {
+    content: '»';
+    color: var(--c-accent-text);
+  }
+
+  figcaption {
+    display: grid;
+    gap: var(--space-1);
+  }
+
+  .review__author {
+    font-weight: 700;
+  }
+
+  .review__role {
+    color: var(--c-muted);
+    font-size: var(--text-s);
+  }
+</style>

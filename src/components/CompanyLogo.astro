@@ -1,0 +1,27 @@
+---
+import { Image } from 'astro:assets';
+import type { CompanyEntry } from '../lib/content';
+
+interface Props {
+  company: CompanyEntry;
+  height?: number;
+}
+
+const { company, height = 56 } = Astro.props;
+const logo = company.data.logo;
+---
+
+{
+  logo &&
+    (logo.format === 'svg' ? (
+      <img
+        src={logo.src}
+        alt={company.data.name}
+        height={height}
+        width={Math.round((height * logo.width) / logo.height)}
+        loading="lazy"
+      />
+    ) : (
+      <Image src={logo} alt={company.data.name} height={height} densities={[1, 2]} format="webp" loading="lazy" />
+    ))
+}

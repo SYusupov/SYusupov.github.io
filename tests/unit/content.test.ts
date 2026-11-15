@@ -18,6 +18,9 @@ describe('content check before the build', () => {
     ['event-missing-photo', 'events/2025-01-10-wedding/index.json: «Фото» — нет файла 02.webp в папке мероприятия'],
     ['event-too-many-videos', 'events/2025-01-10-wedding/index.json: «Видео» — не больше 2 роликов'],
     ['price-too-low', 'settings/prices.json: «Малый фонтан — до 30 гостей → Optima, сум» — цена не меньше 100 000 сум'],
+    ['company-without-name', 'companies/no-name/index.json: «Название» — укажите название компании'],
+    ['company-missing-logo', 'companies/luna/index.json: «Логотип» — нет файла logo.png в папке компании'],
+    ['review-without-russian-text', 'reviews/2025-01-10-anna/index.json: «Отзыв → По-русски» — напишите текст отзыва по-русски'],
   ])('%s stops the publication with a clear message', (fixture, message) => {
     expect(checkContentRoot(invalid(fixture)).errors).toContain(message);
   });
@@ -40,6 +43,13 @@ describe('content check before the build', () => {
         'events/2025-01-10-wedding/index.json: «Фото» — фото 01.webp добавлено дважды, оставлено одно',
         'events/2025-01-10-wedding/index.json: «Фото» — пустая ссылка на фото (сбой при загрузке), пропущена',
       ],
+    });
+  });
+
+  it('a company without a logo passes with a warning and stays off the wall', () => {
+    expect(checkContentRoot(invalid('soft-company-without-logo'))).toEqual({
+      errors: [],
+      warnings: ['companies/luna/index.json: «Логотип» — логотипа нет, компания не показывается на стене'],
     });
   });
 

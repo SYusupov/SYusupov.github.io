@@ -70,12 +70,33 @@ export type SiteSettings = z.infer<typeof siteSchema>;
  * Schemas whose photo fields depend on where they run: Astro passes `image()` (the file is
  * resolved and processed), the Node check passes a plain string (it checks the file itself).
  */
+const date = z
+  .string({ error: 'укажите дату' })
+  .regex(/^\d{4}-\d{2}-\d{2}$/, 'дата в виде ГГГГ-ММ-ДД')
+  .refine(isRealDate, 'такой даты нет');
+
+const requiredText = (message: string) => z.string({ error: message }).trim().min(1, message);
+
 export function makeSchemas<Photo extends z.ZodType>(photo: Photo) {
+  const company = z.object({
+    name: requiredText('укажите название компании'),
+    logo: z.preprocess(blankToUndefined, photo.optional()),
+    url: z.preprocess(blankToUndefined, z.url('адрес сайта в виде https://…').optional()),
+    order: z.preprocess(blankToUndefined, z.number().int().optional()),
+  });
+
+  const review = z.object({
+    author: requiredText('укажите имя'),
+    role: optionalText,
+    date,
+    text: z.preprocess(
+      (value) => blankToUndefined(value) ?? {},
+      z.object({ ru: requiredText('напишите текст отзыва по-русски'), uz: optionalText, en: optionalText }),
+    ),
+  });
+
   const event = z.object({
-    date: z
-      .string({ error: 'укажите дату' })
-      .regex(/^\d{4}-\d{2}-\d{2}$/, 'дата в виде ГГГГ-ММ-ДД')
-      .refine(isRealDate, 'такой даты нет'),
+    date,
     type: z.enum(EVENT_TYPES, { error: 'выберите тип из списка' }),
     client: optionalText,
     title: localizedText,
@@ -90,7 +111,16 @@ export function makeSchemas<Photo extends z.ZodType>(photo: Photo) {
     description: localizedText,
   });
 
-  return { event, prices: pricesSchema, site: siteSchema };
+  return { event, company, review, prices: pricesSchema, site: siteSchema };
+}
+
+/** A company without a logo stays in the files but off the wall. */
+export function companyWarnings(raw: unknown): ContentWarning[] {
+  if (!raw || typeof raw !== 'object') return [];
+  const logo = (raw as Record<string, unknown>).logo;
+  return typeof logo === 'string' && logo.trim()
+    ? []
+    : [{ path: ['logo'], message: 'логотипа нет, компания не показывается на стене' }];
 }
 
 export interface ContentWarning {

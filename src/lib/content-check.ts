@@ -6,7 +6,7 @@ import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { z } from 'astro/zod';
 import { buildCmsConfig, type CmsField } from '../admin/config';
-import { eventWarnings, makeSchemas } from './schemas';
+import { companyWarnings, eventWarnings, makeSchemas, type ContentWarning } from './schemas';
 
 export interface CheckReport {
   errors: string[];
@@ -66,6 +66,41 @@ function validate<T extends z.ZodType>(
   return undefined;
 }
 
+interface FolderCollection<T extends z.ZodType> {
+  folder: string;
+  form: string;
+  schema: T;
+  /** Where the entry's files live, for messages: «в папке мероприятия». */
+  place: string;
+  warnings?: (raw: unknown) => ContentWarning[];
+  /** File names the entry refers to, with the field each comes from. */
+  files?: (entry: z.infer<T>) => { name: string; field: string }[];
+}
+
+/** Folder collections keep one entry per folder: <folder>/<name>/index.json and its files. */
+function checkFolders<T extends z.ZodType>(root: string, collection: FolderCollection<T>, report: CheckReport): void {
+  const base = join(root, collection.folder);
+  if (!existsSync(base)) return;
+  const fields = formFields(collection.form);
+  for (const name of readdirSync(base).sort()) {
+    const dir = join(base, name);
+    if (!statSync(dir).isDirectory()) continue;
+    const file = `${collection.folder}/${name}/index.json`;
+    const raw = readJson(root, file, report);
+    if (raw === undefined) continue;
+    for (const warning of collection.warnings?.(raw) ?? []) {
+      report.warnings.push(`${file}: «${labelFor(fields, warning.path)}» — ${warning.message}`);
+    }
+    const entry = validate(collection.schema, raw, file, fields, report);
+    if (entry === undefined) continue;
+    for (const { name: fileName, field } of collection.files?.(entry) ?? []) {
+      if (!existsSync(join(dir, fileName))) {
+        report.errors.push(`${file}: «${labelFor(fields, [field])}» — нет файла ${fileName} в ${collection.place}`);
+      }
+    }
+  }
+}
+
 export function checkContentRoot(root: string): CheckReport {
   const report: CheckReport = { errors: [], warnings: [] };
 
@@ -78,29 +113,35 @@ export function checkContentRoot(root: string): CheckReport {
     if (value !== undefined) validate(schema, value, file, formFields(name), report);
   }
 
-  const eventsDir = join(root, 'events');
-  const eventFields = formFields('events');
-  const folders = existsSync(eventsDir) ? readdirSync(eventsDir).sort() : [];
-  for (const folder of folders) {
-    const dir = join(eventsDir, folder);
-    if (!statSync(dir).isDirectory()) continue;
-    const file = `events/${folder}/index.json`;
-    const raw = readJson(root, file, report);
-    if (raw === undefined) continue;
-    for (const warning of eventWarnings(raw)) {
-      report.warnings.push(`${file}: «${labelFor(eventFields, warning.path)}» — ${warning.message}`);
-    }
-    const event = validate(schemas.event, raw, file, eventFields, report);
-    if (!event) continue;
-    const expectFile = (name: string, key: string) => {
-      if (!existsSync(join(dir, name))) {
-        report.errors.push(`${file}: «${labelFor(eventFields, [key])}» — нет файла ${name} в папке мероприятия`);
-      }
-    };
-    expectFile(event.cover, 'cover');
-    for (const name of event.gallery) expectFile(name, 'gallery');
-    for (const name of event.videos) expectFile(name, 'videos');
-  }
+  checkFolders(
+    root,
+    {
+      folder: 'events',
+      form: 'events',
+      schema: schemas.event,
+      place: 'папке мероприятия',
+      warnings: eventWarnings,
+      files: (event) => [
+        { name: event.cover, field: 'cover' },
+        ...event.gallery.map((name) => ({ name, field: 'gallery' })),
+        ...event.videos.map((name) => ({ name, field: 'videos' })),
+      ],
+    },
+    report,
+  );
+  checkFolders(
+    root,
+    {
+      folder: 'companies',
+      form: 'companies',
+      schema: schemas.company,
+      place: 'папке компании',
+      warnings: companyWarnings,
+      files: (company) => (company.logo ? [{ name: company.logo, field: 'logo' }] : []),
+    },
+    report,
+  );
+  checkFolders(root, { folder: 'reviews', form: 'reviews', schema: schemas.review, place: 'папке отзыва' }, report);
 
   return report;
 }

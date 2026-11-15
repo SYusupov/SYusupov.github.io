@@ -165,6 +165,96 @@ function eventsForm(): CmsForm {
   };
 }
 
+function companiesForm(): CmsForm {
+  return {
+    name: 'companies',
+    label: 'Компании',
+    label_singular: 'Компания',
+    icon: 'apartment',
+    folder: `${CONTENT}/companies`,
+    path: '{{slug}}/index',
+    media_folder: '',
+    public_folder: '',
+    format: 'json',
+    create: true,
+    delete: true,
+    slug: '{{name}}',
+    summary: '{{name}}',
+    thumbnail: 'logo',
+    sortable_fields: { fields: ['order', 'name'], default: { field: 'order', direction: 'ascending' } },
+    fields: [
+      { name: 'name', label: 'Название', widget: 'string', hint: 'Как писать на сайте, например «Coca-Cola».' },
+      {
+        name: 'logo',
+        label: 'Логотип',
+        widget: 'image',
+        required: false,
+        choose_url: false,
+        hint: 'SVG или PNG с прозрачным фоном. Без логотипа компания на стене не показывается.',
+      },
+      {
+        name: 'url',
+        label: 'Сайт компании',
+        widget: 'string',
+        required: false,
+        pattern: ['^https?://', 'Адрес должен начинаться с https://'],
+      },
+      {
+        name: 'order',
+        label: 'Порядок на стене',
+        widget: 'number',
+        value_type: 'int',
+        required: false,
+        min: 1,
+        max: 999,
+        hint: 'Меньше — ближе к началу. Пусто — после пронумерованных, по алфавиту.',
+      },
+    ],
+  };
+}
+
+function reviewsForm(): CmsForm {
+  return {
+    name: 'reviews',
+    label: 'Отзывы',
+    label_singular: 'Отзыв',
+    icon: 'reviews',
+    folder: `${CONTENT}/reviews`,
+    path: '{{slug}}/index',
+    media_folder: '',
+    public_folder: '',
+    format: 'json',
+    create: true,
+    delete: true,
+    slug: '{{year}}-{{month}}-{{day}}-{{author}}',
+    summary: "{{date | date('DD.MM.YYYY')}} · {{author}}",
+    sortable_fields: { fields: ['date'], default: { field: 'date', direction: 'descending' } },
+    fields: [
+      { name: 'author', label: 'Имя', widget: 'string', hint: 'Как подписать отзыв: имя, или имя и компания.' },
+      {
+        name: 'role',
+        label: 'Кто это',
+        widget: 'string',
+        required: false,
+        hint: 'Например «Свадьба, сентябрь 2025» или «HR-менеджер, Coca-Cola».',
+      },
+      { name: 'date', label: 'Дата', widget: 'datetime', type: 'date' },
+      {
+        name: 'text',
+        label: 'Отзыв',
+        widget: 'object',
+        collapsed: false,
+        hint: 'Русский текст обязателен; на узбекской и английской страницах отзыв виден, если есть перевод.',
+        fields: [
+          { name: 'ru', label: 'По-русски', widget: 'text' },
+          { name: 'uz', label: "O'zbekcha", widget: 'text', required: false },
+          { name: 'en', label: 'English', widget: 'text', required: false },
+        ],
+      },
+    ],
+  };
+}
+
 function pricesForm(): CmsForm {
   return {
     name: 'prices',
@@ -209,7 +299,7 @@ export function buildCmsConfig(options: CmsOptions = {}) {
         },
       },
     },
-    collections: [eventsForm()],
+    collections: [eventsForm(), companiesForm(), reviewsForm()],
     singletons: [pricesForm()],
   };
 }
