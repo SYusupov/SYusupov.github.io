@@ -15,6 +15,7 @@ import Base from '../layouts/Base.astro';
 import { getEvents, getPrices, getPromotions, getReviews, getSite, getWallCompanies } from '../lib/content';
 import type { Locale } from '../lib/domain';
 import { pathFor } from '../lib/routes';
+import { businessJsonLd, faqJsonLd } from '../lib/structured-data';
 
 interface Props {
   locale: Locale;
@@ -34,7 +35,13 @@ const [site, prices, events, companies, reviews, promotions] = await Promise.all
 const latest = events.slice(0, 5);
 ---
 
-<Base locale={locale} page={{ kind: 'home' }} title={t.meta.homeTitle} description={t.meta.homeDescription}>
+<Base
+  locale={locale}
+  page={{ kind: 'home' }}
+  title={t.meta.homeTitle}
+  description={t.meta.homeDescription}
+  jsonLd={[businessJsonLd(locale, site, prices), faqJsonLd(locale, site.phone)]}
+>
   <Hero
     locale={locale}
     image={heroImage}

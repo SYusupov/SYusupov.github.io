@@ -6,6 +6,7 @@ import Base from '../layouts/Base.astro';
 import { eventYear, getEvents } from '../lib/content';
 import { EVENT_TYPES, type Locale } from '../lib/domain';
 import { pathFor } from '../lib/routes';
+import { breadcrumbsJsonLd } from '../lib/structured-data';
 
 interface Props {
   locale: Locale;
@@ -16,14 +17,26 @@ const t = dictionaryFor(locale);
 const events = await getEvents();
 const types = EVENT_TYPES.filter((type) => events.some((event) => event.data.type === type));
 const years = [...new Set(events.map(eventYear))];
+const home = pathFor(locale, { kind: 'home' });
+const crumbs = [
+  { name: t.nav.home, path: home },
+  { name: t.events.title, path: pathFor(locale, { kind: 'events' }) },
+];
 ---
 
-<Base locale={locale} page={{ kind: 'events' }} title={t.eventsPage.metaTitle} description={t.eventsPage.metaDescription}>
+<Base
+  locale={locale}
+  page={{ kind: 'events' }}
+  title={t.eventsPage.metaTitle}
+  description={t.eventsPage.metaDescription}
+  image={events[0]?.data.cover}
+  jsonLd={[breadcrumbsJsonLd(crumbs)]}
+>
   <section class="section events-page">
     <div class="container">
       <Breadcrumbs
         label={t.eventPage.breadcrumbs}
-        items={[{ name: t.nav.home, href: pathFor(locale, { kind: 'home' }) }, { name: t.events.title }]}
+        items={[{ name: t.nav.home, href: home }, { name: t.events.title }]}
       />
       <div class="section-head">
         <div class="section-head__text">

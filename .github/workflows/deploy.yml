@@ -51,6 +51,9 @@ jobs:
       - name: Build
         shell: bash
         run: npm run build 2>&1 | tee build.log; exit "${PIPESTATUS[0]}"
+      - name: Check the built site
+        shell: bash
+        run: npm run audit:dist 2>&1 | tee audit.log; exit "${PIPESTATUS[0]}"
       - name: Save compressed videos
         if: steps.video-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@v6

@@ -1,12 +1,14 @@
 ---
-import { Font } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { Font, getImage } from 'astro:assets';
+import defaultPreview from '../assets/placeholder/hero.webp';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import PromoStrip from '../components/PromoStrip.astro';
 import StickyCta from '../components/StickyCta.astro';
 import { dictionaryFor } from '../i18n';
-import { getPromotions } from '../lib/content';
-import { DEFAULT_LOCALE, type Locale } from '../lib/domain';
+import { getPromotions, getSite } from '../lib/content';
+import { DEFAULT_LOCALE, LOCALES, type Locale } from '../lib/domain';
 import { absoluteUrl, alternatesFor, pathFor, type Page } from '../lib/routes';
 import '../styles/global.css';
 
@@ -15,19 +17,35 @@ interface Props {
   page: Page;
   title: string;
   description: string;
+  /** Picture for link previews in messengers and social networks; cropped to 1200×630. */
+  image?: ImageMetadata;
+  /** schema.org markup for this page. */
+  jsonLd?: object[];
+  /** Pages search engines should skip, such as «not found». */
+  noindex?: boolean;
   /** The phone booking bar; by default it leads to the calculator. */
   sticky?: { label: string; href: string; external?: boolean };
 }
 
-const { locale, page, title, description, sticky } = Astro.props;
+const { locale, page, title, description, image, jsonLd = [], noindex = false, sticky } = Astro.props;
 const t = dictionaryFor(locale);
-const canonical = absoluteUrl(pathFor(locale, page));
+const url = absoluteUrl(pathFor(locale, page));
 const alternates = alternatesFor(page);
 const bookHref = `${pathFor(locale, { kind: 'home' })}#prices`;
 const bar = sticky ?? { label: t.cta.bookDate, href: bookHref };
 // Only the two font files the first screen needs are fetched early; the rest load on demand.
 const fontSubset = locale === 'ru' ? 'cyrillic' : 'latin';
-const promotions = await getPromotions(locale);
+const [promotions, site] = await Promise.all([getPromotions(locale), getSite()]);
+const preview = await getImage({
+  src: image ?? defaultPreview,
+  width: 1200,
+  height: 630,
+  fit: 'cover',
+  format: 'jpg',
+  quality: 80,
+});
+const OG_LOCALES: Record<Locale, string> = { ru: 'ru_RU', uz: 'uz_UZ', en: 'en_US' };
+const analytics = { gaId: site.gaId ?? '', metrikaId: site.metrikaId ?? '' };
 ---
 
 <!doctype html>
@@ -37,16 +55,38 @@ const promotions = await getPromotions(locale);
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    {!noindex && <link rel="canonical" href={url} />}
     {
-      alternates.map((alternate) => (
-        <link rel="alternate" hreflang={alternate.locale} href={absoluteUrl(alternate.path)} />
+      !noindex &&
+        alternates.map((alternate) => (
+          <link rel="alternate" hreflang={alternate.locale} href={absoluteUrl(alternate.path)} />
+        ))
+    }
+    {!noindex && <link rel="alternate" hreflang="x-default" href={absoluteUrl(pathFor(DEFAULT_LOCALE, page))} />}
+    <meta name="theme-color" content="#fbf4ea" />
+    <link rel="icon" href="/brand/logo.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/brand/apple-touch-icon.png" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ChocoParty" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={url} />
+    <meta property="og:image" content={absoluteUrl(preview.src)} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content={OG_LOCALES[locale]} />
+    {
+      LOCALES.filter((other) => other !== locale).map((other) => (
+        <meta property="og:locale:alternate" content={OG_LOCALES[other]} />
       ))
     }
-    <link rel="alternate" hreflang="x-default" href={absoluteUrl(pathFor(DEFAULT_LOCALE, page))} />
-    <link rel="icon" href="/brand/logo.svg" type="image/svg+xml" />
+    <meta name="twitter:card" content="summary_large_image" />
+
     <Font cssVariable="--font-display" preload={[{ subset: fontSubset, weight: 600 }]} />
     <Font cssVariable="--font-body" preload={[{ subset: fontSubset, weight: 400 }]} />
+    {jsonLd.map((data) => <script type="application/ld+json" set:html={JSON.stringify(data)} />)}
   </head>
   <body>
     <PromoStrip locale={locale} promotions={promotions} />
@@ -56,5 +96,52 @@ const promotions = await getPromotions(locale);
     </main>
     <Footer locale={locale} />
     <StickyCta {...bar} />
+    {
+      (analytics.gaId || analytics.metrikaId) && (
+        <script is:inline define:vars={analytics}>
+          // Analytics load after the page is shown, so they never slow down the first screen.
+          // Taps on Telegram and phone links are counted as contacts.
+          function startAnalytics() {
+            if (gaId) {
+              window.dataLayer = window.dataLayer || [];
+              window.gtag = function () {
+                window.dataLayer.push(arguments);
+              };
+              window.gtag('js', new Date());
+              window.gtag('config', gaId);
+              var ga = document.createElement('script');
+              ga.async = true;
+              ga.src = 'https://www.googletagmanager.com/gtag/js?id=' + gaId;
+              document.head.appendChild(ga);
+            }
+            if (metrikaId) {
+              window.ym =
+                window.ym ||
+                function () {
+                  (window.ym.a = window.ym.a || []).push(arguments);
+                };
+              window.ym.l = Date.now();
+              var ym = document.createElement('script');
+              ym.async = true;
+              ym.src = 'https://mc.yandex.ru/metrika/tag.js';
+              document.head.appendChild(ym);
+              window.ym(Number(metrikaId), 'init', { clickmap: true, trackLinks: true, accurateTrackBounce: true });
+            }
+          }
+          document.addEventListener('click', function (event) {
+            var link = event.target.closest && event.target.closest('a[href^="https://t.me/"], a[href^="tel:"]');
+            if (!link) return;
+            var method = link.href.indexOf('tel:') === 0 ? 'phone' : 'telegram';
+            if (window.gtag) window.gtag('event', 'contact', { method: method });
+            if (window.ym && metrikaId) window.ym(Number(metrikaId), 'reachGoal', 'contact_' + method);
+          });
+          if (document.readyState === 'complete') setTimeout(startAnalytics, 1500);
+          else
+            window.addEventListener('load', function () {
+              setTimeout(startAnalytics, 1500);
+            });
+        </script>
+      )
+    }
   </body>
 </html>

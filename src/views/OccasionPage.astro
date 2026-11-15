@@ -7,6 +7,7 @@ import Base from '../layouts/Base.astro';
 import { getEventsOfType, getPrices, getSite } from '../lib/content';
 import type { Locale, OccasionType } from '../lib/domain';
 import { pathFor } from '../lib/routes';
+import { breadcrumbsJsonLd } from '../lib/structured-data';
 
 interface Props {
   locale: Locale;
@@ -18,6 +19,10 @@ const t = dictionaryFor(locale);
 const occasion = t.occasions.pages[type];
 const [events, site, prices] = await Promise.all([getEventsOfType(type), getSite(), getPrices()]);
 const home = pathFor(locale, { kind: 'home' });
+const crumbs = [
+  { name: t.nav.home, path: home },
+  { name: occasion.title, path: pathFor(locale, { kind: 'occasion', type }) },
+];
 ---
 
 <Base
@@ -25,6 +30,8 @@ const home = pathFor(locale, { kind: 'home' });
   page={{ kind: 'occasion', type }}
   title={fill(t.occasions.metaTitle, { title: occasion.title })}
   description={occasion.lead}
+  image={events[0]?.data.cover}
+  jsonLd={[breadcrumbsJsonLd(crumbs)]}
 >
   <section class="section occasion">
     <div class="container">

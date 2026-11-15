@@ -16,9 +16,12 @@
     "test": "vitest run",
     "e2e": "playwright test",
     "typecheck": "astro check",
-    "check:content": "tsx scripts/check-content.ts"
+    "check:content": "tsx scripts/check-content.ts",
+    "audit:dist": "tsx scripts/audit-dist.ts",
+    "audit:test": "CONTENT_ROOT=tests/fixtures/content tsx scripts/audit-dist.ts"
   },
   "dependencies": {
+    "@astrojs/sitemap": "3.7.5",
     "astro": "7.4.12"
   },
   "devDependencies": {

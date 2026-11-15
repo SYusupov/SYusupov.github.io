@@ -264,6 +264,12 @@ export const uz: Dictionary = {
     manager: '{name} javob beradi',
     city: 'Toshkent',
   },
+  notFound: {
+    metaTitle: 'Sahifa topilmadi | ChocoParty',
+    title: "Bunday sahifa yo'q",
+    text: "Ehtimol, manzil o'zgargan. Bosh sahifadan boshlang yoki tadbirlarimizni ko'ring.",
+    home: 'Bosh sahifaga',
+  },
   sizes: {
     small: { name: 'Kichik', guests: '30 nafargacha mehmon', details: '3 qavat · taxminan 40 sm' },
     medium: { name: "O'rtacha", guests: '60 nafar va undan ortiq mehmon', details: '4 qavat · taxminan 60 sm' },

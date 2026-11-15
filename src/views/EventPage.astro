@@ -10,6 +10,7 @@ import type { Locale } from '../lib/domain';
 import { eventDateLabel, eventPhotoAlt, eventSentence, eventTitle } from '../lib/event-title';
 import { eventOrderLink } from '../lib/order-link';
 import { absoluteUrl, pathFor } from '../lib/routes';
+import { breadcrumbsJsonLd } from '../lib/structured-data';
 import { videoUrls } from '../lib/video';
 
 interface Props {
@@ -38,6 +39,11 @@ const videos = data.videos.map((file, index) => ({
 const others = (await getEvents()).filter((item) => item.id !== event.id);
 const sameType = others.filter((item) => item.data.type === data.type);
 const related = (sameType.length ? sameType : others).slice(0, 3);
+const crumbs = [
+  { name: t.nav.home, path: home },
+  { name: t.events.title, path: eventsPath },
+  { name: title, path: pathFor(locale, page) },
+];
 ---
 
 <Base
@@ -45,6 +51,8 @@ const related = (sameType.length ? sameType : others).slice(0, 3);
   page={page}
   title={fill(t.eventPage.metaTitle, { title, date: dateLabel })}
   description={description ? `${sentence} ${description}` : sentence}
+  image={data.cover}
+  jsonLd={[breadcrumbsJsonLd(crumbs)]}
   sticky={{ label: t.eventPage.sameAsThis, href: orderHref, external: true }}
 >
   <article class="event">

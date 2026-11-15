@@ -264,6 +264,12 @@ export const en: Dictionary = {
     manager: '{name} will answer',
     city: 'Tashkent',
   },
+  notFound: {
+    metaTitle: 'Page not found | ChocoParty',
+    title: 'There is no such page',
+    text: 'The address may have changed. Start from the home page or have a look at our events.',
+    home: 'Home page',
+  },
   sizes: {
     small: { name: 'Small', guests: 'up to 30 guests', details: '3 tiers · about 40 cm' },
     medium: { name: 'Medium', guests: '60 guests and more', details: '4 tiers · about 60 cm' },

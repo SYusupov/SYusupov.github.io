@@ -1,4 +1,5 @@
 // @ts-check
+import sitemap from '@astrojs/sitemap';
 import { defineConfig, fontProviders } from 'astro/config';
 
 // Tests build the site from tests/fixtures/content (CONTENT_ROOT) into their own folders,
@@ -15,6 +16,12 @@ export default defineConfig({
     defaultLocale: 'ru',
     routing: { prefixDefaultLocale: false },
   },
+  integrations: [
+    sitemap({
+      i18n: { defaultLocale: 'ru', locales: { ru: 'ru', uz: 'uz', en: 'en' } },
+      filter: (page) => !page.includes('/admin/') && !page.endsWith('/404/'),
+    }),
+  ],
   fonts: [
     {
       provider: fontProviders.fontsource(),
