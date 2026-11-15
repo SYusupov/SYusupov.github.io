@@ -22,6 +22,10 @@ describe('content check before the build', () => {
     ['company-missing-logo', 'companies/luna/index.json: «Логотип» — нет файла logo.png в папке компании'],
     ['review-without-russian-text', 'reviews/2025-01-10-anna/index.json: «Отзыв → По-русски» — напишите текст отзыва по-русски'],
     ['promotion-without-russian-title', 'promotions/2025-12-offer/index.json: «Заголовок → По-русски» — напишите заголовок по-русски'],
+    [
+      'site-telegram-with-at',
+      'settings/site.json: «Telegram для заказов» — имя пользователя Telegram: латинские буквы, цифры и _, от 5 до 32 знаков, без @',
+    ],
   ])('%s stops the publication with a clear message', (fixture, message) => {
     expect(checkContentRoot(invalid(fixture)).errors).toContain(message);
   });

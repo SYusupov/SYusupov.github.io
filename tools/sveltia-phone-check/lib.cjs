@@ -23,7 +23,7 @@ const PROFILES = {
   desktop: () => ({ viewport: { width: 1280, height: 800 } }),
 };
 
-async function launch(profile, { locale = 'en-US' } = {}) {
+async function launch(profile, { locale = process.env.UI_LOCALE || 'en-US' } = {}) {
   const browser = await chromium.launch({ headless: true });
   const context = await browser.newContext({ ...PROFILES[profile](browser.version()), locale, timezoneId: 'Asia/Tashkent' });
   const page = await context.newPage();

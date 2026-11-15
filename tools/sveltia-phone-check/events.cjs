@@ -85,7 +85,7 @@ const results = [];
   // ------------------------------------------------------------------ enter
   await page.goto(ADMIN_URL, { waitUntil: 'load' });
   await step('enter', async () => {
-    await tap(page.getByRole('button', { name: /test/i }).first(), 'enter test repository');
+    await tap(page.getByRole('button', { name: /test|тестов/i }).first(), 'enter test repository');
     await page.getByRole('treeitem', { name: /Мероприятия/ }).waitFor({ timeout: 30000 });
   });
 

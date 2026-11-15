@@ -330,6 +330,78 @@ function pricesForm(): CmsForm {
   };
 }
 
+function siteForm(): CmsForm {
+  return {
+    name: 'site',
+    label: 'Контакты и цифры',
+    file: `${CONTENT}/settings/site.json`,
+    format: 'json',
+    icon: 'contact_phone',
+    fields: [
+      {
+        name: 'telegram',
+        label: 'Telegram для заказов',
+        widget: 'string',
+        pattern: ['^[A-Za-z0-9_]{5,32}$', 'Только имя пользователя: латинские буквы, цифры и _, без @'],
+        hint: 'Имя пользователя без @, например yusupovus. Сюда открывается чат кнопками заказа.',
+      },
+      {
+        name: 'phone',
+        label: 'Телефон',
+        widget: 'string',
+        pattern: ['^\\+998\\d{9}$', 'В виде +998XXXXXXXXX, без пробелов'],
+        hint: 'Например +998900976567. На сайте он покажется с пробелами.',
+      },
+      {
+        name: 'contactName',
+        label: 'Кто отвечает',
+        widget: 'object',
+        collapsed: false,
+        fields: perLanguage('string'),
+      },
+      {
+        name: 'instagram',
+        label: 'Instagram',
+        widget: 'string',
+        required: false,
+        hint: 'Имя без @, например chocoparty.uz.',
+      },
+      {
+        name: 'ordersCount',
+        label: 'Число заказов',
+        widget: 'number',
+        value_type: 'int',
+        min: 0,
+        max: 100_000,
+        hint: 'На сайте пишется «больше N заказов».',
+      },
+      {
+        name: 'foundedYear',
+        label: 'Год основания',
+        widget: 'number',
+        value_type: 'int',
+        min: 1990,
+        max: 2100,
+      },
+      {
+        name: 'gaId',
+        label: 'Google Analytics',
+        widget: 'string',
+        required: false,
+        hint: 'Номер счётчика. Менять не нужно.',
+      },
+      {
+        name: 'metrikaId',
+        label: 'Яндекс Метрика',
+        widget: 'string',
+        required: false,
+        pattern: ['^\\d*$', 'Только цифры'],
+        hint: 'Номер счётчика. Пусто — Метрика не подключена.',
+      },
+    ],
+  };
+}
+
 export function buildCmsConfig(options: CmsOptions = {}) {
   return {
     backend:
@@ -350,6 +422,6 @@ export function buildCmsConfig(options: CmsOptions = {}) {
       },
     },
     collections: [eventsForm(), promotionsForm(), companiesForm(), reviewsForm()],
-    singletons: [pricesForm()],
+    singletons: [pricesForm(), siteForm()],
   };
 }

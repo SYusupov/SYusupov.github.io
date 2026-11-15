@@ -6,7 +6,7 @@ const { ADMIN_URL, launch, controls } = require('./lib.cjs');
   const profile = process.argv[2] || 'phone';
   const { browser, page, shot, tap, log } = await launch(profile);
   await page.goto(ADMIN_URL, { waitUntil: 'load' });
-  const enter = page.getByRole('button', { name: /test/i }).first();
+  const enter = page.getByRole('button', { name: /test|тестов/i }).first();
   await enter.waitFor({ timeout: 30000 });
   console.log('shot', await shot('signin'));
   await tap(enter, 'enter test repository');

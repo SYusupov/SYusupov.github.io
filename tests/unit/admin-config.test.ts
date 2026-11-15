@@ -2,7 +2,7 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { z } from 'astro/zod';
 import { describe, expect, it } from 'vitest';
 import { buildCmsConfig, type CmsField } from '../../src/admin/config';
-import { makeSchemas, pricesSchema } from '../../src/lib/schemas';
+import { makeSchemas, pricesSchema, siteSchema } from '../../src/lib/schemas';
 
 /**
  * Seam 7: everything an admin form can save passes the content schema, and every field the
@@ -15,6 +15,9 @@ type Mode = 'smallest' | 'largest';
 /** Fields with a pattern need a value that matches it; it cannot be generated from the regex. */
 const PATTERN_SAMPLES: Record<string, string> = {
   url: 'https://www.example.com',
+  telegram: 'choco_test',
+  phone: '+998901112233',
+  metrikaId: '12345678',
 };
 
 function sampleValue(field: CmsField, mode: Mode, path: string): unknown {
@@ -96,6 +99,7 @@ const {
 
 const cases = [
   { form: 'prices', schema: pricesSchema },
+  { form: 'site', schema: siteSchema },
   { form: 'events', schema: eventSchema },
   { form: 'promotions', schema: promotionSchema },
   { form: 'companies', schema: companySchema },
