@@ -1,0 +1,12 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { PREFIXED_LOCALES, type Locale } from '../../lib/domain';
+import Home from '../../views/Home.astro';
+
+export const getStaticPaths = (() =>
+  PREFIXED_LOCALES.map((locale) => ({ params: { locale } }))) satisfies GetStaticPaths;
+
+const locale = Astro.params.locale as Locale;
+---
+
+<Home locale={locale} />

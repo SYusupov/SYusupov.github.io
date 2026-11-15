@@ -1,0 +1,31 @@
+{
+  "name": "chocoparty-site",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.23.4"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "build:test": "CONTENT_ROOT=tests/fixtures/content astro build",
+    "serve": "tsx scripts/serve.ts dist 4321",
+    "serve:test": "tsx scripts/serve.ts dist-test 4322",
+    "test": "vitest run",
+    "e2e": "playwright test",
+    "typecheck": "astro check"
+  },
+  "dependencies": {
+    "astro": "7.4.12"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.12",
+    "@playwright/test": "1.61.1",
+    "@types/node": "24.19.2",
+    "tsx": "4.23.15",
+    "typescript": "6.0.3",
+    "vitest": "5.1.0"
+  }
+}

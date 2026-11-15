@@ -1,0 +1,41 @@
+---
+import LangSwitch from '../components/LangSwitch.astro';
+import { DEFAULT_LOCALE, type Locale } from '../lib/domain';
+import { absoluteUrl, alternatesFor, pathFor, type Page } from '../lib/routes';
+
+interface Props {
+  locale: Locale;
+  page: Page;
+  title: string;
+  description: string;
+}
+
+const { locale, page, title, description } = Astro.props;
+const canonical = absoluteUrl(pathFor(locale, page));
+const alternates = alternatesFor(page);
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {
+      alternates.map((alternate) => (
+        <link rel="alternate" hreflang={alternate.locale} href={absoluteUrl(alternate.path)} />
+      ))
+    }
+    <link rel="alternate" hreflang="x-default" href={absoluteUrl(pathFor(DEFAULT_LOCALE, page))} />
+  </head>
+  <body>
+    <header class="site-header">
+      <LangSwitch locale={locale} page={page} />
+    </header>
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>

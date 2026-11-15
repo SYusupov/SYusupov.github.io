@@ -1,0 +1,36 @@
+---
+import { dictionaryFor } from '../i18n';
+import { LOCALES, type Locale } from '../lib/domain';
+import { pathFor, type Page } from '../lib/routes';
+
+interface Props {
+  locale: Locale;
+  page: Page;
+}
+
+const { locale, page } = Astro.props;
+const t = dictionaryFor(locale);
+---
+
+<nav class="lang-switch" data-lang-switch aria-label={t.langSwitchLabel}>
+  <ul>
+    {
+      LOCALES.map((other) => {
+        const names = dictionaryFor(other);
+        return (
+          <li>
+            {other === locale ? (
+              <span aria-current="true" lang={other} title={names.langName}>
+                {names.langShort}
+              </span>
+            ) : (
+              <a href={pathFor(other, page)} hreflang={other} lang={other} title={names.langName}>
+                {names.langShort}
+              </a>
+            )}
+          </li>
+        );
+      })
+    }
+  </ul>
+</nav>

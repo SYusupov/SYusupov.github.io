@@ -1,0 +1,12 @@
+{
+  "package_basic": 1500000,
+  "package_standard": 2700000,
+  "package_premium": 4000000,
+  "extra_hour": 300000,
+  "delivery": 150000,
+  "setup": 200000,
+  "decoration": 500000,
+  "staff_per_hour": 100000,
+  "deposit_percent": 30,
+  "minimum_order": 1000000
+}

@@ -1,0 +1,16 @@
+---
+import { dictionaryFor } from '../i18n';
+import Base from '../layouts/Base.astro';
+import type { Locale } from '../lib/domain';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = dictionaryFor(locale);
+---
+
+<Base locale={locale} page={{ kind: 'home' }} title={t.meta.homeTitle} description={t.meta.homeDescription}>
+  <h1>ChocoParty</h1>
+</Base>
