@@ -6,6 +6,16 @@ import type { PriceTable } from './pricing';
 import { buildTime, promoWindow } from './promo';
 import type { SiteSettings } from './schemas';
 
+type CollectionName = 'events' | 'companies' | 'reviews' | 'promotions';
+const cache = new Map<CollectionName, Promise<unknown>>();
+
+/** Each collection is read once per build (in dev every time, so edits show up at once). */
+function collection<C extends CollectionName>(name: C): Promise<CollectionEntry<C>[]> {
+  if (!import.meta.env.PROD) return getCollection(name);
+  if (!cache.has(name)) cache.set(name, getCollection(name));
+  return cache.get(name) as Promise<CollectionEntry<C>[]>;
+}
+
 export type EventEntry = CollectionEntry<'events'>;
 
 export async function getPrices(): Promise<PriceTable> {
@@ -22,7 +32,7 @@ export async function getSite(): Promise<SiteSettings> {
 
 /** All events, newest first; two events on one day keep a stable order. */
 export async function getEvents(): Promise<EventEntry[]> {
-  const events = await getCollection('events');
+  const events = [...(await collection('events'))];
   return events.sort((a, b) => b.data.date.localeCompare(a.data.date) || b.id.localeCompare(a.id));
 }
 
@@ -38,7 +48,7 @@ export type CompanyEntry = CollectionEntry<'companies'>;
 
 /** Companies for the logo wall: only those with a logo; numbered first, then alphabetically. */
 export async function getWallCompanies(): Promise<CompanyEntry[]> {
-  const companies = await getCollection('companies');
+  const companies = await collection('companies');
   return companies
     .filter((company) => company.data.logo)
     .sort(
@@ -62,7 +72,7 @@ export interface PromotionView {
 /** Promotions not over at build time, with title and text in the page's language, soonest first. */
 export async function getPromotions(locale: Locale): Promise<PromotionView[]> {
   const now = buildTime();
-  const promotions = await getCollection('promotions');
+  const promotions = await collection('promotions');
   return promotions
     .map((promotion) => ({ promotion, window: promoWindow(promotion.data.start, promotion.data.end) }))
     .filter(
@@ -92,7 +102,7 @@ export interface ReviewView {
 
 /** Reviews written in the page's language, newest first. */
 export async function getReviews(locale: Locale): Promise<ReviewView[]> {
-  const reviews = await getCollection('reviews');
+  const reviews = await collection('reviews');
   return reviews
     .filter((review) => review.data.text[locale])
     .sort((a, b) => b.data.date.localeCompare(a.data.date))

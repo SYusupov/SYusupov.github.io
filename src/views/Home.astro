@@ -1,8 +1,11 @@
 ---
 import heroImage from '../assets/placeholder/hero.webp';
 import Calculator from '../components/Calculator.astro';
+import Contacts from '../components/Contacts.astro';
 import EventGrid from '../components/EventGrid.astro';
+import Faq from '../components/Faq.astro';
 import Hero from '../components/Hero.astro';
+import HowItWorks from '../components/HowItWorks.astro';
 import OccasionCards from '../components/OccasionCards.astro';
 import PromoBlock from '../components/PromoBlock.astro';
 import Reviews from '../components/Reviews.astro';
@@ -79,5 +82,11 @@ const latest = events.slice(0, 5);
 
   <PromoBlock locale={locale} promotions={promotions} />
 
+  <HowItWorks locale={locale} />
+
   {reviews.length > 0 && <Reviews locale={locale} reviews={reviews} />}
+
+  <Faq locale={locale} phone={site.phone} />
+
+  <Contacts locale={locale} site={site} />
 </Base>

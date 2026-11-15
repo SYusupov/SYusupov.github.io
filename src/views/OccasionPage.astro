@@ -32,6 +32,9 @@ const home = pathFor(locale, { kind: 'home' });
       <p class="eyebrow">{t.occasions.title}</p>
       <h1>{occasion.title}</h1>
       <p class="occasion__lead">{occasion.lead}</p>
+      <div class="occasion__body">
+        {occasion.body.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
       <div class="occasion__actions" data-hides-sticky>
         <a class="btn btn--primary" href="#prices">{t.cta.bookDate}</a>
         <a class="btn btn--ghost" href={pathFor(locale, { kind: 'events' })}>{t.events.all}</a>
@@ -76,6 +79,13 @@ const home = pathFor(locale, { kind: 'home' });
     margin-top: var(--space-4);
     color: var(--c-muted);
     font-size: var(--text-l);
+  }
+
+  .occasion__body {
+    display: grid;
+    gap: var(--space-3);
+    max-width: 44rem;
+    margin-top: var(--space-4);
   }
 
   .occasion__actions {
