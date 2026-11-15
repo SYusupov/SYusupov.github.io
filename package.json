@@ -28,6 +28,7 @@
     "@astrojs/check": "0.9.12",
     "@playwright/test": "1.61.1",
     "@types/node": "24.19.2",
+    "heic-decode": "2.1.0",
     "tsx": "4.23.15",
     "typescript": "6.0.3",
     "vitest": "5.1.0"
