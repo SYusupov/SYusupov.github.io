@@ -13,6 +13,9 @@
  * A ledger (scripts/import-ledger.json) remembers imported rows, so a second run adds only new
  * ones. To redo an event: delete its folder and its ledger line.
  *
+ * The sheet is exported to CSV from the owner's workbook: python3 -I tools/xlsx2csv.py book.xlsx out_dir
+ * (one CSV per sheet, hyperlinks kept as «text URL»).
+ *
  * Usage: tsx scripts/import-archive.ts --events events.csv [--companies companies.csv]
  *          [--downloads "/mnt/c/Users/sayor/Desktop/chocoparty photos,/mnt/c/Users/sayor/Downloads"]
  *          [--content src/content]
