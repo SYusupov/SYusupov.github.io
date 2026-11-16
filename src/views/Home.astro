@@ -1,5 +1,5 @@
 ---
-import heroImage from '../assets/placeholder/hero.webp';
+import heroImage from '../assets/hero.webp';
 import Calculator from '../components/Calculator.astro';
 import Contacts from '../components/Contacts.astro';
 import EventGrid from '../components/EventGrid.astro';
@@ -54,7 +54,7 @@ const latest = events.slice(0, 5);
 
   <TrustSection locale={locale} companies={companies} />
 
-  <section class="section section--alt" id="occasions" aria-labelledby="occasions-title">
+  <section class="section section--alt section--defer" id="occasions" aria-labelledby="occasions-title">
     <div class="container">
       <div class="section-head">
         <div class="section-head__text">
@@ -68,7 +68,7 @@ const latest = events.slice(0, 5);
 
   {
     latest.length > 0 && (
-      <section class="section" id="events" aria-labelledby="events-title">
+      <section class="section section--defer" id="events" aria-labelledby="events-title">
         <div class="container">
           <div class="section-head">
             <div class="section-head__text">

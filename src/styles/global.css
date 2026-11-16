@@ -122,6 +122,13 @@ p {
   padding-block: var(--section-gap);
 }
 
+/* A section far below the first screen is not laid out until the reader nears it, so its many card
+   images load then and not with the first screen (phone weight budget). */
+.section--defer {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 44rem;
+}
+
 .section--alt {
   background: var(--c-bg-2);
 }

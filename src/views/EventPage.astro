@@ -30,6 +30,8 @@ const home = pathFor(locale, { kind: 'home' });
 const eventsPath = pathFor(locale, { kind: 'events' });
 const orderHref = eventOrderLink({ locale, telegram: site.telegram, title, url: absoluteUrl(pathFor(locale, page)) });
 const description = data.description[locale];
+// A portrait cover in the wide frame would show only its middle band: show it whole instead.
+const portraitCover = data.cover.height > data.cover.width;
 // The cover is photo 1 in captions; the gallery follows it.
 const photos = data.gallery.map((image, index) => ({ image, alt: eventPhotoAlt(data, locale, index + 2) }));
 const videos = data.videos.map((file, index) => ({
@@ -57,37 +59,39 @@ const crumbs = [
   sticky={{ label: t.eventPage.sameAsThis, href: orderHref, external: true }}
 >
   <article class="event">
-    <header class="container event__head">
-      <Breadcrumbs
-        label={t.eventPage.breadcrumbs}
-        items={[{ name: t.nav.home, href: home }, { name: t.events.title, href: eventsPath }, { name: title }]}
-      />
-      <p class="eyebrow">{t.eventTypes[data.type]} · {dateLabel}</p>
-      <h1>{title}</h1>
-      <p class="event__sentence">{sentence}</p>
-      <div class="event__actions" data-hides-sticky>
-        <a class="btn btn--primary" href={orderHref} target="_blank" rel="noopener">{t.eventPage.sameAsThis}</a>
-        <a class="btn btn--ghost" href={`${home}#prices`}>{t.cta.prices}</a>
-      </div>
-    </header>
+    <div class:list={['container', 'event__top', { 'event__top--split': portraitCover }]}>
+      <header class="event__head">
+        <Breadcrumbs
+          label={t.eventPage.breadcrumbs}
+          items={[{ name: t.nav.home, href: home }, { name: t.events.title, href: eventsPath }, { name: title }]}
+        />
+        <p class="eyebrow">{t.eventTypes[data.type]} · {dateLabel}</p>
+        <h1>{title}</h1>
+        <p class="event__sentence">{sentence}</p>
+        <div class="event__actions" data-hides-sticky>
+          <a class="btn btn--primary" href={orderHref} target="_blank" rel="noopener">{t.eventPage.sameAsThis}</a>
+          <a class="btn btn--ghost" href={`${home}#prices`}>{t.cta.prices}</a>
+        </div>
+      </header>
 
-    <div class="container event__cover">
-      <Image
-        src={data.cover}
-        alt={eventPhotoAlt(data, locale, 1)}
-        widths={[640, 800, 1200, 1600]}
-        sizes="(max-width: 720px) 66vw, (max-width: 1232px) calc(100vw - 2rem), 1200px"
-        format="webp"
-        quality={75}
-        loading="eager"
-        fetchpriority="high"
-      />
+      <div class="event__cover">
+        <Image
+          src={data.cover}
+          alt={eventPhotoAlt(data, locale, 1)}
+          widths={[640, 800, 1200, 1600]}
+          sizes={portraitCover ? '(max-width: 720px) 66vw, 432px' : '(max-width: 720px) 66vw, (max-width: 1232px) calc(100vw - 2rem), 1200px'}
+          format="webp"
+          quality={75}
+          loading="eager"
+          fetchpriority="high"
+        />
+      </div>
     </div>
 
     {
       description && (
-        <div class="container event__description">
-          <p>{description}</p>
+        <div class="container">
+          <p class="event__description">{description}</p>
         </div>
       )
     }
@@ -162,7 +166,35 @@ const crumbs = [
     width: 100%;
     max-height: 42rem;
     object-fit: cover;
+    object-position: 50% 35%;
     border-radius: var(--radius-l);
+  }
+
+  /* A portrait cover (most phone shots) sits beside the title on wide screens, 3:4, fountain top kept. */
+  .event__top {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .event__top--split {
+    align-items: center;
+  }
+
+  .event__top--split .event__cover {
+    padding-block: var(--space-6);
+  }
+
+  .event__top--split .event__cover :global(img) {
+    max-height: none;
+    aspect-ratio: 3 / 4;
+    object-position: 50% 30%;
+  }
+
+  @media (min-width: 62rem) {
+    .event__top--split {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 27rem);
+      gap: var(--space-7);
+    }
   }
 
   .event__description {

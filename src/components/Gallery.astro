@@ -152,6 +152,11 @@ const t = dictionaryFor(locale);
     transition: transform 0.5s var(--ease);
   }
 
+  /* Most photos are portrait phone shots cropped to 4:3: keep the top of the fountain, not the table's front edge. */
+  .gallery__item :global(img) {
+    object-position: 50% 30%;
+  }
+
   .gallery__item a:hover :global(img) {
     transform: scale(1.03);
   }
