@@ -105,9 +105,7 @@ export const uz: Dictionary = {
     metaDescription:
       "Toshkentda ChocoParty shokoladli favvorasi bilan o'tgan to'ylar, tug'ilgan kunlar, korporativlar va taqdimotlar: rasm va videolar.",
     typeFilter: 'Tadbir turi',
-    yearFilter: 'Yil',
     allTypes: 'Barcha turlar',
-    allYears: 'Barcha yillar',
     empty: "Bunday tadbirlar hozircha yo'q — boshqalarini ko'ring.",
     video: 'Video',
   },

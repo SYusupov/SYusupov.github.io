@@ -3,7 +3,7 @@ import Breadcrumbs from '../components/Breadcrumbs.astro';
 import EventGrid from '../components/EventGrid.astro';
 import { dictionaryFor } from '../i18n';
 import Base from '../layouts/Base.astro';
-import { eventYear, getEvents } from '../lib/content';
+import { getEvents } from '../lib/content';
 import { EVENT_TYPES, type Locale } from '../lib/domain';
 import { pathFor } from '../lib/routes';
 import { breadcrumbsJsonLd } from '../lib/structured-data';
@@ -16,7 +16,6 @@ const { locale } = Astro.props;
 const t = dictionaryFor(locale);
 const events = await getEvents();
 const types = EVENT_TYPES.filter((type) => events.some((event) => event.data.type === type));
-const years = [...new Set(events.map(eventYear))];
 const home = pathFor(locale, { kind: 'home' });
 const crumbs = [
   { name: t.nav.home, path: home },
@@ -56,16 +55,6 @@ const crumbs = [
             ))
           }
         </div>
-        <div class="filters__group" role="group" aria-label={t.eventsPage.yearFilter}>
-          <button type="button" data-filter="year" data-value="" aria-pressed="true">{t.eventsPage.allYears}</button>
-          {
-            years.map((year) => (
-              <button type="button" data-filter="year" data-value={year} aria-pressed="false">
-                {year}
-              </button>
-            ))
-          }
-        </div>
       </div>
 
       <EventGrid events={events} locale={locale} layout="grid" />
@@ -75,8 +64,9 @@ const crumbs = [
 </Base>
 
 <script>
-  // Filters work in the browser and live in the address (?type=wedding&year=2025), so a filtered
-  // list can be shared. Without JavaScript the filters stay hidden and every event is listed.
+  // The type filter works in the browser and lives in the address (?type=wedding), so a filtered
+  // list can be shared. Without JavaScript the filter stays hidden and every event is listed.
+  // There is no filter by year on purpose: the owner does not want event dates shown.
   const root = document.querySelector<HTMLElement>('[data-filters]');
   if (root) {
     const cards = [...document.querySelectorAll<HTMLElement>('[data-event-list] [data-event-card]')];
@@ -86,7 +76,7 @@ const crumbs = [
       buttons.some((button) => button.dataset.filter === key && button.dataset.value === value);
     const params = new URLSearchParams(location.search);
     const state: Record<string, string> = {};
-    for (const key of ['type', 'year']) {
+    for (const key of ['type']) {
       const value = params.get(key) ?? '';
       state[key] = known(key, value) ? value : '';
     }
@@ -94,8 +84,7 @@ const crumbs = [
     const apply = () => {
       let shown = 0;
       for (const card of cards) {
-        const match =
-          (!state.type || card.dataset.type === state.type) && (!state.year || card.dataset.year === state.year);
+        const match = !state.type || card.dataset.type === state.type;
         card.hidden = !match;
         if (match) shown += 1;
       }
@@ -110,7 +99,7 @@ const crumbs = [
       if (!button?.dataset.filter) return;
       state[button.dataset.filter] = button.dataset.value ?? '';
       const url = new URL(location.href);
-      for (const key of ['type', 'year']) {
+      for (const key of ['type']) {
         if (state[key]) url.searchParams.set(key, state[key]);
         else url.searchParams.delete(key);
       }

@@ -54,12 +54,31 @@ test.describe('filters on the list of all events', () => {
     await expect(page.getByRole('button', { name: 'Свадьба' })).toHaveAttribute('aria-pressed', 'true');
   });
 
-  test('choosing a year narrows the list and goes into the address', async ({ page }) => {
+  test('there is no filter by year, only by type', async ({ page }) => {
     await page.goto('/events/');
-    await page.getByRole('button', { name: '2024', exact: true }).click();
-    await expect(page.locator('[data-event-card]:visible')).toHaveCount(2);
-    await expect(page).toHaveURL(/[?&]year=2024/);
-    await page.getByRole('button', { name: 'Все годы' }).click();
+    await expect(page.getByRole('group', { name: 'Тип мероприятия' })).toBeVisible();
+    await expect(page.getByRole('group', { name: 'Год' })).toHaveCount(0);
+    await expect(page.getByRole('button', { name: 'Все годы' })).toHaveCount(0);
+  });
+
+  test('a year left in an old address changes nothing: every event is listed', async ({ page }) => {
+    await page.goto('/events/?year=2024');
     await expect(page.locator('[data-event-card]:visible')).toHaveCount(7);
   });
+});
+
+test.describe('event cards do not show dates', () => {
+  for (const [path, cards] of [
+    ['/', 5],
+    ['/events/', 7],
+    ['/uz/events/', 7],
+    ['/en/events/', 7],
+  ] as const) {
+    test(`on ${path}`, async ({ page }) => {
+      await page.goto(path);
+      await expect(page.locator('[data-event-card]')).toHaveCount(cards);
+      await expect(page.locator('[data-event-card] .chip')).toHaveCount(0);
+      await expect(page.locator('[data-event-card]').getByText(/\b20\d\d\b/)).toHaveCount(0);
+    });
+  }
 });

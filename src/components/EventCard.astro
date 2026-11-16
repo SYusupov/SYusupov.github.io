@@ -3,7 +3,7 @@ import { Image } from 'astro:assets';
 import { dictionaryFor } from '../i18n';
 import type { EventEntry } from '../lib/content';
 import type { Locale } from '../lib/domain';
-import { eventDateLabel, eventPhotoAlt, eventTitle } from '../lib/event-title';
+import { eventPhotoAlt, eventTitle } from '../lib/event-title';
 import { pathFor } from '../lib/routes';
 
 interface Props {
@@ -33,7 +33,6 @@ const Heading = headingLevel;
       {event.data.videos.length > 0 && <span class="event-card__badge">▶ {t.eventsPage.video}</span>}
     </div>
     <div class="event-card__body">
-      <span class="chip">{eventDateLabel(event.data, locale)}</span>
       <Heading class="event-card__title">{eventTitle(event.data, locale)}</Heading>
       {event.data.venue && <p class="event-card__subtitle">{event.data.venue}</p>}
     </div>

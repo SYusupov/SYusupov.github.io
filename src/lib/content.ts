@@ -40,10 +40,6 @@ export async function getEventsOfType(type: OccasionType): Promise<EventEntry[]>
   return (await getEvents()).filter((event) => event.data.type === type);
 }
 
-export function eventYear(event: EventEntry): string {
-  return event.data.date.slice(0, 4);
-}
-
 export type CompanyEntry = CollectionEntry<'companies'>;
 
 /** Companies for the logo wall: only those with a logo; numbered first, then alphabetically. */
