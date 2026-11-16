@@ -1,0 +1,20 @@
+{
+  "date": "2023-09-04",
+  "type": "other",
+  "title": {
+    "ru": "Банкет"
+  },
+  "fountain": "several",
+  "cover": "cover.webp",
+  "gallery": [
+    "01.webp",
+    "02.webp",
+    "03.webp"
+  ],
+  "videos": [
+    "video-1.mp4"
+  ],
+  "description": {
+    "ru": "Банкет в зале с красным ковром: фонтаны с молочным шоколадом, фрукты, десерты и шпажки."
+  }
+}

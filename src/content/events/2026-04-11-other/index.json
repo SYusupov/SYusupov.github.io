@@ -1,0 +1,23 @@
+{
+  "date": "2026-04-11",
+  "type": "other",
+  "client": "Bashkent",
+  "title": {
+    "ru": "Сумаляк Пати в ЖК Bashkent"
+  },
+  "fountain": "large",
+  "cover": "cover.webp",
+  "gallery": [
+    "01.webp",
+    "02.webp",
+    "03.webp",
+    "04.webp"
+  ],
+  "videos": [
+    "video-1.mp4",
+    "video-2.mp4"
+  ],
+  "description": {
+    "ru": "Двор жилого комплекса Bashkent: большой фонтан с молочным шоколадом, профитроли, ягоды и клубника на шпажках."
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "date": "2024-03-07",
+  "type": "corporate",
+  "client": "Deloitte",
+  "fountain": "large",
+  "cover": "cover.webp",
+  "gallery": [
+    "01.webp",
+    "02.webp"
+  ],
+  "videos": [
+    "video-1.mp4"
+  ],
+  "description": {
+    "ru": "Корпоратив Deloitte к Международному женскому дню: большой фонтан с молочным шоколадом в офисе с открытой планировкой."
+  }
+}

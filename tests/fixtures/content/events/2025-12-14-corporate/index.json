@@ -1,0 +1,20 @@
+{
+  "date": "2025-12-14",
+  "type": "corporate",
+  "client": "Coca-Cola",
+  "venue": "Hyatt Regency Tashkent",
+  "fountain": "large",
+  "cover": "cover.webp",
+  "gallery": [
+    "01.webp",
+    "02.webp",
+    "03.webp"
+  ],
+  "videos": [
+    "clip.mp4"
+  ],
+  "description": {
+    "ru": "Корпоратив с большим фонтаном.",
+    "en": "A corporate party with a large fountain."
+  }
+}

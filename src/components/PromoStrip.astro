@@ -1,0 +1,85 @@
+---
+import { dictionaryFor } from '../i18n';
+import type { PromotionView } from '../lib/content';
+import type { Locale } from '../lib/domain';
+import { promoUntilLabel } from '../lib/promo';
+import { pathFor } from '../lib/routes';
+
+interface Props {
+  locale: Locale;
+  promotions: PromotionView[];
+}
+
+const { locale, promotions } = Astro.props;
+const t = dictionaryFor(locale);
+const href = `${pathFor(locale, { kind: 'home' })}#promo`;
+---
+
+{
+  promotions.length > 0 && (
+    <div class="promo-strip" data-promo-strip>
+      {promotions.map((promo) => (
+        <Fragment>
+          <a class="promo-strip__item" href={href} data-from={promo.from} data-until={promo.until} hidden>
+            <span class="promo-strip__badge">{t.promo.label}</span>
+            <span class="promo-strip__title">{promo.title}</span>
+            <span class="promo-strip__until">{promoUntilLabel(promo.end, locale)}</span>
+            <span aria-hidden="true">→</span>
+          </a>
+          {/* Shown right away while the visitor's clock is inside the promotion window. */}
+          <script is:inline>
+            (function (s) {
+              var e = s.previousElementSibling, n = Date.now();
+              if (n >= +e.dataset.from && n < +e.dataset.until) e.hidden = false;
+            })(document.currentScript);
+          </script>
+        </Fragment>
+      ))}
+    </div>
+  )
+}
+
+<style>
+  .promo-strip {
+    background: var(--c-cta-bg);
+    color: var(--c-cta-text);
+  }
+
+  .promo-strip__item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-1) var(--space-3);
+    padding: var(--space-2) 1rem;
+    font-size: var(--text-s);
+    text-align: center;
+    text-decoration: none;
+  }
+
+  /* One promotion at a time: the first one that is on. */
+  .promo-strip__item:not([hidden]) ~ .promo-strip__item {
+    display: none;
+  }
+
+  .promo-strip__badge {
+    padding: 0.1rem 0.55rem;
+    border-radius: var(--radius-pill);
+    background: var(--c-accent);
+    color: var(--c-text);
+    font-size: var(--text-xs);
+    font-weight: 700;
+  }
+
+  .promo-strip__title {
+    font-weight: 600;
+  }
+
+  .promo-strip__until {
+    opacity: 0.8;
+  }
+
+  .promo-strip__item:hover .promo-strip__title {
+    text-decoration: underline;
+  }
+</style>

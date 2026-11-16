@@ -1,0 +1,82 @@
+---
+import { dictionaryFor } from '../i18n';
+import type { Locale } from '../lib/domain';
+import { pathFor } from '../lib/routes';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = dictionaryFor(locale);
+---
+
+<section class="section" id="how" aria-labelledby="how-title">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-head__text">
+        <h2 id="how-title">{t.howItWorks.title}</h2>
+        <p>{t.howItWorks.lead}</p>
+      </div>
+      <a class="link-arrow" href={`${pathFor(locale, { kind: 'home' })}#prices`}>{t.cta.prices}</a>
+    </div>
+    <ol class="steps">
+      {
+        t.howItWorks.steps.map((step, index) => (
+          <li class="step">
+            <span class="step__number" aria-hidden="true">
+              {String(index + 1).padStart(2, '0')}
+            </span>
+            <h3>{step.title}</h3>
+            <p>{step.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-4);
+    padding: 0;
+    list-style: none;
+  }
+
+  .step {
+    display: grid;
+    align-content: start;
+    gap: var(--space-3);
+    padding: var(--space-6) var(--space-5);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-l);
+    background: var(--c-surface);
+  }
+
+  .step__number {
+    font-family: var(--font-display), Georgia, serif;
+    font-size: 2.4rem;
+    font-weight: 600;
+    font-variant-numeric: lining-nums;
+    line-height: 1;
+    color: var(--c-accent-text);
+  }
+
+  .step p {
+    color: var(--c-muted);
+  }
+
+  @media (max-width: 1000px) {
+    .steps {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 560px) {
+    .steps {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

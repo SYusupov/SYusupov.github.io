@@ -1,0 +1,13 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { OCCASION_TYPES, PREFIXED_LOCALES, type Locale, type OccasionType } from '../../../lib/domain';
+import OccasionPage from '../../../views/OccasionPage.astro';
+
+export const getStaticPaths = (() =>
+  PREFIXED_LOCALES.flatMap((locale) => OCCASION_TYPES.map((type) => ({ params: { locale, type } })))) satisfies GetStaticPaths;
+
+const locale = Astro.params.locale as Locale;
+const type = Astro.params.type as OccasionType;
+---
+
+<OccasionPage locale={locale} type={type} />

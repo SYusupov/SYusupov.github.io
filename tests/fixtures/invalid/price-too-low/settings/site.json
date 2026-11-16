@@ -1,0 +1,12 @@
+{
+  "telegram": "choco_test",
+  "phone": "+998901112233",
+  "contactName": {
+    "ru": "Тест",
+    "uz": "Test",
+    "en": "Test"
+  },
+  "instagram": "chocoparty.test",
+  "ordersCount": 123,
+  "foundedYear": 2015
+}

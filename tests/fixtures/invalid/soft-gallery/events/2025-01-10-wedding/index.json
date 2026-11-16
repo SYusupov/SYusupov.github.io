@@ -1,0 +1,11 @@
+{
+  "date": "2025-01-10",
+  "type": "wedding",
+  "cover": "cover.webp",
+  "gallery": [
+    "01.webp",
+    "01.webp",
+    "blob:http://localhost/0b1f",
+    "02.webp"
+  ]
+}

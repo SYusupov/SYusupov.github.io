@@ -1,0 +1,12 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getEvents } from '../../lib/content';
+import EventPage from '../../views/EventPage.astro';
+
+export const getStaticPaths = (async () =>
+  (await getEvents()).map((event) => ({ params: { slug: event.id }, props: { event } }))) satisfies GetStaticPaths;
+
+const { event } = Astro.props;
+---
+
+<EventPage locale="ru" event={event} />
