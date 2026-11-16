@@ -7,13 +7,12 @@
  * the source, so only new videos are compressed. Needs ffmpeg on the PATH.
  * Usage: tsx scripts/prepare-videos.ts   (CONTENT_ROOT switches to fixture content and dist-test)
  */
-import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, renameSync, statSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import sharp from 'sharp';
 import { videoUrls } from '../src/lib/video';
-import { encodeSiteClip, isSiteFormat, probeVideo } from './lib/ffmpeg';
+import { encodeSiteClip, extractFrame, isSiteFormat, probeVideo } from './lib/ffmpeg';
 
 const root = process.env.CONTENT_ROOT ?? 'src/content';
 const outDir = process.env.CONTENT_ROOT ? 'dist-test' : 'dist';
@@ -48,8 +47,7 @@ async function compress(source: string, clip: string, poster: string): Promise<v
   const partClip = `${clip}.part.mp4`;
   if (isSiteFormat(probeVideo(source), statSync(source).size)) copyFileSync(source, partClip);
   else encodeSiteClip(source, partClip);
-  const frame = execFileSync('ffmpeg', ['-v', 'error', '-ss', '0.3', '-i', partClip, '-frames:v', '1', '-f', 'image2pipe', '-vcodec', 'png', '-']);
-  await sharp(frame).webp({ quality: 72 }).toFile(poster);
+  await sharp(extractFrame(partClip, 0.3)).webp({ quality: 72 }).toFile(poster);
   renameSync(partClip, clip);
 }
 
