@@ -1,5 +1,5 @@
 ---
-import { eventYear, type EventEntry } from '../lib/content';
+import type { EventEntry } from '../lib/content';
 import type { Locale } from '../lib/domain';
 import EventCard from './EventCard.astro';
 
@@ -16,7 +16,7 @@ const { events, locale, layout = 'grid' } = Astro.props;
 <ul class:list={['event-grid', `event-grid--${layout}`]} role="list" data-event-list>
   {
     events.map((event) => (
-      <li data-event-card data-type={event.data.type} data-year={eventYear(event)}>
+      <li data-event-card data-type={event.data.type}>
         <EventCard event={event} locale={locale} />
       </li>
     ))
