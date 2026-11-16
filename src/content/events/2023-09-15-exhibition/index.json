@@ -1,0 +1,14 @@
+{
+  "date": "2023-09-15",
+  "type": "exhibition",
+  "client": "Agio Pharmaceuticals",
+  "fountain": "several",
+  "cover": "cover.webp",
+  "gallery": [
+    "01.webp",
+    "02.webp"
+  ],
+  "description": {
+    "ru": "Выставочный стенд Agio Pharmaceuticals: фонтаны с молочным и белым шоколадом в зале с арочными нишами."
+  }
+}

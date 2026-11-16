@@ -61,6 +61,8 @@ const VIDEO = /\.(mp4|mov|m4v)$/i;
 const RESIZE = { width: 1600, height: 1600, fit: 'inside' as const, withoutEnlargement: true };
 
 interface Curation {
+  /** Keeps the event out of the site; the reason is reported (a legible private name, a pending question). */
+  skip?: string;
   /** Overrides the client from the sheet. */
   client?: string;
   /** Russian title of an «other» event. */
@@ -190,6 +192,10 @@ if (args.events) {
     if (column(row, 'статус').toLowerCase() !== 'готово') continue;
     if (ledger[number] || (only && !only.has(number))) continue;
     const extra = curation[number] ?? {};
+    if (extra.skip) {
+      report.push(`№${number}: пропущено — ${extra.skip}`);
+      continue;
+    }
     const typeText = column(row, 'тип').toLowerCase();
     const type = TYPES[typeText] ?? (typeText.startsWith('другое') ? 'other' : '');
     const date = column(row, 'дата (');
