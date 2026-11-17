@@ -2,7 +2,8 @@
  * Runs after `astro build`: turns every event video into a short silent clip for the site
  * (MP4 H.264, long side up to 1280 px, up to 8 s, about 1 MB) plus a WebP poster, written to
  * <outDir>/generated/events/<event>/ (see src/lib/video.ts). A clip already in that format (the
- * archive import makes them so) is copied as it is; anything else, such as a phone video the admin
+ * archive import makes them so) is only rewritten without metadata (a phone writes the shooting time
+ * and GPS coordinates into its videos); anything else, such as a phone video the admin
  * uploaded, is compressed, HDR mapped to SDR. Results are cached in .video-cache by the hash of
  * the source, so only new videos are compressed. Needs ffmpeg on the PATH.
  * Usage: tsx scripts/prepare-videos.ts   (CONTENT_ROOT switches to fixture content and dist-test)
@@ -12,7 +13,7 @@ import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, renameS
 import { dirname, join } from 'node:path';
 import sharp from 'sharp';
 import { videoUrls } from '../src/lib/video';
-import { encodeSiteClip, extractFrame, isSiteFormat, probeVideo } from './lib/ffmpeg';
+import { encodeSiteClip, extractFrame, isSiteFormat, probeVideo, stripMetadata } from './lib/ffmpeg';
 
 const root = process.env.CONTENT_ROOT ?? 'src/content';
 const outDir = process.env.CONTENT_ROOT ? 'dist-test' : 'dist';
@@ -45,7 +46,7 @@ function sourceVideos(): SourceVideo[] {
 
 async function compress(source: string, clip: string, poster: string): Promise<void> {
   const partClip = `${clip}.part.mp4`;
-  if (isSiteFormat(probeVideo(source), statSync(source).size)) copyFileSync(source, partClip);
+  if (isSiteFormat(probeVideo(source), statSync(source).size)) stripMetadata(source, partClip);
   else encodeSiteClip(source, partClip);
   await sharp(extractFrame(partClip, 0.3)).webp({ quality: 72 }).toFile(poster);
   renameSync(partClip, clip);

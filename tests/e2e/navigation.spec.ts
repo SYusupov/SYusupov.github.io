@@ -6,9 +6,9 @@ const pages = [
   { name: 'all events', ru: '/events/', uz: '/uz/events/', en: '/en/events/' },
   {
     name: 'an event',
-    ru: '/events/2025-12-14-corporate/',
-    uz: '/uz/events/2025-12-14-corporate/',
-    en: '/en/events/2025-12-14-corporate/',
+    ru: '/events/corporate-1/',
+    uz: '/uz/events/corporate-1/',
+    en: '/en/events/corporate-1/',
   },
   { name: 'an occasion', ru: '/occasions/wedding/', uz: '/uz/occasions/wedding/', en: '/en/occasions/wedding/' },
 ];

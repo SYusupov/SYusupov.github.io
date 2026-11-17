@@ -84,7 +84,15 @@ export function isSiteFormat(info: VideoInfo, bytes: number): boolean {
   );
 }
 
-/** Silent MP4 H.264 up to `length` seconds from `start`, long side up to 1280 px, 30 fps, upright, SDR. */
+/** A phone video carries the shooting time, the device and GPS coordinates; nothing of it may be published. */
+const NO_METADATA = ['-map_metadata', '-1', '-map_metadata:s:v', '-1', '-map_chapters', '-1', '-fflags', '+bitexact'];
+
+/** The same video stream copied without any metadata (no re-encoding). */
+export function stripMetadata(source: string, target: string): void {
+  execFileSync('ffmpeg', ['-v', 'error', '-y', '-i', source, '-map', '0:v:0', '-c', 'copy', ...NO_METADATA, '-movflags', '+faststart', target]);
+}
+
+/** Silent MP4 H.264 up to `length` seconds from `start`, long side up to 1280 px, 30 fps, upright, SDR, no metadata. */
 export function encodeSiteClip(source: string, target: string, start = 0, length = CLIP_SECONDS): void {
   const info = probeVideo(source);
   const filters = [
@@ -96,7 +104,7 @@ export function encodeSiteClip(source: string, target: string, start = 0, length
   execFileSync('ffmpeg', [
     '-v', 'error', '-y', '-ss', String(start), '-i', source, '-t', String(Math.min(length, CLIP_SECONDS)), '-an',
     '-vf', filters.join(','),
-    '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '27', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', target,
+    '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '27', '-pix_fmt', 'yuv420p', ...NO_METADATA, '-movflags', '+faststart', target,
   ]);
 }
 

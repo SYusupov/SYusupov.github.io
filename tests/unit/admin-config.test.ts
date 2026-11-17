@@ -149,6 +149,12 @@ describe('admin forms match the content schema', () => {
     });
   });
 
+  it('an event address carries no date: the type and a short unique id, so two events never clash', () => {
+    const slug = formNamed('events').slug;
+    expect(slug).not.toMatch(/\{\{(year|month|day|hour|minute|second|date)/);
+    expect(slug).toBe('{{type}}-{{uuid_shorter}}');
+  });
+
   it('the price form writes the price file the site reads', () => {
     expect(formNamed('prices')).toMatchObject({ file: 'src/content/settings/prices.json', format: 'json' });
   });

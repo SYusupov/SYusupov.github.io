@@ -6,9 +6,12 @@
  *     from its occasion page, and the five newest are on the home page;
  *   - schema.org markup parses; the admin panel publishes to the main branch on GitHub;
  *   - the home page keeps the Google and Yandex ownership tags in <head> (the services re-check
- *     them), and every page carries the Metrika counter when site.json names one.
+ *     them), and every page carries the Metrika counter when site.json names one;
+ *   - no event date leaks: no address (page, video, poster) contains a date, and no published clip
+ *     keeps the shooting time or GPS coordinates a phone writes into its videos.
  * Usage: tsx scripts/audit-dist.ts   (CONTENT_ROOT switches to fixture content and dist-test)
  */
+import { execFileSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { LOCALES, OCCASION_TYPES, SITE_URL, SITE_VERIFICATION } from '../src/lib/domain';
@@ -135,6 +138,31 @@ if (metrikaId) {
       problems.push(`нет пикселя Метрики в <body>: ${page}`);
     }
   }
+}
+
+// 6. No event date leaks, in an address or in a clip's metadata.
+const DATE_IN_ADDRESS = /\d{4}-\d{2}-\d{2}/;
+for (const [page, html] of pages) {
+  if (DATE_IN_ADDRESS.test(page)) problems.push(`в адресе страницы есть дата: ${page}`);
+  for (const [, url] of html.matchAll(/(?:href|src|poster)="(\/(?:events|generated)\/[^"]*)"/g)) {
+    if (DATE_IN_ADDRESS.test(url)) problems.push(`в адресе на странице ${page} есть дата: ${url}`);
+  }
+}
+function clipsIn(dir: string): string[] {
+  return readdirSync(dir).flatMap((name) => {
+    const path = join(dir, name);
+    if (statSync(path).isDirectory()) return clipsIn(path);
+    return name.endsWith('.mp4') ? [path] : [];
+  });
+}
+const generated = join(outDir, 'generated');
+for (const clip of existsSync(generated) ? clipsIn(generated) : []) {
+  const probe = JSON.parse(
+    execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format_tags:stream_tags', '-of', 'json', clip], { encoding: 'utf8' }),
+  ) as { format?: { tags?: Record<string, string> }; streams?: { tags?: Record<string, string> }[] };
+  const keys = [...Object.keys(probe.format?.tags ?? {}), ...(probe.streams ?? []).flatMap((stream) => Object.keys(stream.tags ?? {}))];
+  const risky = keys.filter((key) => /location|creation|date|gps|quicktime/i.test(key));
+  if (risky.length) problems.push(`в ролике записаны дата или место съёмки (${risky.join(', ')}): ${relative(outDir, clip)}`);
 }
 
 for (const problem of problems) console.error(`Ошибка: ${problem}`);

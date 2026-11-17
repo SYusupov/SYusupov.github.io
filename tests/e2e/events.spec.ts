@@ -1,8 +1,8 @@
 import { expect, test } from '@playwright/test';
 
-// Fixture content: seven events; the newest is 2025-12-14-corporate, the oldest 2023-12-30-other.
-const NEWEST = '/events/2025-12-14-corporate/';
-const OLDEST = '/events/2023-12-30-other/';
+// Fixture content: seven events; the newest is corporate-1, the oldest other-1. Addresses carry no date.
+const NEWEST = '/events/corporate-1/';
+const OLDEST = '/events/other-1/';
 
 test.describe('a new event shows up everywhere it should', () => {
   test('on the home page among the five latest', async ({ page }) => {
@@ -24,26 +24,50 @@ test.describe('a new event shows up everywhere it should', () => {
     await page.goto(NEWEST);
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Корпоратив Coca-Cola');
     await expect(
-      page.getByText('Большой шоколадный фонтан на корпоративе Coca-Cola, Hyatt Regency Tashkent, декабрь 2025.'),
+      page.getByText('Большой шоколадный фонтан на корпоративе Coca-Cola, Hyatt Regency Tashkent.', { exact: true }),
     ).toBeVisible();
     await expect(page.locator('[data-gallery] img')).toHaveCount(3);
     await expect(page.locator('[data-gallery] video')).toHaveAttribute('poster', /\.webp$/);
     const href = await page.getByRole('link', { name: 'Хочу так же' }).first().getAttribute('href');
     expect(new URL(href ?? '').searchParams.get('text')).toBe(
-      'Здравствуйте! Хочу шоколадный фонтан, как на этом мероприятии: Корпоратив Coca-Cola (https://chocoparty.uz/events/2025-12-14-corporate/). Дата и место моего праздника: ',
+      'Здравствуйте! Хочу шоколадный фонтан, как на этом мероприятии: Корпоратив Coca-Cola (https://chocoparty.uz/events/corporate-1/). Дата и место моего праздника: ',
     );
   });
 
   test('on the page of its occasion, without events of other types', async ({ page }) => {
     await page.goto('/occasions/corporate/');
     await expect(page.locator(`a[href="${NEWEST}"]`)).toBeVisible();
-    await expect(page.locator('a[href="/events/2025-11-02-wedding/"]')).toHaveCount(0);
+    await expect(page.locator('a[href="/events/wedding-1/"]')).toHaveCount(0);
   });
 
   test('in English on its English page', async ({ page }) => {
-    await page.goto('/en/events/2025-12-14-corporate/');
+    await page.goto('/en/events/corporate-1/');
     await expect(page.locator('html')).toHaveAttribute('lang', 'en');
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Corporate event: Coca-Cola');
+  });
+});
+
+test.describe('no date is shown anywhere for an event', () => {
+  for (const path of ['/events/corporate-1/', '/uz/events/corporate-1/', '/en/events/corporate-1/']) {
+    test(`not on ${path}`, async ({ page }) => {
+      await page.goto(path);
+      await expect(page.locator('article.event')).not.toContainText(/\b20\d\d\b/);
+      expect(await page.title()).not.toMatch(/\b20\d\d\b/);
+      expect(await page.locator('meta[property="og:title"]').getAttribute('content')).not.toMatch(/\b20\d\d\b/);
+      expect(await page.locator('meta[name="description"]').getAttribute('content')).not.toMatch(/\b20\d\d\b/);
+    });
+  }
+
+  test('the eyebrow over the title names the type only', async ({ page }) => {
+    await page.goto('/events/corporate-1/');
+    await expect(page.locator('article.event .eyebrow')).toHaveText('Корпоратив');
+  });
+
+  test('the address of every event in the list has no date', async ({ page }) => {
+    await page.goto('/events/');
+    const hrefs = await page.locator('[data-event-card] a').evaluateAll((links) => links.map((a) => a.getAttribute('href') ?? ''));
+    expect(hrefs).toHaveLength(7);
+    for (const href of hrefs) expect(href).not.toMatch(/\d{4}-\d{2}-\d{2}/);
   });
 });
 

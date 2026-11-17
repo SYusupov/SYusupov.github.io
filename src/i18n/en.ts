@@ -55,9 +55,7 @@ export const en: Dictionary = {
     contacts: 'Contacts',
   },
   dates: {
-    months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
     monthsGenitive: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-    monthYear: '{month} {year}',
   },
   eventNames: {
     wedding: 'Wedding',
@@ -70,7 +68,7 @@ export const en: Dictionary = {
   },
   eventPhrases: {
     titleWithClient: '{type}: {client}',
-    sentence: '{fountain} {occasion}{venue}, {date}.',
+    sentence: '{fountain} {occasion}{venue}.',
     venue: ', {venue}',
     photoAlt: '{title} — chocolate fountain, photo {n}',
     fountain: {
@@ -110,7 +108,7 @@ export const en: Dictionary = {
     video: 'Video',
   },
   eventPage: {
-    metaTitle: '{title}, {date} — chocolate fountain | ChocoParty',
+    metaTitle: '{title} — chocolate fountain | ChocoParty',
     breadcrumbs: 'You are here',
     sameAsThis: 'I want the same',
     gallery: 'Photos and videos',
