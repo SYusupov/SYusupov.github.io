@@ -53,9 +53,7 @@ export const ru = {
     contacts: 'Контакты',
   },
   dates: {
-    months: ['январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь'],
     monthsGenitive: ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'],
-    monthYear: '{month} {year}',
   },
   eventNames: {
     wedding: 'Свадьба',
@@ -68,7 +66,7 @@ export const ru = {
   },
   eventPhrases: {
     titleWithClient: '{type} {client}',
-    sentence: '{fountain} {occasion}{venue}, {date}.',
+    sentence: '{fountain} {occasion}{venue}.',
     venue: ', {venue}',
     photoAlt: '{title} — шоколадный фонтан, фото {n}',
     fountain: {
@@ -108,7 +106,7 @@ export const ru = {
     video: 'Видео',
   },
   eventPage: {
-    metaTitle: '{title}, {date} — шоколадный фонтан | ChocoParty',
+    metaTitle: '{title} — шоколадный фонтан | ChocoParty',
     breadcrumbs: 'Вы здесь',
     sameAsThis: 'Хочу так же',
     gallery: 'Фото и видео',

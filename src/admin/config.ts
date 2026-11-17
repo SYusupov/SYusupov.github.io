@@ -82,12 +82,19 @@ function eventsForm(): CmsForm {
     format: 'json',
     create: true,
     delete: true,
-    slug: '{{year}}-{{month}}-{{day}}-{{type}}',
+    // No date in the address: the owner does not want event dates shown anywhere, links included.
+    slug: '{{type}}-{{uuid_shorter}}',
     summary: "{{date | date('DD.MM.YYYY')}} · {{client}}",
     thumbnail: 'cover',
     sortable_fields: { fields: ['date'], default: { field: 'date', direction: 'descending' } },
     fields: [
-      { name: 'date', label: 'Дата', widget: 'datetime', type: 'date' },
+      {
+        name: 'date',
+        label: 'Дата',
+        widget: 'datetime',
+        type: 'date',
+        hint: 'Нужна только для порядка в списке: новые мероприятия идут выше. На сайте дата не показывается.',
+      },
       {
         name: 'type',
         label: 'Тип мероприятия',

@@ -42,19 +42,19 @@ describe('order link from an event page («Хочу так же»)', () => {
   const event = {
     telegram: 'choco_test',
     title: 'Корпоратив Coca-Cola',
-    url: 'https://chocoparty.uz/events/2025-12-14-corporate/',
+    url: 'https://chocoparty.uz/events/corporate-1/',
   };
 
   it('Russian', () => {
     expect(decode(eventOrderLink({ ...event, locale: 'ru' }))).toEqual({
       address: 'https://t.me/choco_test',
-      text: 'Здравствуйте! Хочу шоколадный фонтан, как на этом мероприятии: Корпоратив Coca-Cola (https://chocoparty.uz/events/2025-12-14-corporate/). Дата и место моего праздника: ',
+      text: 'Здравствуйте! Хочу шоколадный фонтан, как на этом мероприятии: Корпоратив Coca-Cola (https://chocoparty.uz/events/corporate-1/). Дата и место моего праздника: ',
     });
   });
 
   it('English', () => {
     expect(decode(eventOrderLink({ ...event, title: 'Corporate event: Coca-Cola', locale: 'en' })).text).toBe(
-      'Hello! I would like a chocolate fountain like at this event: Corporate event: Coca-Cola (https://chocoparty.uz/events/2025-12-14-corporate/). Date and place of my celebration: ',
+      'Hello! I would like a chocolate fountain like at this event: Corporate event: Coca-Cola (https://chocoparty.uz/events/corporate-1/). Date and place of my celebration: ',
     );
   });
 });

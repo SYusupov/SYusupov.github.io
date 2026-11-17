@@ -1,4 +1,7 @@
-/** How an event is named and described on the site, in each language. Private events carry no names. */
+/**
+ * How an event is named and described on the site, in each language. Private events carry no names.
+ * An event's date is never shown (the owner's decision): it only orders the events.
+ */
 import { dictionaryFor } from '../i18n';
 import type { EventType, Fountain, Locale } from './domain';
 import { fill } from './template';
@@ -26,14 +29,7 @@ export function eventTitle(event: EventFacts, locale: Locale): string {
   return event.client ? fill(t.eventPhrases.titleWithClient, { type, client: event.client }) : type;
 }
 
-/** «декабрь 2025», «2025-yil dekabr», «December 2025». */
-export function eventDateLabel(event: Pick<EventFacts, 'date'>, locale: Locale): string {
-  const t = dictionaryFor(locale);
-  const [year, month] = event.date.split('-').map(Number);
-  return fill(t.dates.monthYear, { month: t.dates.months[month - 1], year });
-}
-
-/** One sentence from what is known: fountain, occasion, venue and date. */
+/** One sentence from what is known: fountain, occasion and venue. */
 export function eventSentence(event: EventFacts, locale: Locale): string {
   const phrases = dictionaryFor(locale).eventPhrases;
   const title = ownTitle(event, locale);
@@ -47,7 +43,6 @@ export function eventSentence(event: EventFacts, locale: Locale): string {
       fountain: phrases.fountain[event.fountain ?? 'none'],
       occasion,
       venue: event.venue ? fill(phrases.venue, { venue: event.venue }) : '',
-      date: eventDateLabel(event, locale),
     }),
   );
 }

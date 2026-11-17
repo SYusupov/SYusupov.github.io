@@ -55,9 +55,7 @@ export const uz: Dictionary = {
     contacts: 'Aloqa',
   },
   dates: {
-    months: ['yanvar', 'fevral', 'mart', 'aprel', 'may', 'iyun', 'iyul', 'avgust', 'sentabr', 'oktabr', 'noyabr', 'dekabr'],
     monthsGenitive: ['yanvar', 'fevral', 'mart', 'aprel', 'may', 'iyun', 'iyul', 'avgust', 'sentabr', 'oktabr', 'noyabr', 'dekabr'],
-    monthYear: '{year}-yil {month}',
   },
   eventNames: {
     wedding: "To'y",
@@ -70,7 +68,7 @@ export const uz: Dictionary = {
   },
   eventPhrases: {
     titleWithClient: '{type}: {client}',
-    sentence: '{occasion} {fountain}{venue}, {date}.',
+    sentence: '{occasion} {fountain}{venue}.',
     venue: ', {venue}',
     photoAlt: '{title} — shokoladli favvora, {n}-rasm',
     fountain: {
@@ -110,7 +108,7 @@ export const uz: Dictionary = {
     video: 'Video',
   },
   eventPage: {
-    metaTitle: '{title}, {date} — shokoladli favvora | ChocoParty',
+    metaTitle: '{title} — shokoladli favvora | ChocoParty',
     breadcrumbs: 'Siz shu yerdasiz',
     sameAsThis: 'Menga ham shunday',
     gallery: 'Rasm va videolar',

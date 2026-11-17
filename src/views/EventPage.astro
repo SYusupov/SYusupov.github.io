@@ -7,7 +7,7 @@ import { dictionaryFor, fill } from '../i18n';
 import Base from '../layouts/Base.astro';
 import { getEvents, getSite, type EventEntry } from '../lib/content';
 import type { Locale } from '../lib/domain';
-import { eventDateLabel, eventPhotoAlt, eventSentence, eventTitle } from '../lib/event-title';
+import { eventPhotoAlt, eventSentence, eventTitle } from '../lib/event-title';
 import { eventOrderLink } from '../lib/order-link';
 import { absoluteUrl, pathFor } from '../lib/routes';
 import { breadcrumbsJsonLd } from '../lib/structured-data';
@@ -23,7 +23,6 @@ const t = dictionaryFor(locale);
 const data = event.data;
 const site = await getSite();
 const title = eventTitle(data, locale);
-const dateLabel = eventDateLabel(data, locale);
 const sentence = eventSentence(data, locale);
 const page = { kind: 'event', slug: event.id } as const;
 const home = pathFor(locale, { kind: 'home' });
@@ -52,7 +51,7 @@ const crumbs = [
 <Base
   locale={locale}
   page={page}
-  title={fill(t.eventPage.metaTitle, { title, date: dateLabel })}
+  title={fill(t.eventPage.metaTitle, { title })}
   description={description ? `${sentence} ${description}` : sentence}
   image={data.cover}
   jsonLd={[breadcrumbsJsonLd(crumbs)]}
@@ -65,7 +64,7 @@ const crumbs = [
           label={t.eventPage.breadcrumbs}
           items={[{ name: t.nav.home, href: home }, { name: t.events.title, href: eventsPath }, { name: title }]}
         />
-        <p class="eyebrow">{t.eventTypes[data.type]} · {dateLabel}</p>
+        <p class="eyebrow">{t.eventTypes[data.type]}</p>
         <h1>{title}</h1>
         <p class="event__sentence">{sentence}</p>
         <div class="event__actions" data-hides-sticky>

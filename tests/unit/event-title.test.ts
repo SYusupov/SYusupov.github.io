@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { eventDateLabel, eventPhotoAlt, eventSentence, eventTitle } from '../../src/lib/event-title';
+import { eventPhotoAlt, eventSentence, eventTitle } from '../../src/lib/event-title';
 
-// Seam 4: an event's title, date line, sentence and photo captions in three languages.
+// Seam 4: an event's title, sentence and photo captions in three languages. A date is never shown:
+// it only orders the events, so it is not part of any text.
 
 const corporate = {
   date: '2025-12-14',
@@ -40,31 +41,30 @@ describe('event title', () => {
   });
 });
 
-describe('date line', () => {
-  it('month and year', () => {
-    expect(eventDateLabel(corporate, 'ru')).toBe('декабрь 2025');
-    expect(eventDateLabel(corporate, 'uz')).toBe('2025-yil dekabr');
-    expect(eventDateLabel(corporate, 'en')).toBe('December 2025');
-  });
-});
-
 describe('sentence on the event page', () => {
-  it('fountain, occasion, venue and date', () => {
+  it('fountain, occasion and venue', () => {
     expect(eventSentence(corporate, 'ru')).toBe(
-      'Большой шоколадный фонтан на корпоративе Coca-Cola, Hyatt Regency Tashkent, декабрь 2025.',
+      'Большой шоколадный фонтан на корпоративе Coca-Cola, Hyatt Regency Tashkent.',
     );
     expect(eventSentence(corporate, 'uz')).toBe(
-      'Coca-Cola korporativida katta shokoladli favvora, Hyatt Regency Tashkent, 2025-yil dekabr.',
+      'Coca-Cola korporativida katta shokoladli favvora, Hyatt Regency Tashkent.',
     );
     expect(eventSentence(corporate, 'en')).toBe(
-      'A large chocolate fountain at a Coca-Cola corporate event, Hyatt Regency Tashkent, December 2025.',
+      'A large chocolate fountain at a Coca-Cola corporate event, Hyatt Regency Tashkent.',
     );
+  });
+
+  it('never names a year or a month', () => {
+    for (const locale of ['ru', 'uz', 'en'] as const) {
+      expect(eventSentence(corporate, locale)).not.toMatch(/20\d\d/);
+      expect(eventPhotoAlt(corporate, locale, 1)).not.toMatch(/20\d\d/);
+    }
   });
 
   it('without a venue or a known fountain', () => {
-    expect(eventSentence(wedding, 'ru')).toBe('Средний шоколадный фонтан на свадьбе, ноябрь 2025.');
-    expect(eventSentence(graduation, 'ru')).toBe('Шоколадный фонтан на празднике «Выпускной», декабрь 2023.');
-    expect(eventSentence(graduation, 'en')).toBe('A chocolate fountain at the Graduation party, December 2023.');
+    expect(eventSentence(wedding, 'ru')).toBe('Средний шоколадный фонтан на свадьбе.');
+    expect(eventSentence(graduation, 'ru')).toBe('Шоколадный фонтан на празднике «Выпускной».');
+    expect(eventSentence(graduation, 'en')).toBe('A chocolate fountain at the Graduation party.');
   });
 });
 

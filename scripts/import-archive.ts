@@ -147,7 +147,7 @@ async function toWebp(source: string, target: string): Promise<void> {
   await sharp(source).rotate().resize(RESIZE).webp({ quality: 80 }).toFile(target);
 }
 
-/** Folder names as the admin panel makes them: the second event of a day gets «-1». */
+/** Folder names carry no date (it would end up in the address): the event type and the sheet's number. */
 function freeFolder(base: string, taken: Set<string>): string {
   let name = base;
   for (let n = 1; taken.has(name) || existsSync(join(args.content, 'events', name)); n += 1) name = `${base}-${n}`;
@@ -211,7 +211,7 @@ if (args.events) {
       report.push(`№${number}: пропущено — нет архива альбома «${albumName(column(row, 'альбом'))}» в ${folders.join(', ')}`);
       continue;
     }
-    const folder = freeFolder(`${date}-${type}`, taken);
+    const folder = freeFolder(`${type}-${number}`, taken);
     if (args['dry-run']) {
       report.push(`№${number}: будет ${folder} из ${zips.map((zip) => basename(zip)).join(', ')}`);
       continue;
