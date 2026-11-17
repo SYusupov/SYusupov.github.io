@@ -19,6 +19,7 @@ describe('content check before the build', () => {
     ['event-too-many-videos', 'events/2025-01-10-wedding/index.json: «Видео» — не больше 2 роликов'],
     ['price-too-low', 'settings/prices.json: «Малый фонтан — до 30 гостей → Optima, сум» — цена не меньше 100 000 сум'],
     ['company-without-name', 'companies/no-name/index.json: «Название» — укажите название компании'],
+    ['company-url-not-web', 'companies/odd/index.json: «Сайт компании» — адрес сайта в виде https://…'],
     ['company-missing-logo', 'companies/luna/index.json: «Логотип» — нет файла logo.png в папке компании'],
     ['review-without-russian-text', 'reviews/2025-01-10-anna/index.json: «Отзыв → По-русски» — напишите текст отзыва по-русски'],
     ['promotion-without-russian-title', 'promotions/2025-12-offer/index.json: «Заголовок → По-русски» — напишите заголовок по-русски'],

@@ -1,5 +1,6 @@
 {
   "name": "Deloitte",
   "logo": "logo.svg",
-  "url": "https://www.deloitte.com/kz/en/pages/uzbekistan/topics/uzbekistan.html"
+  "url": "https://www.deloitte.com/kz/en/pages/uzbekistan/topics/uzbekistan.html",
+  "order": 16
 }
