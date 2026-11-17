@@ -162,4 +162,18 @@ describe('admin forms match the content schema', () => {
   it('publishes to the main branch of the site repository by default', () => {
     expect(config.backend).toMatchObject({ name: 'github', repo: 'SYusupov/SYusupov.github.io', branch: 'main' });
   });
+
+  it('signs in with an access token only, until a login address is set up', () => {
+    expect(config.backend).toMatchObject({ auth_methods: ['token'] });
+    expect(config.backend).not.toHaveProperty('base_url');
+  });
+
+  it('with a login address it also offers «sign in with GitHub» (where GitHub accepts a Google account)', () => {
+    const { backend } = buildCmsConfig({ authUrl: 'https://chocoparty-auth.example.workers.dev' });
+    expect(backend).toMatchObject({
+      name: 'github',
+      base_url: 'https://chocoparty-auth.example.workers.dev',
+      auth_methods: ['oauth', 'token'],
+    });
+  });
 });
