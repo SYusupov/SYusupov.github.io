@@ -4,6 +4,7 @@
  */
 import { ru } from '../i18n/ru';
 import {
+  CMS_AUTH_URL,
   EVENT_TYPES,
   FOUNTAINS,
   GALLERY_MAX,
@@ -43,6 +44,8 @@ export interface CmsOptions {
   backend?: 'github' | 'test';
   /** Branch the admin publishes to; `main` on the live site. */
   branch?: string;
+  /** Login service address; defaults to CMS_AUTH_URL (empty: access token only). */
+  authUrl?: string;
 }
 
 export const REPOSITORY = 'SYusupov/SYusupov.github.io';
@@ -409,12 +412,20 @@ function siteForm(): CmsForm {
   };
 }
 
+function githubBackend(options: CmsOptions) {
+  const authUrl = options.authUrl ?? CMS_AUTH_URL;
+  const base = { name: 'github', repo: REPOSITORY, branch: options.branch ?? 'main' };
+  return authUrl
+    ? { ...base, base_url: authUrl, auth_methods: ['oauth', 'token'] }
+    : { ...base, auth_methods: ['token'] };
+}
+
 export function buildCmsConfig(options: CmsOptions = {}) {
   return {
     backend:
       options.backend === 'test'
         ? { name: 'test-repo' }
-        : { name: 'github', repo: REPOSITORY, branch: options.branch ?? 'main', auth_methods: ['token'] },
+        : githubBackend(options),
     media_folder: 'src/assets/uploads',
     public_folder: '/src/assets/uploads',
     output: { omit_empty_optional_fields: true },

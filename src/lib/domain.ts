@@ -11,6 +11,13 @@ export const SITE_VERIFICATION = {
   yandex: '41d5f9ccab706f3f',
 } as const;
 
+/**
+ * Address of the small login service (a free Cloudflare Worker) that lets the admin panel offer
+ * «sign in with GitHub»; GitHub itself accepts a Google account. Empty until the service is set up:
+ * the panel then signs in with an access token only. See chocoparty-materials/prompts/admin-login.md.
+ */
+export const CMS_AUTH_URL = '';
+
 export const LOCALES = ['ru', 'uz', 'en'] as const;
 export type Locale = (typeof LOCALES)[number];
 export const DEFAULT_LOCALE: Locale = 'ru';
