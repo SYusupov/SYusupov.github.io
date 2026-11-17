@@ -9,19 +9,35 @@ interface Props {
 
 const { company, height = 56 } = Astro.props;
 const logo = company.data.logo;
+const url = company.data.url;
+// With an address the logo leads to the company's own site: a new tab, no referrer, no search weight.
+const Wrapper = url ? 'a' : 'span';
+const link = url ? { href: url, target: '_blank', rel: 'noopener noreferrer nofollow' } : {};
 ---
 
 {
-  logo &&
-    (logo.format === 'svg' ? (
-      <img
-        src={logo.src}
-        alt={company.data.name}
-        height={height}
-        width={Math.round((height * logo.width) / logo.height)}
-        loading="lazy"
-      />
-    ) : (
-      <Image src={logo} alt={company.data.name} height={height} densities={[1, 2]} format="webp" loading="lazy" />
-    ))
+  logo && (
+    <Wrapper class="company-logo" {...link}>
+      {logo.format === 'svg' ? (
+        <img
+          src={logo.src}
+          alt={company.data.name}
+          height={height}
+          width={Math.round((height * logo.width) / logo.height)}
+          loading="lazy"
+        />
+      ) : (
+        <Image src={logo} alt={company.data.name} height={height} densities={[1, 2]} format="webp" loading="lazy" />
+      )}
+    </Wrapper>
+  )
 }
+
+<style>
+  .company-logo {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+  }
+</style>

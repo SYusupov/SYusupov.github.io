@@ -10,6 +10,23 @@ test.describe('trust block on the home page', () => {
     await expect(trust.getByRole('img', { name: 'Olma' })).toBeVisible();
   });
 
+  test('a logo leads to the company site in a new tab, without referrer or search weight', async ({ page }) => {
+    await page.goto('/');
+    const link = page.locator('[data-trust]').getByRole('link', { name: 'Coca-Cola' });
+    await expect(link).toHaveAttribute('href', 'https://www.coca-cola.com');
+    await expect(link).toHaveAttribute('target', '_blank');
+    await expect(link).toHaveAttribute('rel', /noopener/);
+    await expect(link).toHaveAttribute('rel', /noreferrer/);
+    await expect(link).toHaveAttribute('rel', /nofollow/);
+  });
+
+  test('a company without an address stays a plain logo', async ({ page }) => {
+    await page.goto('/');
+    const trust = page.locator('[data-trust]');
+    await expect(trust.getByRole('img', { name: 'Olma' })).toBeVisible();
+    await expect(trust.getByRole('link', { name: 'Olma' })).toHaveCount(0);
+  });
+
   test('a review appears on the page of the language it is written in', async ({ page }) => {
     await page.goto('/');
     await expect(page.locator('[data-reviews]')).toContainText('Фонтан стал главным украшением вечера');

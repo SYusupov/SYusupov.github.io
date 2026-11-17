@@ -1,4 +1,6 @@
 {
   "name": "BI Group",
-  "url": "https://bi.group/"
+  "logo": "logo.png",
+  "url": "https://bi.group/",
+  "order": 10
 }

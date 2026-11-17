@@ -1,4 +1,6 @@
 {
-  "name": "Bashkent",
-  "url": "https://bashkent.uz/"
+  "name": "Bashkent Development",
+  "logo": "logo.svg",
+  "url": "https://bashkent.uz/",
+  "order": 1
 }

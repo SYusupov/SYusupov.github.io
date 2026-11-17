@@ -85,7 +85,7 @@ export function makeSchemas<Photo extends z.ZodType>(photo: Photo) {
   const company = z.object({
     name: requiredText('укажите название компании'),
     logo: z.preprocess(blankToUndefined, photo.optional()),
-    url: z.preprocess(blankToUndefined, z.url('адрес сайта в виде https://…').optional()),
+    url: z.preprocess(blankToUndefined, z.url({ protocol: /^https?$/, error: 'адрес сайта в виде https://…' }).optional()),
     order: z.preprocess(blankToUndefined, z.number().int().optional()),
   });
 
