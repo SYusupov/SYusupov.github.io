@@ -33,7 +33,9 @@ const { chromium } = require('playwright');
 
   await page.goto(url, { waitUntil: 'load', timeout: 120000 });
   await page.waitForTimeout(1500);
-  const firstScreen = rows.reduce((sum, row) => sum + row.bytes, 0);
+  // The budget is «without video»: clips are measured apart, they stream after the page is shown.
+  const firstScreen = rows.filter((row) => row.type !== 'media').reduce((sum, row) => sum + row.bytes, 0);
+  const firstScreenMedia = rows.filter((row) => row.type === 'media').reduce((sum, row) => sum + row.bytes, 0);
   const cls = await page.evaluate(() => window.__cls);
   await page.evaluate(async () => {
     for (let y = 0; y < document.body.scrollHeight; y += 600) {
@@ -57,6 +59,7 @@ const { chromium } = require('playwright');
         url,
         mobile,
         firstScreenKB: kb(firstScreen),
+        firstScreenVideoKB: kb(firstScreenMedia),
         totalKB: kb(rows.reduce((sum, row) => sum + row.bytes, 0)),
         ownScriptKB: kb(rows.filter((row) => row.type === 'script' && sameOrigin(row)).reduce((s, r) => s + r.bytes, 0)),
         layoutShift: Number(cls.toFixed(3)),

@@ -140,7 +140,7 @@ if (metrikaId) {
   }
 }
 
-// 6. No event date leaks, in an address or in a clip's metadata.
+// 6. No event date leaks, in an address or in the metadata of any published clip.
 const DATE_IN_ADDRESS = /\d{4}-\d{2}-\d{2}/;
 for (const [page, html] of pages) {
   if (DATE_IN_ADDRESS.test(page)) problems.push(`в адресе страницы есть дата: ${page}`);
@@ -155,8 +155,7 @@ function clipsIn(dir: string): string[] {
     return name.endsWith('.mp4') ? [path] : [];
   });
 }
-const generated = join(outDir, 'generated');
-for (const clip of existsSync(generated) ? clipsIn(generated) : []) {
+for (const clip of clipsIn(outDir)) {
   const probe = JSON.parse(
     execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format_tags:stream_tags', '-of', 'json', clip], { encoding: 'utf8' }),
   ) as { format?: { tags?: Record<string, string> }; streams?: { tags?: Record<string, string> }[] };
