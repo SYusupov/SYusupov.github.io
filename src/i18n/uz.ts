@@ -225,7 +225,7 @@ export const uz: Dictionary = {
       },
       {
         q: 'Narxga nimalar kiradi?',
-        a: "Uskunani yetkazib berish va o'rnatish, dasturxonni bezash va mevalarni kesish, salfetkalar, shpajkalar va idishlar. Tadbirda xizmat ko'rsatish — qo'shimcha to'lov evaziga.",
+        a: "Uskunani yetkazib berish va o'rnatish, dasturxonni bezash va mevalarni kesish, salfetkalar, shpajkalar va idishlar. Tadbirda xizmat ko'rsatish — qo'shimcha to'lov evaziga. Operator-ofitsiant faqat Maxima tarifiga kiradi.",
       },
       {
         q: 'Tariflar nimasi bilan farq qiladi?',
@@ -324,7 +324,7 @@ export const uz: Dictionary = {
     contents: 'Nimalar kiradi',
     total: 'Narxi',
     flavours: "Shokolad tanlovi: sutli, oq, apelsinli, qulupnayli, laymli — narx ta'mga bog'liq emas.",
-    service: "Tadbirda xizmat ko'rsatish — qo'shimcha to'lov evaziga.",
+    service: "Tadbirda xizmat ko'rsatish — qo'shimcha to'lov evaziga. Operator-ofitsiant faqat Maxima tarifiga kiradi.",
     note: "Tugma Telegramni tayyor xabar bilan ochadi — faqat sana va manzilni yozish qoladi.",
   },
   order: {

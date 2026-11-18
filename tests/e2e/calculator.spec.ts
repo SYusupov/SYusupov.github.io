@@ -48,4 +48,18 @@ test.describe('price calculator', () => {
       'Hello! I would like to order a chocolate fountain. Size: Medium. Package: Light. Price on the site: 2,010,000 UZS. Date and place of the celebration: ',
     );
   });
+
+  for (const [path, note] of [
+    ['/', 'Оператор-официант входит только в тариф Maxima.'],
+    ['/uz/', 'Operator-ofitsiant faqat Maxima tarifiga kiradi.'],
+    ['/en/', 'The operator-waiter is included in the Maxima package only.'],
+  ] as const) {
+    test(`${path}: the operator-waiter is said to be only in Maxima, in the calculator and in the answer on what is included`, async ({
+      page,
+    }) => {
+      await page.goto(path);
+      await expect(page.locator('[data-calculator]')).toContainText(note);
+      await expect(page.locator('#faq')).toContainText(note);
+    });
+  }
 });
