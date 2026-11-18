@@ -225,7 +225,7 @@ export const en: Dictionary = {
       },
       {
         q: 'What is included in the price?',
-        a: 'Delivery and setup of the equipment, table decoration and fruit cutting, napkins, skewers and tableware. Staff service at the event costs extra.',
+        a: 'Delivery and setup of the equipment, table decoration and fruit cutting, napkins, skewers and tableware. Staff service at the event costs extra. The operator-waiter is included in the Maxima package only.',
       },
       {
         q: 'How do the packages differ?',
@@ -324,7 +324,7 @@ export const en: Dictionary = {
     contents: "What's included",
     total: 'Price',
     flavours: 'Chocolate of your choice: milk, white, orange, strawberry, lime — the price is the same for every flavour.',
-    service: 'Staff service at the event costs extra.',
+    service: 'Staff service at the event costs extra. The operator-waiter is included in the Maxima package only.',
     note: 'The button opens Telegram with a ready message — just add the date and place.',
   },
   order: {
