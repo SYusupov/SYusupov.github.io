@@ -5,8 +5,8 @@
     "maxima": 3500000
   },
   "medium": {
-    "light": 1100000,
-    "optima": 4100000,
+    "light": 1200000,
+    "optima": 3900000,
     "maxima": 5900000
   },
   "large": {
