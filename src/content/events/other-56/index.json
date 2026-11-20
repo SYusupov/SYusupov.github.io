@@ -1,0 +1,16 @@
+{
+  "date": "2022-10-20",
+  "type": "other",
+  "title": {
+    "ru": "Вечернее мероприятие"
+  },
+  "fountain": "medium",
+  "cover": "cover.webp",
+  "gallery": [
+    "frame-1.webp"
+  ],
+  "videos": [
+    "68cddc0144a84fbd8b59b0d1a4b9ee1a.mp4",
+    "importvideo-50700-871922.mp4"
+  ]
+}
