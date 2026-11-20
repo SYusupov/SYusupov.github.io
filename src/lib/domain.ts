@@ -51,7 +51,12 @@ export type OccasionType = Exclude<EventType, 'other'>;
 export const FOUNTAINS = ['small', 'medium', 'large', 'several'] as const;
 export type Fountain = (typeof FOUNTAINS)[number];
 
-export const GALLERY_MAX = 15;
-export const VIDEOS_MAX = 2;
+/**
+ * How many photos and clips an event page may hold. It was 15 and 2 while the pages showed only the
+ * best; 150 and 60 since the whole archive went onto the site for the manager to choose the best from
+ * (the biggest event has 112 photos and 44 clips). Lower them again once the choice is made.
+ */
+export const GALLERY_MAX = 150;
+export const VIDEOS_MAX = 60;
 /** Largest video file the admin may upload; the build compresses it for the site. */
 export const VIDEO_MAX_BYTES = 20 * 1024 * 1024;

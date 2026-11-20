@@ -1,6 +1,6 @@
 /**
  * Runs after `astro build`: turns every event video into a short silent clip for the site
- * (MP4 H.264, long side up to 1280 px, up to 8 s, about 1 MB) plus a WebP poster, written to
+ * (MP4 H.264, long side up to 1280 px, up to 15 s, 1–3 MB) plus a WebP poster, written to
  * <outDir>/generated/events/<event>/ (see src/lib/video.ts). A clip already in that format (the
  * archive import makes them so) is only rewritten without metadata (a phone writes the shooting time
  * and GPS coordinates into its videos); anything else, such as a phone video the admin
@@ -18,7 +18,7 @@ import { encodeSiteClip, extractFrame, isSiteFormat, probeVideo, stripMetadata }
 const root = process.env.CONTENT_ROOT ?? 'src/content';
 const outDir = process.env.CONTENT_ROOT ? 'dist-test' : 'dist';
 const cacheDir = '.video-cache';
-const SETTINGS = 'h264-1280-crf27-8s-v2';
+const SETTINGS = 'h264-1280-crf27-15s-v3';
 
 interface SourceVideo {
   slug: string;

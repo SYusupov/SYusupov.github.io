@@ -6,9 +6,14 @@
 import { execFileSync } from 'node:child_process';
 import { renameSync, rmSync } from 'node:fs';
 
-/** A clip on the site: at most this long (seconds), at most this wide on the long side (pixels). */
-export const CLIP_SECONDS = 8;
+/**
+ * A clip on the site: at most this long (seconds), at most this wide on the long side (pixels), at most
+ * this heavy to be left alone by the build. 15 s since the whole archive went onto the site for the
+ * manager to choose from; the clips picked for the final pages are cut to 8 s or less.
+ */
+export const CLIP_SECONDS = 15;
 export const CLIP_LONG_SIDE = 1280;
+export const CLIP_MAX_BYTES = 6 * 1024 * 1024;
 const CLIP_FPS = 30;
 
 export interface VideoInfo {
@@ -80,7 +85,7 @@ export function isSiteFormat(info: VideoInfo, bytes: number): boolean {
     Math.max(info.width, info.height) <= CLIP_LONG_SIDE &&
     info.fps <= CLIP_FPS + 0.5 &&
     info.duration <= CLIP_SECONDS + 0.2 &&
-    bytes <= 3 * 1024 * 1024 &&
+    bytes <= CLIP_MAX_BYTES &&
     hdrToSdr(info).length === 0
   );
 }
