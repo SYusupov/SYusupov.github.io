@@ -12,10 +12,12 @@ interface Props {
 
 const { locale, photos, videos } = Astro.props;
 const t = dictionaryFor(locale);
+// A couple of clips open the gallery; with many of them the photos come first, or the clips would fill the screens.
+const videosLast = videos.length > 6;
 // Phones: `sizes` is set below the real width on purpose, so 3× screens fetch ~2× images (half the bytes).
 ---
 
-<ul class="gallery" role="list" data-gallery>
+<ul class="gallery" role="list" data-gallery data-videos-last={videosLast ? '' : undefined}>
   {
     videos.map((video) => (
       <li class="gallery__item gallery__item--video">
@@ -136,6 +138,10 @@ const t = dictionaryFor(locale);
   .gallery__item--video {
     grid-row: span 2;
     aspect-ratio: auto;
+  }
+
+  .gallery[data-videos-last] .gallery__item--video {
+    order: 1;
   }
 
   .gallery__item a {

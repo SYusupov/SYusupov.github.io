@@ -1,0 +1,32 @@
+{
+  "date": "2022-11-18",
+  "type": "exhibition",
+  "fountain": "several",
+  "cover": "cover.webp",
+  "gallery": [
+    "img-4372.webp",
+    "img-4373.webp",
+    "img-4374.webp",
+    "img-4376.webp",
+    "img-4377.webp",
+    "img-4378.webp",
+    "img-4379.webp",
+    "img-4384.webp",
+    "img-4385.webp",
+    "img-4386.webp",
+    "img-4387.webp",
+    "img-4388.webp",
+    "img-4389.webp",
+    "img-4390.webp",
+    "img-4391.webp",
+    "img-4392.webp",
+    "img-4394.webp"
+  ],
+  "videos": [
+    "img-4371.mp4",
+    "img-4375.mp4"
+  ],
+  "description": {
+    "ru": "Конференция с выставочными стендами: два фонтана с молочным шоколадом, посетители берут десерты."
+  }
+}

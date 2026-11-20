@@ -159,7 +159,7 @@ function eventsForm(): CmsForm {
         required: false,
         choose_url: false,
         accept: 'video/*',
-        hint: 'До 2 коротких роликов, до 20 МБ каждый. На сайте они крутятся без звука.',
+        hint: 'Короткие ролики до 15 секунд, до 20 МБ каждый. На сайте они крутятся без звука.',
         media_libraries: { default: { config: { max_file_size: VIDEO_MAX_BYTES } } },
       },
       {

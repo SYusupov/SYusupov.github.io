@@ -1,10 +1,37 @@
-import { describe, expect, it } from 'vitest';
+import { copyFileSync, cpSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { afterEach, describe, expect, it } from 'vitest';
 import { checkContentRoot } from '../../src/lib/content-check';
+import { GALLERY_MAX, VIDEOS_MAX } from '../../src/lib/domain';
 
 // Seam 3: content with a mistake stops the publication with a message the admin can act on.
 // Only what the admin form itself prevents is an error; the rest is fixed with a warning.
 
 const invalid = (name: string) => `tests/fixtures/invalid/${name}`;
+
+const made: string[] = [];
+afterEach(() => {
+  for (const root of made.splice(0)) rmSync(root, { recursive: true, force: true });
+});
+
+/** The fixture content plus one event with this many photos and videos (tiny files). */
+function contentWithEvent(photos: number, videos: number): string {
+  const root = mkdtempSync(join(tmpdir(), 'chocoparty-content-'));
+  made.push(root);
+  cpSync('tests/fixtures/content', root, { recursive: true });
+  const dir = join(root, 'events', 'other-big');
+  mkdirSync(dir, { recursive: true });
+  const tiny = 'tests/fixtures/content/events/birthday-1/01.webp';
+  copyFileSync(tiny, join(dir, 'cover.webp'));
+  const gallery = Array.from({ length: photos }, (_, index) => `photo-${index + 1}.webp`);
+  for (const name of gallery) copyFileSync(tiny, join(dir, name));
+  const clips = Array.from({ length: videos }, (_, index) => `clip-${index + 1}.mp4`);
+  for (const name of clips) writeFileSync(join(dir, name), '');
+  const entry = { date: '2025-01-10', type: 'other', title: { ru: 'Большое событие' }, cover: 'cover.webp', gallery, videos: clips };
+  writeFileSync(join(dir, 'index.json'), JSON.stringify(entry));
+  return root;
+}
 
 describe('content check before the build', () => {
   it('the fixture content passes without errors or warnings', () => {
@@ -16,7 +43,6 @@ describe('content check before the build', () => {
     ['event-unknown-type', 'events/2025-01-10-party/index.json: «Тип мероприятия» — выберите тип из списка'],
     ['event-bad-date', 'events/2025-02-30-wedding/index.json: «Дата» — такой даты нет'],
     ['event-missing-photo', 'events/2025-01-10-wedding/index.json: «Фото» — нет файла 02.webp в папке мероприятия'],
-    ['event-too-many-videos', 'events/2025-01-10-wedding/index.json: «Видео» — не больше 2 роликов'],
     ['price-too-low', 'settings/prices.json: «Малый фонтан — до 30 гостей → Optima, сум» — цена не меньше 100 000 сум'],
     ['company-without-name', 'companies/no-name/index.json: «Название» — укажите название компании'],
     ['company-url-not-web', 'companies/odd/index.json: «Сайт компании» — адрес сайта в виде https://…'],
@@ -30,6 +56,18 @@ describe('content check before the build', () => {
     ['site-metrika-with-spaces', 'settings/site.json: «Яндекс Метрика» — номер счётчика: только цифры, без пробелов'],
   ])('%s stops the publication with a clear message', (fixture, message) => {
     expect(checkContentRoot(invalid(fixture)).errors).toContain(message);
+  });
+
+  it('an event can hold everything its folder of photos has: the biggest has 112 photos and 44 clips', () => {
+    expect(checkContentRoot(contentWithEvent(112, 44)).errors).toEqual([]);
+  });
+
+  it.each([
+    [GALLERY_MAX + 1, 1, '«Фото» — не больше'],
+    [1, VIDEOS_MAX + 1, '«Видео» — не больше'],
+  ])('%i photos and %i clips: one over the limit stops the publication', (photos, videos, text) => {
+    const { errors } = checkContentRoot(contentWithEvent(photos, videos));
+    expect(errors.some((error) => error.includes(text))).toBe(true);
   });
 
   it('a broken file stops the publication and names the file', () => {
