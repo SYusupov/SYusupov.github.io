@@ -35,7 +35,7 @@ export const uz: Dictionary = {
   },
   events: {
     title: 'Bizning tadbirlarimiz',
-    lead: "To'ylar, tug'ilgan kunlar, korporativlar va taqdimotlar — har bir bayram o'z favvorasi bilan.",
+    lead: "To'ylar, tug'ilgan kunlar, korporativlar, Yangi yil bayramlari va taqdimotlar — har bir bayram o'z favvorasi bilan.",
     all: 'Barcha tadbirlar',
   },
   eventTypes: {
@@ -45,6 +45,7 @@ export const uz: Dictionary = {
     corporate: 'Korporativ',
     exhibition: "Ko'rgazma yoki taqdimot",
     opening: 'Ochilish marosimi',
+    'new-year': 'Yangi yil',
     other: 'Bayram',
   },
   footer: {
@@ -64,6 +65,7 @@ export const uz: Dictionary = {
     corporate: 'Korporativ',
     exhibition: "Ko'rgazma",
     opening: 'Ochilish marosimi',
+    'new-year': 'Yangi yil bayrami',
     other: 'Bayram',
   },
   eventPhrases: {
@@ -85,6 +87,7 @@ export const uz: Dictionary = {
       corporate: 'korporativda',
       exhibition: "ko'rgazmada",
       opening: 'ochilish marosimida',
+      'new-year': 'Yangi yil bayramida',
       other: 'bayramda',
     },
     occasionWithClient: {
@@ -94,6 +97,7 @@ export const uz: Dictionary = {
       corporate: '{client} korporativida',
       exhibition: "{client} ko'rgazmasida",
       opening: '{client} ochilish marosimida',
+      'new-year': '{client} Yangi yil bayramida',
       other: '{client} bayramida',
     },
     occasionWithTitle: '«{title}» bayramida',
@@ -101,9 +105,10 @@ export const uz: Dictionary = {
   eventsPage: {
     metaTitle: 'Toshkentda shokoladli favvorali tadbirlar | ChocoParty',
     metaDescription:
-      "Toshkentda ChocoParty shokoladli favvorasi bilan o'tgan to'ylar, tug'ilgan kunlar, korporativlar va taqdimotlar: rasm va videolar.",
+      "Toshkentda ChocoParty shokoladli favvorasi bilan o'tgan to'ylar, tug'ilgan kunlar, korporativlar, Yangi yil bayramlari va taqdimotlar: rasm va videolar.",
     typeFilter: 'Tadbir turi',
     allTypes: 'Barcha turlar',
+    clientFilter: '{client} uchun tadbirlar',
     empty: "Bunday tadbirlar hozircha yo'q — boshqalarini ko'ring.",
     video: 'Video',
   },
@@ -112,6 +117,7 @@ export const uz: Dictionary = {
     breadcrumbs: 'Siz shu yerdasiz',
     sameAsThis: 'Menga ham shunday',
     gallery: 'Rasm va videolar',
+    coverLabel: 'muqova',
     more: 'Boshqa tadbirlar',
     ctaTitle: 'Bayramingizga ham shunday favvora kerakmi?',
     ctaText: "Telegramda yozing: sana bo'shligini aytamiz va favvora hamda tarif tanlashga yordam beramiz.",
@@ -176,6 +182,14 @@ export const uz: Dictionary = {
         body: [
           "Do'kon, restoran yoki ofis ochilishida favvora bayramona kayfiyat yaratadi va mehmonlarni yig'adi.",
           "Favvorani tadbir boshlanishiga olib kelib o'rnatamiz, dasturxonni bezaymiz va mevalarni kesamiz.",
+        ],
+      },
+      'new-year': {
+        title: 'Yangi yil uchun shokoladli favvora',
+        lead: "Shokoladli favvora Yangi yil kechasini bezaydi: mehmonlar archa yonida uning atrofida yig'iladi, bayram rasmlari esa ayniqsa iliq chiqadi.",
+        body: [
+          "Favvora shirinliklar stoli yoniga yoki archa yoniga o'rnatiladi: shokolad sharsharasi uzoqdan ko'rinadi va mehmonlar kech bo'yi uning yoniga kelishadi — korporativda, restoranda yoki uyda. 60 va undan ortiq mehmonli bayram uchun o'rtacha favvora, 100 va undan ortiq uchun katta favvora mos keladi.",
+          "Dekabr oxirida bayramlar ko'p, shuning uchun sanani oldindan band qilgan ma'qul. Maxima tarifida shirinliklar stoli uchun hamma narsa bor: Belgiya shokoladi, mavsumiy mevalar, qulupnay, marshmellou va profiterol.",
         ],
       },
     },
@@ -244,7 +258,7 @@ export const uz: Dictionary = {
       { q: 'Toshkentdan tashqariga borasizmi?', a: 'Shahar tashqarisiga chiqishni band qilishda aniqlashtiramiz.' },
       {
         q: 'Kompaniyalar bilan ishlaysizmi?',
-        a: "Ha: korporativlar, konferensiyalar, ko'rgazmalar, taqdimotlar va ochilish marosimlari. Tadbirlarimizni ko'ring — ular orasida korporativlar ko'p.",
+        a: "Ha: korporativlar, Yangi yil bayramlari, konferensiyalar, ko'rgazmalar, taqdimotlar va ochilish marosimlari. Tadbirlarimizni ko'ring — ular orasida korporativlar ko'p.",
       },
     ],
   },

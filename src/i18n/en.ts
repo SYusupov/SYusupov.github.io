@@ -35,7 +35,7 @@ export const en: Dictionary = {
   },
   events: {
     title: 'Our events',
-    lead: 'Weddings, birthdays, corporate parties and presentations — each celebration with its own fountain.',
+    lead: 'Weddings, birthdays, corporate parties, New Year parties and presentations — each celebration with its own fountain.',
     all: 'All events',
   },
   eventTypes: {
@@ -45,6 +45,7 @@ export const en: Dictionary = {
     corporate: 'Corporate event',
     exhibition: 'Exhibition or presentation',
     opening: 'Opening',
+    'new-year': 'New Year',
     other: 'Celebration',
   },
   footer: {
@@ -64,6 +65,7 @@ export const en: Dictionary = {
     corporate: 'Corporate event',
     exhibition: 'Exhibition',
     opening: 'Opening',
+    'new-year': 'New Year party',
     other: 'Celebration',
   },
   eventPhrases: {
@@ -85,6 +87,7 @@ export const en: Dictionary = {
       corporate: 'at a corporate event',
       exhibition: 'at an exhibition',
       opening: 'at an opening',
+      'new-year': 'at a New Year party',
       other: 'at a celebration',
     },
     occasionWithClient: {
@@ -94,6 +97,7 @@ export const en: Dictionary = {
       corporate: 'at a {client} corporate event',
       exhibition: 'at a {client} exhibition',
       opening: 'at a {client} opening',
+      'new-year': 'at a {client} New Year party',
       other: 'at a {client} celebration',
     },
     occasionWithTitle: 'at the {title}',
@@ -101,9 +105,10 @@ export const en: Dictionary = {
   eventsPage: {
     metaTitle: 'Events with a chocolate fountain in Tashkent | ChocoParty',
     metaDescription:
-      'Weddings, birthdays, corporate events and presentations with a ChocoParty chocolate fountain in Tashkent: photos and videos.',
+      'Weddings, birthdays, corporate events, New Year parties and presentations with a ChocoParty chocolate fountain in Tashkent: photos and videos.',
     typeFilter: 'Event type',
     allTypes: 'All types',
+    clientFilter: 'Events for {client}',
     empty: 'No such events yet — have a look at the others.',
     video: 'Video',
   },
@@ -112,6 +117,7 @@ export const en: Dictionary = {
     breadcrumbs: 'You are here',
     sameAsThis: 'I want the same',
     gallery: 'Photos and videos',
+    coverLabel: 'cover',
     more: 'More events',
     ctaTitle: 'Would you like the same fountain at your celebration?',
     ctaText: 'Message us on Telegram: we will tell you whether the date is free and help you choose a fountain and a package.',
@@ -176,6 +182,14 @@ export const en: Dictionary = {
         body: [
           'At the opening of a shop, restaurant or office, a fountain sets a festive mood and gathers guests.',
           'We deliver and set up the fountain before the event starts, decorate the table and cut the fruit.',
+        ],
+      },
+      'new-year': {
+        title: 'Chocolate fountain for New Year',
+        lead: 'A chocolate fountain brightens a New Year evening: guests gather around it by the tree, and the holiday photos turn out especially warm.',
+        body: [
+          'The fountain stands by the dessert table or next to the tree: the chocolate cascade is visible from afar, and guests come back to it all evening — at a corporate party, in a restaurant or at home. For a party of 60 guests or more the medium fountain suits, for 100 or more the large one.',
+          'Late December is full of parties, so it is best to book your date early. The Maxima package has everything for the dessert table: Belgian chocolate, seasonal fruit, strawberries, marshmallows and profiteroles.',
         ],
       },
     },
@@ -244,7 +258,7 @@ export const en: Dictionary = {
       { q: 'Do you travel outside Tashkent?', a: 'We agree on trips outside the city when you book.' },
       {
         q: 'Do you work with companies?',
-        a: 'Yes: corporate parties, conferences, exhibitions, presentations and openings. Have a look at our events — many of them are corporate.',
+        a: 'Yes: corporate parties, New Year parties, conferences, exhibitions, presentations and openings. Have a look at our events — many of them are corporate.',
       },
     ],
   },

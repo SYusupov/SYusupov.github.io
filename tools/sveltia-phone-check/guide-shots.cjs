@@ -71,6 +71,12 @@ fs.mkdirSync(out, { recursive: true });
   await field('text.ru').locator('textarea').fill('Клубника в подарок к тарифу Maxima.');
   await field('start').locator('input[type=date]').fill('2025-12-01');
   await field('end').locator('input[type=date]').fill('2025-12-31');
+  // The event's «saved» notice is still on screen: let it fade, then show the top of the form.
+  await page.waitForTimeout(6000);
+  // The form scrolls inside its own block, not the window: put every scrolled ancestor back on top.
+  await field('title').evaluate((el) => {
+    for (let node = el.parentElement; node; node = node.parentElement) node.scrollTop = 0;
+  });
   await shot('promotion');
   await field('end').evaluate((el) => el.scrollIntoView({ block: 'center' }));
   await shot('promotion-dates');

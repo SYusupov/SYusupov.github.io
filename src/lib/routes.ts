@@ -25,6 +25,14 @@ export function pathFor(locale: Locale, page: Page): string {
   }
 }
 
+/**
+ * The list of all events narrowed to one company's events, by the company's folder name. The address
+ * keeps the parameter out of `Page`, so canonical links and language versions stay without it.
+ */
+export function companyEventsPath(locale: Locale, companyId: string): string {
+  return `${pathFor(locale, { kind: 'events' })}?client=${encodeURIComponent(companyId)}`;
+}
+
 export function absoluteUrl(path: string): string {
   return new URL(path, SITE_URL).href;
 }

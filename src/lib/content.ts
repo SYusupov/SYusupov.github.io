@@ -54,6 +54,27 @@ export async function getWallCompanies(): Promise<CompanyEntry[]> {
     );
 }
 
+/** A name as it is compared: lower case, anything but letters and digits counts as a space. */
+const comparable = (name: string) => name.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
+
+/**
+ * Whether an event was for this company: its client is the company's name, or one of the two names
+ * begins with the other («Bashkent» and «Bashkent Development»).
+ */
+export function isEventOf(company: CompanyEntry, event: EventEntry): boolean {
+  const client = comparable(event.data.client ?? '');
+  const name = comparable(company.data.name);
+  return client !== '' && (client === name || client.startsWith(`${name} `) || name.startsWith(`${client} `));
+}
+
+export function eventsOfCompany(company: CompanyEntry, events: EventEntry[]): EventEntry[] {
+  return events.filter((event) => isEventOf(company, event));
+}
+
+export function companiesOfEvent(event: EventEntry, companies: CompanyEntry[]): CompanyEntry[] {
+  return companies.filter((company) => isEventOf(company, event));
+}
+
 export interface PromotionView {
   id: string;
   title: string;

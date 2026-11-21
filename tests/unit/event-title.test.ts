@@ -19,6 +19,7 @@ const graduation = {
   title: { ru: 'Выпускной', uz: 'Bitiruv kechasi', en: 'Graduation party' },
 } as const;
 const untitled = { date: '2024-03-08', type: 'other', title: {} } as const;
+const newYear = { date: '2024-12-31', type: 'new-year', fountain: 'large', title: {} } as const;
 
 describe('event title', () => {
   it('a company event is named after the company', () => {
@@ -31,6 +32,15 @@ describe('event title', () => {
     expect(eventTitle(wedding, 'ru')).toBe('Свадьба');
     expect(eventTitle(wedding, 'uz')).toBe("To'y");
     expect(eventTitle(wedding, 'en')).toBe('Wedding');
+  });
+
+  it('a New Year party, with or without a company', () => {
+    expect(eventTitle(newYear, 'ru')).toBe('Новогодний праздник');
+    expect(eventTitle(newYear, 'uz')).toBe('Yangi yil bayrami');
+    expect(eventTitle(newYear, 'en')).toBe('New Year party');
+    expect(eventTitle({ ...newYear, client: 'Coca-Cola' }, 'ru')).toBe('Новогодний праздник Coca-Cola');
+    expect(eventTitle({ ...newYear, client: 'Coca-Cola' }, 'uz')).toBe('Yangi yil bayrami: Coca-Cola');
+    expect(eventTitle({ ...newYear, client: 'Coca-Cola' }, 'en')).toBe('New Year party: Coca-Cola');
   });
 
   it('type «other» uses its own title, or «Праздник» when it has none', () => {
@@ -59,6 +69,15 @@ describe('sentence on the event page', () => {
       expect(eventSentence(corporate, locale)).not.toMatch(/20\d\d/);
       expect(eventPhotoAlt(corporate, locale, 1)).not.toMatch(/20\d\d/);
     }
+  });
+
+  it('at a New Year party', () => {
+    expect(eventSentence(newYear, 'ru')).toBe('Большой шоколадный фонтан на новогоднем празднике.');
+    expect(eventSentence(newYear, 'uz')).toBe('Yangi yil bayramida katta shokoladli favvora.');
+    expect(eventSentence(newYear, 'en')).toBe('A large chocolate fountain at a New Year party.');
+    expect(eventSentence({ ...newYear, client: 'Coca-Cola' }, 'ru')).toBe(
+      'Большой шоколадный фонтан на новогоднем празднике Coca-Cola.',
+    );
   });
 
   it('without a venue or a known fountain', () => {

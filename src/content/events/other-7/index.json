@@ -1,9 +1,6 @@
 {
   "date": "2024-12-31",
-  "type": "other",
-  "title": {
-    "ru": "Новогодний праздник"
-  },
+  "type": "new-year",
   "fountain": "several",
   "cover": "cover.webp",
   "gallery": [

@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-// Fixture content: seven events; the newest is corporate-1, the oldest other-1. Addresses carry no date.
+// Fixture content: eight events; the newest is corporate-1, the oldest other-1. Addresses carry no date.
 const NEWEST = '/events/corporate-1/';
 const OLDEST = '/events/other-1/';
 
@@ -17,7 +17,7 @@ test.describe('a new event shows up everywhere it should', () => {
   test('in the list of all events', async ({ page }) => {
     await page.goto('/events/');
     await expect(page.locator(`a[href="${NEWEST}"]`)).toBeVisible();
-    await expect(page.locator('[data-event-card]')).toHaveCount(7);
+    await expect(page.locator('[data-event-card]')).toHaveCount(8);
   });
 
   test('on its own page: title, sentence, photos, video and «Хочу так же»', async ({ page }) => {
@@ -66,7 +66,7 @@ test.describe('no date is shown anywhere for an event', () => {
   test('the address of every event in the list has no date', async ({ page }) => {
     await page.goto('/events/');
     const hrefs = await page.locator('[data-event-card] a').evaluateAll((links) => links.map((a) => a.getAttribute('href') ?? ''));
-    expect(hrefs).toHaveLength(7);
+    expect(hrefs).toHaveLength(8);
     for (const href of hrefs) expect(href).not.toMatch(/\d{4}-\d{2}-\d{2}/);
   });
 });
@@ -87,16 +87,46 @@ test.describe('filters on the list of all events', () => {
 
   test('a year left in an old address changes nothing: every event is listed', async ({ page }) => {
     await page.goto('/events/?year=2024');
-    await expect(page.locator('[data-event-card]:visible')).toHaveCount(7);
+    await expect(page.locator('[data-event-card]:visible')).toHaveCount(8);
+  });
+});
+
+test.describe('the New Year occasion', () => {
+  test('has a card among the occasions on the home page', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('a[href="/occasions/new-year/"]').first()).toBeVisible();
+  });
+
+  test('has its own page with its events only', async ({ page }) => {
+    await page.goto('/occasions/new-year/');
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Шоколадный фонтан на Новый год');
+    await expect(page.locator('a[href="/events/new-year-1/"]').first()).toBeVisible();
+    await expect(page.locator(`a[href="${NEWEST}"]`)).toHaveCount(0);
+  });
+
+  test('has an English page', async ({ page }) => {
+    await page.goto('/en/occasions/new-year/');
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Chocolate fountain for New Year');
+  });
+
+  test('is a filter on the list of all events', async ({ page }) => {
+    await page.goto('/events/?type=new-year');
+    await expect(page.locator('[data-event-card]:visible')).toHaveCount(1);
+    await expect(page.getByRole('button', { name: 'Новый год' })).toHaveAttribute('aria-pressed', 'true');
+  });
+
+  test('names the event a New Year party', async ({ page }) => {
+    await page.goto('/events/new-year-1/');
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Новогодний праздник Olma Group');
   });
 });
 
 test.describe('event cards do not show dates', () => {
   for (const [path, cards] of [
     ['/', 5],
-    ['/events/', 7],
-    ['/uz/events/', 7],
-    ['/en/events/', 7],
+    ['/events/', 8],
+    ['/uz/events/', 8],
+    ['/en/events/', 8],
   ] as const) {
     test(`on ${path}`, async ({ page }) => {
       await page.goto(path);
