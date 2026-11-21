@@ -6,8 +6,9 @@ import Gallery from '../components/Gallery.astro';
 import { dictionaryFor, fill } from '../i18n';
 import Base from '../layouts/Base.astro';
 import { getEvents, getSite, type EventEntry } from '../lib/content';
-import type { Locale } from '../lib/domain';
+import { SHOW_FILE_NAMES, type Locale } from '../lib/domain';
 import { eventPhotoAlt, eventSentence, eventTitle } from '../lib/event-title';
+import { fileNameOf } from '../lib/file-name';
 import { eventOrderLink } from '../lib/order-link';
 import { absoluteUrl, pathFor } from '../lib/routes';
 import { breadcrumbsJsonLd } from '../lib/structured-data';
@@ -32,10 +33,15 @@ const description = data.description[locale];
 // A portrait cover in the wide frame would show only its middle band: show it whole instead.
 const portraitCover = data.cover.height > data.cover.width;
 // The cover is photo 1 in captions; the gallery follows it.
-const photos = data.gallery.map((image, index) => ({ image, alt: eventPhotoAlt(data, locale, index + 2) }));
+const photos = data.gallery.map((image, index) => ({
+  image,
+  alt: eventPhotoAlt(data, locale, index + 2),
+  name: SHOW_FILE_NAMES ? fileNameOf(image.src) : undefined,
+}));
 const videos = data.videos.map((file, index) => ({
   ...videoUrls(event.id, file),
   label: `${title} — ${t.eventsPage.video.toLowerCase()} ${index + 1}`,
+  name: SHOW_FILE_NAMES ? fileNameOf(file) : undefined,
 }));
 const others = (await getEvents()).filter((item) => item.id !== event.id);
 const sameType = others.filter((item) => item.data.type === data.type);
@@ -73,7 +79,7 @@ const crumbs = [
         </div>
       </header>
 
-      <div class="event__cover">
+      <figure class="event__cover">
         <Image
           src={data.cover}
           alt={eventPhotoAlt(data, locale, 1)}
@@ -84,7 +90,8 @@ const crumbs = [
           loading="eager"
           fetchpriority="high"
         />
-      </div>
+        {SHOW_FILE_NAMES && <figcaption class="event__cover-name">{t.eventPage.coverLabel}</figcaption>}
+      </figure>
     </div>
 
     {
@@ -159,6 +166,13 @@ const crumbs = [
     flex-wrap: wrap;
     gap: var(--space-3);
     margin-top: var(--space-5);
+  }
+
+  .event__cover-name {
+    margin-top: var(--space-2);
+    color: var(--c-muted);
+    font-size: var(--text-xs);
+    text-align: center;
   }
 
   .event__cover :global(img) {

@@ -42,7 +42,7 @@ export const PRICE_MIN = 100_000;
 export const PRICE_MAX = 100_000_000;
 
 /** Event types; every type but `other` has its own occasion page. */
-export const EVENT_TYPES = ['wedding', 'birthday', 'kids-party', 'corporate', 'exhibition', 'opening', 'other'] as const;
+export const EVENT_TYPES = ['wedding', 'birthday', 'kids-party', 'corporate', 'exhibition', 'opening', 'new-year', 'other'] as const;
 export type EventType = (typeof EVENT_TYPES)[number];
 export const OCCASION_TYPES = EVENT_TYPES.filter((type) => type !== 'other');
 export type OccasionType = Exclude<EventType, 'other'>;
@@ -58,5 +58,11 @@ export type Fountain = (typeof FOUNTAINS)[number];
  */
 export const GALLERY_MAX = 150;
 export const VIDEOS_MAX = 60;
+/**
+ * File names under every photo and clip of an event page (the cover is marked «обложка»), so the
+ * manager can name the ones to keep while choosing the best from the whole archive. Turn off once the
+ * choice is made, together with lowering the limits above.
+ */
+export const SHOW_FILE_NAMES = true;
 /** Largest video file the admin may upload; the build compresses it for the site. */
 export const VIDEO_MAX_BYTES = 20 * 1024 * 1024;

@@ -6,8 +6,9 @@ import type { Locale } from '../lib/domain';
 
 interface Props {
   locale: Locale;
-  photos: { image: ImageMetadata; alt: string }[];
-  videos: { src: string; poster: string; label: string }[];
+  /** `name`: the file name shown under the photo (and in the full-size view) while the manager chooses. */
+  photos: { image: ImageMetadata; alt: string; name?: string }[];
+  videos: { src: string; poster: string; label: string; name?: string }[];
 }
 
 const { locale, photos, videos } = Astro.props;
@@ -21,26 +22,40 @@ const videosLast = videos.length > 6;
   {
     videos.map((video) => (
       <li class="gallery__item gallery__item--video">
-        <video muted loop playsinline preload="none" poster={video.poster} aria-label={video.label} data-autoplay>
-          <source src={video.src} type="video/mp4" />
-        </video>
+        <figure class="gallery__figure">
+          <div class="gallery__media">
+            <video muted loop playsinline preload="none" poster={video.poster} aria-label={video.label} data-autoplay>
+              <source src={video.src} type="video/mp4" />
+            </video>
+          </div>
+          {video.name && <figcaption class="gallery__name">{video.name}</figcaption>}
+        </figure>
       </li>
     ))
   }
   {
     photos.map((photo, index) => (
       <li class="gallery__item">
-        <a href={photo.image.src} data-lightbox-item aria-label={fill(t.lightbox.open, { n: index + 1 })}>
-          <Image
-            src={photo.image}
-            alt={photo.alt}
-            widths={[320, 480, 640, 960]}
-            sizes="(max-width: 720px) 33vw, (max-width: 1100px) 33vw, 380px"
-            format="webp"
-            quality={72}
-            loading="lazy"
-          />
-        </a>
+        <figure class="gallery__figure">
+          <a
+            class="gallery__media"
+            href={photo.image.src}
+            data-lightbox-item
+            data-name={photo.name}
+            aria-label={fill(t.lightbox.open, { n: index + 1 })}
+          >
+            <Image
+              src={photo.image}
+              alt={photo.alt}
+              widths={[320, 480, 640, 960]}
+              sizes="(max-width: 720px) 33vw, (max-width: 1100px) 33vw, 380px"
+              format="webp"
+              quality={72}
+              loading="lazy"
+            />
+          </a>
+          {photo.name && <figcaption class="gallery__name">{photo.name}</figcaption>}
+        </figure>
       </li>
     ))
   }
@@ -89,7 +104,8 @@ const videosLast = videos.length > 6;
       const link = links[current];
       image.src = link.href;
       image.alt = link.querySelector('img')?.alt ?? '';
-      counter.textContent = fill(dialog.dataset.counter ?? '', { n: current + 1, total: links.length });
+      const count = fill(dialog.dataset.counter ?? '', { n: current + 1, total: links.length });
+      counter.textContent = link.dataset.name ? `${count} · ${link.dataset.name}` : count;
     };
     links.forEach((link, index) =>
       link.addEventListener('click', (event) => {
@@ -128,7 +144,13 @@ const videosLast = videos.length > 6;
     list-style: none;
   }
 
-  .gallery__item {
+  .gallery__figure {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .gallery__media {
     overflow: hidden;
     border-radius: var(--radius-m);
     background: var(--c-surface-2);
@@ -137,21 +159,33 @@ const videosLast = videos.length > 6;
 
   .gallery__item--video {
     grid-row: span 2;
+  }
+
+  .gallery__item--video .gallery__media {
+    flex: 1;
+    min-height: 0;
     aspect-ratio: auto;
+  }
+
+  .gallery__name {
+    padding-top: var(--space-1);
+    color: var(--c-muted);
+    font-size: var(--text-xs);
+    text-align: center;
+    overflow-wrap: anywhere;
   }
 
   .gallery[data-videos-last] .gallery__item--video {
     order: 1;
   }
 
-  .gallery__item a {
+  a.gallery__media {
     display: block;
-    height: 100%;
     cursor: zoom-in;
   }
 
-  .gallery__item :global(img),
-  .gallery__item video {
+  .gallery__media :global(img),
+  .gallery__media video {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -159,11 +193,11 @@ const videosLast = videos.length > 6;
   }
 
   /* Most photos are portrait phone shots cropped to 4:3: keep the top of the fountain, not the table's front edge. */
-  .gallery__item :global(img) {
+  .gallery__media :global(img) {
     object-position: 50% 30%;
   }
 
-  .gallery__item a:hover :global(img) {
+  a.gallery__media:hover :global(img) {
     transform: scale(1.03);
   }
 
