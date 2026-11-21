@@ -111,8 +111,9 @@ const cards = OCCASION_TYPES.map((type) => ({
     line-height: 1.15;
   }
 
+  /* A no-break space keeps the arrow with the last word when a long name wraps. */
   .occasion-card__name::after {
-    content: ' →';
+    content: '\00a0→';
   }
 
   @media (max-width: 720px) {
