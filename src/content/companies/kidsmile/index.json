@@ -1,3 +1,6 @@
 {
-  "name": "Kidsmile"
+  "name": "Kidsmile",
+  "logo": "logo.png",
+  "url": "https://kidsmile.uz/",
+  "order": 20
 }
