@@ -5,14 +5,23 @@ import type { CompanyEntry } from '../lib/content';
 interface Props {
   company: CompanyEntry;
   height?: number;
+  /** A page of this site about the company's events; it wins over the company's own site. */
+  href?: string;
+  /** What the link to `href` says to screen readers. */
+  label?: string;
 }
 
-const { company, height = 56 } = Astro.props;
+const { company, height = 56, href, label } = Astro.props;
 const logo = company.data.logo;
 const url = company.data.url;
-// With an address the logo leads to the company's own site: a new tab, no referrer, no search weight.
-const Wrapper = url ? 'a' : 'span';
-const link = url ? { href: url, target: '_blank', rel: 'noopener noreferrer nofollow' } : {};
+// The logo leads to the company's events on this site (same tab); without events, to the company's
+// own site: a new tab, no referrer, no search weight.
+const Wrapper = href || url ? 'a' : 'span';
+const link = href
+  ? { href, 'aria-label': label }
+  : url
+    ? { href: url, target: '_blank', rel: 'noopener noreferrer nofollow' }
+    : {};
 ---
 
 {

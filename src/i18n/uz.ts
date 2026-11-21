@@ -108,6 +108,7 @@ export const uz: Dictionary = {
       "Toshkentda ChocoParty shokoladli favvorasi bilan o'tgan to'ylar, tug'ilgan kunlar, korporativlar, Yangi yil bayramlari va taqdimotlar: rasm va videolar.",
     typeFilter: 'Tadbir turi',
     allTypes: 'Barcha turlar',
+    clientFilter: '{client} uchun tadbirlar',
     empty: "Bunday tadbirlar hozircha yo'q — boshqalarini ko'ring.",
     video: 'Video',
   },

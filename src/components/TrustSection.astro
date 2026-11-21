@@ -1,20 +1,31 @@
 ---
 import { dictionaryFor, fill } from '../i18n';
-import type { CompanyEntry } from '../lib/content';
+import { eventsOfCompany, type CompanyEntry, type EventEntry } from '../lib/content';
 import type { Locale } from '../lib/domain';
+import { companyEventsPath, pathFor } from '../lib/routes';
 import CompanyLogo from './CompanyLogo.astro';
 
 interface Props {
   locale: Locale;
   /** Companies with a logo; the block is left out while there are none. */
   companies: CompanyEntry[];
+  /** All events: a company's logo leads to the events made for it. */
+  events: EventEntry[];
 }
 
-const { locale, companies } = Astro.props;
+const { locale, companies, events } = Astro.props;
 const t = dictionaryFor(locale);
 const WALL_SIZE = 30;
 const first = companies.slice(0, WALL_SIZE);
 const rest = companies.slice(WALL_SIZE);
+// One event: its page; several: the list of all events narrowed to this company; none: the company's site.
+const eventsLink = (company: CompanyEntry) => {
+  const own = eventsOfCompany(company, events);
+  if (own.length === 1) return pathFor(locale, { kind: 'event', slug: own[0].id });
+  if (own.length > 1) return companyEventsPath(locale, company.id);
+  return undefined;
+};
+const label = (company: CompanyEntry) => fill(t.eventsPage.clientFilter, { client: company.data.name });
 ---
 
 {
@@ -30,7 +41,7 @@ const rest = companies.slice(WALL_SIZE);
         <ul class="trust__wall" role="list">
           {first.map((company) => (
             <li class="trust__logo">
-              <CompanyLogo company={company} />
+              <CompanyLogo company={company} href={eventsLink(company)} label={label(company)} />
             </li>
           ))}
         </ul>
@@ -40,7 +51,7 @@ const rest = companies.slice(WALL_SIZE);
             <ul class="trust__wall" role="list">
               {rest.map((company) => (
                 <li class="trust__logo">
-                  <CompanyLogo company={company} />
+                  <CompanyLogo company={company} href={eventsLink(company)} label={label(company)} />
                 </li>
               ))}
             </ul>

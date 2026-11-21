@@ -108,6 +108,7 @@ export const en: Dictionary = {
       'Weddings, birthdays, corporate events, New Year parties and presentations with a ChocoParty chocolate fountain in Tashkent: photos and videos.',
     typeFilter: 'Event type',
     allTypes: 'All types',
+    clientFilter: 'Events for {client}',
     empty: 'No such events yet — have a look at the others.',
     video: 'Video',
   },
