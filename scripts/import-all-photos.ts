@@ -6,15 +6,16 @@
  *   stage  converts each file once into a staging folder outside the repository (photos: WebP up to
  *          1600 px, no metadata; videos: silent MP4 clips in the site format, no metadata) and
  *          measures it (size, sharpness, brightness, duration) into <stage>/<N>/items.json, with a
- *          small preview in <stage>/<N>/thumbs for contact sheets. A video longer than a site clip is
- *          measured but not encoded. A video with the same name as a photo beside it is the motion
- *          half of a Live Photo, part of the same frame, and is skipped.
+ *          small preview in <stage>/<N>/thumbs for contact sheets. A video longer than a site clip
+ *          becomes a clip of its first CLIP_SECONDS seconds. A video with the same name as a photo
+ *          beside it is the motion half of a Live Photo, part of the same frame, and is skipped.
  *   apply  copies the approved items into src/content/events and writes each event's index.json:
  *          an event already on the site keeps what was set up for it (title, description, cover and
- *          the clips picked earlier, unless the whole video comes now) and gets every approved photo
+ *          the clips picked earlier, unless the new clip holds them) and gets every approved photo
  *          and clip; an event not on the site yet is created from its row of the sheet. Items named
- *          in the hold file (and photos that scripts/import-curation.json left out) stay out.
- *          Events of a single frame («singles») get no page.
+ *          in the hold file stay out (the owner had everything published on 2026-11-21; what the
+ *          first import left out is kept in scripts/import-curation.json as `excludedBefore`, for the
+ *          record only). Events of a single frame («singles») get no page.
  *
  * Usage: tsx scripts/import-all-photos.ts stage --photos <exported folders> --stage <staging folder>
  *          [--only 2,10] [--force]
@@ -78,7 +79,7 @@ export interface StagedItem {
   /** Seconds. */
   duration?: number;
   hdr?: boolean;
-  /** A video longer than a site clip: measured, not encoded. */
+  /** A video longer than a site clip: the site gets its first CLIP_SECONDS seconds. */
   tooLong?: boolean;
   /** Staged file relative to the event's staging folder: photos/<stem>.webp or videos/<stem>.mp4. */
   file?: string;
@@ -191,13 +192,10 @@ async function stageVideo(source: string, dir: string, name: string, stem: strin
   const thumb = `thumbs/${stem}.jpg`;
   await sharp(extractFrame(source, Math.min(0.5, info.duration / 2))).resize(THUMB).jpeg({ quality: 70 }).toFile(join(dir, thumb));
   item.thumb = thumb;
-  if (info.duration > CLIP_SECONDS + 0.5) {
-    item.tooLong = true;
-    return item;
-  }
+  if (info.duration > CLIP_SECONDS + 0.5) item.tooLong = true;
   const file = `videos/${stem}.mp4`;
   const target = join(dir, file);
-  if (args.force || !existsSync(target)) encodeSiteClip(source, target, 0, info.duration);
+  if (args.force || !existsSync(target)) encodeSiteClip(source, target, 0, Math.min(info.duration, CLIP_SECONDS));
   item.file = file;
   item.fileBytes = statSync(target).size;
   return item;
@@ -255,7 +253,8 @@ interface Curation {
   title?: string;
   description?: string;
   cover?: string;
-  exclude?: string[];
+  /** What the first import left out; kept for the record, no longer applied. */
+  excludedBefore?: string[];
   clips?: { file: string; from: number; to: number }[];
 }
 
@@ -303,10 +302,9 @@ async function apply(): Promise<void> {
     }
     const items = readJson<StagedItem[]>(join(args.stage, key, 'items.json'), []);
     const reasons = new Map<string, string>(Object.entries(hold[key] ?? {}));
-    for (const name of curation[key]?.exclude ?? []) if (!reasons.has(name)) reasons.set(name, 'раньше убрано при отборе (читаемое имя или дефект)');
     for (const item of items) {
-      if (item.kind === 'video' && item.tooLong) held.push({ event: key, name: item.name, why: `видео ${item.duration} с: длиннее ${CLIP_SECONDS} с` });
-      else if (reasons.has(item.name)) held.push({ event: key, name: item.name, why: reasons.get(item.name) as string });
+      if (reasons.has(item.name)) held.push({ event: key, name: item.name, why: reasons.get(item.name) as string });
+      else if (item.kind === 'video' && item.tooLong && !item.file) held.push({ event: key, name: item.name, why: `видео ${item.duration} с: нет ролика, повторите stage` });
       else if (item.kind === 'error') held.push({ event: key, name: item.name, why: `не конвертируется: ${item.message}` });
     }
     const stagedPath = (item: StagedItem) => join(args.stage as string, key, item.file as string);
@@ -394,20 +392,28 @@ async function apply(): Promise<void> {
     }
 
     if (keepOldGallery) gallery = (old.gallery as string[]) ?? [];
+    // Frames picked earlier from the videos (files the staging does not know) stay after the photos.
+    const knownPhotos = new Set(items.filter((item) => item.kind === 'photo' && item.stem).map((item) => `${item.stem}.webp`));
+    const keptFrames = existing && !keepOldGallery ? ((old.gallery as string[] | undefined) ?? []).filter((name) => !knownPhotos.has(name) && name !== cover) : [];
+    gallery.push(...keptFrames.filter((name) => !gallery.includes(name)));
 
     // Clips: every approved one; the clips picked earlier stay unless their whole video comes now.
     const videos: string[] = [];
     const keep: string[] = [];
     if (existing) {
       // «video-N.mp4» are the clips picked at the first import (N-th of the curation's clips); every other clip
-      // was written by this script and is rebuilt from the staging, so a second run changes nothing.
+      // was written by this script and is rebuilt from the staging, so a second run changes nothing. A picked
+      // clip goes when the new clip of the same video holds it: the whole video, or its first CLIP_SECONDS
+      // seconds when the piece lies within them.
       const picked = curation[key]?.clips ?? [];
-      const whole = new Set(clips.map((clip) => clip.name));
+      const published = new Map(clips.map((clip) => [clip.name, clip]));
       for (const file of (old.videos as string[] | undefined) ?? []) {
         const number = /^video-(\d+)\.mp4$/.exec(file)?.[1];
         if (!number) continue;
-        const source = picked[Number(number) - 1]?.file;
-        if (!source || !whole.has(source)) keep.push(file);
+        const piece = picked[Number(number) - 1];
+        const clip = piece && published.get(piece.file);
+        const covered = clip && (!clip.tooLong || piece.to <= CLIP_SECONDS);
+        if (!covered) keep.push(file);
       }
     }
     videos.push(...keep);
@@ -440,9 +446,11 @@ async function apply(): Promise<void> {
       ...Object.entries(entry).filter(([name]) => !ORDER.includes(name)),
     ]);
 
+    const trimmed = clips.filter((clip) => clip.tooLong).length;
     report.push(
       `№${key}: ${folder} — ${existing ? 'обновлено' : 'новое'}, фото ${gallery.length + 1}, видео ${videos.length}` +
-        (keep.length ? ` (прежних роликов оставлено ${keep.length})` : ''),
+        (keep.length ? ` (прежних роликов оставлено ${keep.length})` : '') +
+        (trimmed ? ` (обрезано до ${CLIP_SECONDS} с: ${trimmed})` : ''),
     );
     if (args['dry-run']) continue;
 
@@ -450,7 +458,7 @@ async function apply(): Promise<void> {
     if (existing) {
       // the folder is rebuilt: photos and clips go, except the cover and the clips kept
       for (const name of readdirSync(dir)) {
-        if (name === 'index.json' || name === 'cover.webp' || keep.includes(name)) continue;
+        if (name === 'index.json' || name === 'cover.webp' || keep.includes(name) || keptFrames.includes(name)) continue;
         if (keepOldGallery && gallery.includes(name)) continue;
         if (/\.(webp|mp4)$/i.test(name)) rmSync(join(dir, name));
       }

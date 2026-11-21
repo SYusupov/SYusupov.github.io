@@ -7,11 +7,13 @@
   "fountain": "medium",
   "cover": "cover.webp",
   "gallery": [
+    "img-0586.webp",
     "01.webp",
     "02.webp"
   ],
   "videos": [
     "img-0584.mp4",
+    "img-0588.mp4",
     "img-0589.mp4"
   ],
   "description": {
