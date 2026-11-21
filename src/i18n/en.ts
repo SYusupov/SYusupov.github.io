@@ -111,6 +111,7 @@ export const en: Dictionary = {
     clientFilter: 'Events for {client}',
     empty: 'No such events yet — have a look at the others.',
     video: 'Video',
+    hasVideo: 'With video',
   },
   eventPage: {
     metaTitle: '{title} — chocolate fountain | ChocoParty',

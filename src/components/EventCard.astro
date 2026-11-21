@@ -30,7 +30,7 @@ const Heading = headingLevel;
         quality={62}
         loading="lazy"
       />
-      {event.data.videos.length > 0 && <span class="event-card__badge">▶ {t.eventsPage.video}</span>}
+      {event.data.videos.length > 0 && <span class="event-card__badge">{t.eventsPage.hasVideo}</span>}
     </div>
     <div class="event-card__body">
       <Heading class="event-card__title">{eventTitle(event.data, locale)}</Heading>
