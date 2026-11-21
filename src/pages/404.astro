@@ -1,0 +1,50 @@
+---
+import { dictionaryFor } from '../i18n';
+import Base from '../layouts/Base.astro';
+
+const t = dictionaryFor('ru');
+const uz = dictionaryFor('uz');
+const en = dictionaryFor('en');
+---
+
+<Base locale="ru" page={{ kind: 'home' }} title={t.notFound.metaTitle} description={t.notFound.text} noindex>
+  <section class="section not-found">
+    <div class="container">
+      <p class="eyebrow">404</p>
+      <h1>{t.notFound.title}</h1>
+      <p class="not-found__text">{t.notFound.text}</p>
+      <div class="not-found__actions">
+        <a class="btn btn--primary" href="/">{t.notFound.home}</a>
+        <a class="btn btn--ghost" href="/events/">{t.events.all}</a>
+      </div>
+      <p class="not-found__other">
+        <a href="/uz/" lang="uz">{uz.notFound.home}</a> · <a href="/en/" lang="en">{en.notFound.home}</a>
+      </p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .not-found h1 {
+    margin-top: var(--space-3);
+  }
+
+  .not-found__text {
+    max-width: 36rem;
+    margin-top: var(--space-4);
+    color: var(--c-muted);
+    font-size: var(--text-l);
+  }
+
+  .not-found__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-5);
+  }
+
+  .not-found__other {
+    margin-top: var(--space-5);
+    color: var(--c-muted);
+  }
+</style>

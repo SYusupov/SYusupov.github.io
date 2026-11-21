@@ -1,0 +1,13 @@
+{
+  "title": {
+    "ru": "Новогодняя акция",
+    "en": "New Year offer"
+  },
+  "text": {
+    "ru": "Клубника в подарок к тарифу Maxima.",
+    "en": "Strawberries as a gift with Maxima."
+  },
+  "photo": "photo.webp",
+  "start": "2025-12-01",
+  "end": "2025-12-31"
+}

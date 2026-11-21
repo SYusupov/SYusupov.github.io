@@ -1,0 +1,13 @@
+{
+  "date": "2023-12-30",
+  "type": "other",
+  "title": {
+    "ru": "Выпускной",
+    "uz": "Bitiruv kechasi",
+    "en": "Graduation party"
+  },
+  "cover": "cover.webp",
+  "gallery": [
+    "01.webp"
+  ]
+}

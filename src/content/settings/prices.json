@@ -1,0 +1,17 @@
+{
+  "small": {
+    "light": 800000,
+    "optima": 1900000,
+    "maxima": 3500000
+  },
+  "medium": {
+    "light": 1200000,
+    "optima": 3900000,
+    "maxima": 5900000
+  },
+  "large": {
+    "light": 1600000,
+    "optima": 6200000,
+    "maxima": 8700000
+  }
+}

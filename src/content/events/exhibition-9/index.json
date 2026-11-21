@@ -1,0 +1,20 @@
+{
+  "date": "2024-11-21",
+  "type": "exhibition",
+  "fountain": "medium",
+  "cover": "cover.webp",
+  "gallery": [
+    "img-0360.webp",
+    "img-0362.webp",
+    "img-0363.webp",
+    "img-2984.webp",
+    "img-2985.webp",
+    "img-3254.webp",
+    "img-3256.webp",
+    "img-9113.webp",
+    "img-9114.webp"
+  ],
+  "description": {
+    "ru": "Выставка в светлом зале со стендами: средний фонтан с молочным шоколадом."
+  }
+}

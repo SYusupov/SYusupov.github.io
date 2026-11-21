@@ -1,0 +1,21 @@
+{
+  "date": "2024-03-05",
+  "type": "birthday",
+  "fountain": "small",
+  "cover": "cover.webp",
+  "gallery": [
+    "img-7244.webp",
+    "img-7246.webp",
+    "img-7247.webp",
+    "img-7250.webp"
+  ],
+  "videos": [
+    "img-7249.mp4",
+    "img-7251.mp4",
+    "img-7257.mp4",
+    "img-7258.mp4"
+  ],
+  "description": {
+    "ru": "День рождения в банкетном зале с фотозоной в стиле диско: малый фонтан с молочным шоколадом, клубника и выпечка."
+  }
+}

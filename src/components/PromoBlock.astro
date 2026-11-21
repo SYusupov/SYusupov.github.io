@@ -1,0 +1,134 @@
+---
+import { Image } from 'astro:assets';
+import { dictionaryFor } from '../i18n';
+import type { PromotionView } from '../lib/content';
+import type { Locale } from '../lib/domain';
+import { promoUntilLabel } from '../lib/promo';
+import { pathFor } from '../lib/routes';
+
+interface Props {
+  locale: Locale;
+  promotions: PromotionView[];
+}
+
+const { locale, promotions } = Astro.props;
+const t = dictionaryFor(locale);
+const bookHref = `${pathFor(locale, { kind: 'home' })}#prices`;
+---
+
+{
+  promotions.length > 0 && (
+    <section class="section promo" id="promo" data-promo-block aria-label={t.promo.label} hidden>
+      <div class="container promo__list">
+        {promotions.map((promo) => (
+          <Fragment>
+            <article class="promo-card" data-from={promo.from} data-until={promo.until} hidden>
+              {promo.photo && (
+                <Image
+                  class="promo-card__photo"
+                  src={promo.photo}
+                  alt=""
+                  widths={[480, 960]}
+                  sizes="(max-width: 720px) 100vw, 480px"
+                  format="webp"
+                  quality={72}
+                  loading="lazy"
+                />
+              )}
+              <div class="promo-card__body">
+                <p class="eyebrow">
+                  {t.promo.label} · {promoUntilLabel(promo.end, locale)}
+                </p>
+                <h2>{promo.title}</h2>
+                <p class="promo-card__text">{promo.text}</p>
+                <a class="btn btn--primary" href={bookHref} data-hides-sticky>
+                  {t.promo.book}
+                </a>
+              </div>
+            </article>
+            {/* Shown right away while the visitor's clock is inside the promotion window. */}
+            <script is:inline>
+              (function (s) {
+                var e = s.previousElementSibling, n = Date.now();
+                if (n >= +e.dataset.from && n < +e.dataset.until) {
+                  e.hidden = false;
+                  e.closest('[data-promo-block]').hidden = false;
+                }
+              })(document.currentScript);
+            </script>
+          </Fragment>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .promo__list {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .promo-card {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    overflow: hidden;
+    border-radius: var(--radius-l);
+    background: var(--c-cta-bg);
+    color: var(--c-cta-text);
+  }
+
+  .promo-card:not(:has(.promo-card__photo)) {
+    grid-template-columns: 1fr;
+  }
+
+  .promo-card__photo {
+    width: 100%;
+    height: 100%;
+    min-height: 16rem;
+    object-fit: cover;
+  }
+
+  .promo-card__body {
+    display: grid;
+    align-content: center;
+    justify-items: start;
+    gap: var(--space-3);
+    padding: var(--space-7);
+  }
+
+  .promo-card .eyebrow {
+    color: var(--c-accent);
+  }
+
+  .promo-card__text {
+    max-width: 36rem;
+    font-size: var(--text-l);
+    opacity: 0.9;
+  }
+
+  .promo-card .btn--primary {
+    margin-top: var(--space-2);
+    background: var(--c-accent);
+    color: var(--c-text);
+  }
+
+  .promo-card .btn--primary:hover {
+    background: #ffd69e;
+  }
+
+  @media (max-width: 720px) {
+    .promo-card {
+      grid-template-columns: 1fr;
+    }
+
+    .promo-card__photo {
+      min-height: 12rem;
+      max-height: 16rem;
+    }
+
+    .promo-card__body {
+      padding: var(--space-5);
+    }
+  }
+</style>

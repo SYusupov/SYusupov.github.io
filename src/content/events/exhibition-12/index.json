@@ -1,0 +1,39 @@
+{
+  "date": "2024-09-26",
+  "type": "exhibition",
+  "client": "BI Group",
+  "fountain": "several",
+  "cover": "cover.webp",
+  "gallery": [
+    "01.webp",
+    "02.webp",
+    "03.webp",
+    "04.webp"
+  ],
+  "videos": [
+    "img-8119.mp4",
+    "img-8120.mp4",
+    "img-8121.mp4",
+    "img-8122.mp4",
+    "img-8123.mp4",
+    "img-8124.mp4",
+    "img-8125.mp4",
+    "img-8138.mp4",
+    "img-8139.mp4",
+    "img-8143.mp4",
+    "img-8146.mp4",
+    "img-8147.mp4",
+    "img-8149.mp4",
+    "img-8150.mp4",
+    "img-8156.mp4",
+    "img-8157.mp4",
+    "img-8158.mp4",
+    "img-8159.mp4",
+    "img-8160.mp4",
+    "img-8161.mp4",
+    "img-8162.mp4"
+  ],
+  "description": {
+    "ru": "Фонтаны с молочным шоколадом и столы с десертами у входа в кирпичное здание с изразцовым порталом."
+  }
+}

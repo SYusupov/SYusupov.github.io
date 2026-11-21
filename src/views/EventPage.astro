@@ -1,0 +1,255 @@
+---
+import { Image } from 'astro:assets';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import EventGrid from '../components/EventGrid.astro';
+import Gallery from '../components/Gallery.astro';
+import { dictionaryFor, fill } from '../i18n';
+import Base from '../layouts/Base.astro';
+import { getEvents, getSite, type EventEntry } from '../lib/content';
+import { SHOW_FILE_NAMES, type Locale } from '../lib/domain';
+import { eventPhotoAlt, eventSentence, eventTitle } from '../lib/event-title';
+import { fileNameOf } from '../lib/file-name';
+import { eventOrderLink } from '../lib/order-link';
+import { absoluteUrl, pathFor } from '../lib/routes';
+import { breadcrumbsJsonLd } from '../lib/structured-data';
+import { videoUrls } from '../lib/video';
+
+interface Props {
+  locale: Locale;
+  event: EventEntry;
+}
+
+const { locale, event } = Astro.props;
+const t = dictionaryFor(locale);
+const data = event.data;
+const site = await getSite();
+const title = eventTitle(data, locale);
+const sentence = eventSentence(data, locale);
+const page = { kind: 'event', slug: event.id } as const;
+const home = pathFor(locale, { kind: 'home' });
+const eventsPath = pathFor(locale, { kind: 'events' });
+const orderHref = eventOrderLink({ locale, telegram: site.telegram, title, url: absoluteUrl(pathFor(locale, page)) });
+const description = data.description[locale];
+// A portrait cover in the wide frame would show only its middle band: show it whole instead.
+const portraitCover = data.cover.height > data.cover.width;
+// The cover is photo 1 in captions; the gallery follows it.
+const photos = data.gallery.map((image, index) => ({
+  image,
+  alt: eventPhotoAlt(data, locale, index + 2),
+  name: SHOW_FILE_NAMES ? fileNameOf(image.src) : undefined,
+}));
+const videos = data.videos.map((file, index) => ({
+  ...videoUrls(event.id, file),
+  label: `${title} — ${t.eventsPage.video.toLowerCase()} ${index + 1}`,
+  name: SHOW_FILE_NAMES ? fileNameOf(file) : undefined,
+}));
+const others = (await getEvents()).filter((item) => item.id !== event.id);
+const sameType = others.filter((item) => item.data.type === data.type);
+const related = (sameType.length ? sameType : others).slice(0, 3);
+const crumbs = [
+  { name: t.nav.home, path: home },
+  { name: t.events.title, path: eventsPath },
+  { name: title, path: pathFor(locale, page) },
+];
+// Phones: `sizes` is set below the real width on purpose, so 3× screens fetch ~2× images (half the bytes).
+---
+
+<Base
+  locale={locale}
+  page={page}
+  title={fill(t.eventPage.metaTitle, { title })}
+  description={description ? `${sentence} ${description}` : sentence}
+  image={data.cover}
+  jsonLd={[breadcrumbsJsonLd(crumbs)]}
+  sticky={{ label: t.eventPage.sameAsThis, href: orderHref, external: true }}
+>
+  <article class="event">
+    <div class:list={['container', 'event__top', { 'event__top--split': portraitCover }]}>
+      <header class="event__head">
+        <Breadcrumbs
+          label={t.eventPage.breadcrumbs}
+          items={[{ name: t.nav.home, href: home }, { name: t.events.title, href: eventsPath }, { name: title }]}
+        />
+        <p class="eyebrow">{t.eventTypes[data.type]}</p>
+        <h1>{title}</h1>
+        <p class="event__sentence">{sentence}</p>
+        <div class="event__actions" data-hides-sticky>
+          <a class="btn btn--primary" href={orderHref} target="_blank" rel="noopener">{t.eventPage.sameAsThis}</a>
+          <a class="btn btn--ghost" href={`${home}#prices`}>{t.cta.prices}</a>
+        </div>
+      </header>
+
+      <figure class="event__cover">
+        <Image
+          src={data.cover}
+          alt={eventPhotoAlt(data, locale, 1)}
+          widths={[640, 800, 1200, 1600]}
+          sizes={portraitCover ? '(max-width: 720px) 66vw, 432px' : '(max-width: 720px) 66vw, (max-width: 1232px) calc(100vw - 2rem), 1200px'}
+          format="webp"
+          quality={75}
+          loading="eager"
+          fetchpriority="high"
+        />
+        {SHOW_FILE_NAMES && <figcaption class="event__cover-name">{t.eventPage.coverLabel}</figcaption>}
+      </figure>
+    </div>
+
+    {
+      description && (
+        <div class="container">
+          <p class="event__description">{description}</p>
+        </div>
+      )
+    }
+
+    {
+      (photos.length > 0 || videos.length > 0) && (
+        <section class="section container" aria-labelledby="gallery-title">
+          <h2 id="gallery-title" class="event__gallery-title">
+            {t.eventPage.gallery}
+          </h2>
+          <Gallery locale={locale} photos={photos} videos={videos} />
+        </section>
+      )
+    }
+
+    <section class="cta-band">
+      <div class="container cta-band__inner">
+        <h2>{t.eventPage.ctaTitle}</h2>
+        <p>{t.eventPage.ctaText}</p>
+        <a class="btn btn--primary" href={orderHref} target="_blank" rel="noopener">{t.eventPage.sameAsThis}</a>
+      </div>
+    </section>
+
+    {
+      related.length > 0 && (
+        <section class="section" aria-labelledby="more-title">
+          <div class="container">
+            <div class="section-head">
+              <h2 id="more-title">{t.eventPage.more}</h2>
+              <a class="link-arrow" href={eventsPath}>
+                {t.events.all}
+              </a>
+            </div>
+            <EventGrid events={related} locale={locale} layout="carousel" />
+          </div>
+        </section>
+      )
+    }
+  </article>
+</Base>
+
+<style>
+  .event__head {
+    padding-top: var(--space-6);
+    padding-bottom: var(--space-6);
+  }
+
+  .event__head .eyebrow {
+    margin-top: var(--space-6);
+  }
+
+  .event__head h1 {
+    margin-top: var(--space-3);
+    max-width: 22ch;
+  }
+
+  .event__sentence {
+    max-width: 44rem;
+    margin-top: var(--space-4);
+    color: var(--c-muted);
+    font-size: var(--text-l);
+  }
+
+  .event__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-5);
+  }
+
+  .event__cover-name {
+    margin-top: var(--space-2);
+    color: var(--c-muted);
+    font-size: var(--text-xs);
+    text-align: center;
+  }
+
+  .event__cover :global(img) {
+    width: 100%;
+    max-height: 42rem;
+    object-fit: cover;
+    object-position: 50% 35%;
+    border-radius: var(--radius-l);
+  }
+
+  /* A portrait cover (most phone shots) sits beside the title on wide screens, 3:4, fountain top kept. */
+  .event__top {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .event__top--split {
+    align-items: center;
+  }
+
+  .event__top--split .event__cover {
+    padding-block: var(--space-6);
+  }
+
+  .event__top--split .event__cover :global(img) {
+    max-height: none;
+    aspect-ratio: 3 / 4;
+    object-position: 50% 30%;
+  }
+
+  @media (min-width: 62rem) {
+    .event__top--split {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 27rem);
+      gap: var(--space-7);
+    }
+  }
+
+  .event__description {
+    max-width: 48rem;
+    margin-top: var(--space-6);
+    font-size: var(--text-l);
+  }
+
+  .event__gallery-title {
+    margin-bottom: var(--space-5);
+  }
+
+  .cta-band {
+    padding-block: var(--space-8);
+    background: var(--c-cta-bg);
+    color: var(--c-cta-text);
+    text-align: center;
+  }
+
+  .cta-band__inner {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-4);
+    max-width: 44rem;
+  }
+
+  .cta-band p {
+    opacity: 0.85;
+  }
+
+  .cta-band .btn--primary {
+    background: var(--c-accent);
+    color: var(--c-text);
+  }
+
+  .cta-band .btn--primary:hover {
+    background: #ffd69e;
+  }
+
+  @media (max-width: 720px) {
+    .event__actions .btn {
+      flex: 1 1 100%;
+    }
+  }
+</style>

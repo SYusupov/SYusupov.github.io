@@ -1,0 +1,65 @@
+---
+import type { EventEntry } from '../lib/content';
+import type { Locale } from '../lib/domain';
+import EventCard from './EventCard.astro';
+
+interface Props {
+  events: EventEntry[];
+  locale: Locale;
+  /** 'carousel' scrolls sideways on phones (home, related events); 'grid' stacks. */
+  layout?: 'carousel' | 'grid';
+  /** Folder names of the companies an event was for, for the list's filter by company. */
+  clientsOf?: (event: EventEntry) => string[];
+}
+
+const { events, locale, layout = 'grid', clientsOf } = Astro.props;
+---
+
+<ul class:list={['event-grid', `event-grid--${layout}`]} role="list" data-event-list>
+  {
+    events.map((event) => (
+      <li data-event-card data-type={event.data.type} data-clients={clientsOf?.(event).join(' ') || undefined}>
+        <EventCard event={event} locale={locale} />
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .event-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-5);
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (max-width: 1000px) {
+    .event-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 720px) {
+    .event-grid--grid {
+      grid-template-columns: 1fr;
+    }
+
+    .event-grid--carousel {
+      grid-auto-flow: column;
+      grid-template-columns: none;
+      grid-auto-columns: 82%;
+      gap: var(--space-4);
+      margin-inline: -1rem;
+      padding-inline: 1rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-padding-inline: 1rem;
+      scrollbar-width: none;
+    }
+
+    .event-grid--carousel > li {
+      scroll-snap-align: start;
+    }
+  }
+</style>

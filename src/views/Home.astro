@@ -1,0 +1,99 @@
+---
+import heroImage from '../assets/hero.webp';
+import Calculator from '../components/Calculator.astro';
+import Contacts from '../components/Contacts.astro';
+import EventGrid from '../components/EventGrid.astro';
+import Faq from '../components/Faq.astro';
+import Hero from '../components/Hero.astro';
+import HowItWorks from '../components/HowItWorks.astro';
+import OccasionCards from '../components/OccasionCards.astro';
+import PromoBlock from '../components/PromoBlock.astro';
+import Reviews from '../components/Reviews.astro';
+import TrustSection from '../components/TrustSection.astro';
+import { dictionaryFor } from '../i18n';
+import Base from '../layouts/Base.astro';
+import { getEvents, getPrices, getPromotions, getReviews, getSite, getWallCompanies } from '../lib/content';
+import type { Locale } from '../lib/domain';
+import { pathFor } from '../lib/routes';
+import { businessJsonLd, faqJsonLd } from '../lib/structured-data';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = dictionaryFor(locale);
+const home = pathFor(locale, { kind: 'home' });
+const [site, prices, events, companies, reviews, promotions] = await Promise.all([
+  getSite(),
+  getPrices(),
+  getEvents(),
+  getWallCompanies(),
+  getReviews(locale),
+  getPromotions(locale),
+]);
+const latest = events.slice(0, 5);
+---
+
+<Base
+  locale={locale}
+  page={{ kind: 'home' }}
+  title={t.meta.homeTitle}
+  description={t.meta.homeDescription}
+  jsonLd={[businessJsonLd(locale, site, prices), faqJsonLd(locale, site.phone)]}
+>
+  <Hero
+    locale={locale}
+    image={heroImage}
+    imageAlt=""
+    foundedYear={site.foundedYear}
+    ordersCount={site.ordersCount}
+    bookHref={`${home}#prices`}
+    pricesHref={`${home}#prices`}
+  />
+
+  <TrustSection locale={locale} companies={companies} events={events} />
+
+  <section class="section section--alt section--defer" id="occasions" aria-labelledby="occasions-title">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-head__text">
+          <h2 id="occasions-title">{t.occasions.title}</h2>
+          <p>{t.occasions.lead}</p>
+        </div>
+      </div>
+      <OccasionCards locale={locale} events={events} fallbackImage={heroImage} />
+    </div>
+  </section>
+
+  {
+    latest.length > 0 && (
+      <section class="section section--defer" id="events" aria-labelledby="events-title">
+        <div class="container">
+          <div class="section-head">
+            <div class="section-head__text">
+              <h2 id="events-title">{t.events.title}</h2>
+              <p>{t.events.lead}</p>
+            </div>
+            <a class="link-arrow" href={pathFor(locale, { kind: 'events' })}>
+              {t.events.all}
+            </a>
+          </div>
+          <EventGrid events={latest} locale={locale} layout="carousel" />
+        </div>
+      </section>
+    )
+  }
+
+  <Calculator locale={locale} prices={prices} telegram={site.telegram} />
+
+  <PromoBlock locale={locale} promotions={promotions} />
+
+  <HowItWorks locale={locale} />
+
+  {reviews.length > 0 && <Reviews locale={locale} reviews={reviews} />}
+
+  <Faq locale={locale} phone={site.phone} />
+
+  <Contacts locale={locale} site={site} />
+</Base>

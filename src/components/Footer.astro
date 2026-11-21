@@ -1,0 +1,135 @@
+---
+import { dictionaryFor, fill } from '../i18n';
+import { getSite } from '../lib/content';
+import { OCCASION_TYPES, type Locale } from '../lib/domain';
+import { formatPhone } from '../lib/format';
+import { pathFor } from '../lib/routes';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = dictionaryFor(locale);
+const site = await getSite();
+const home = pathFor(locale, { kind: 'home' });
+const year = new Date().getFullYear();
+const sections = [
+  { href: pathFor(locale, { kind: 'events' }), label: t.nav.events },
+  { href: `${home}#prices`, label: t.nav.prices },
+  { href: `${home}#how`, label: t.nav.how },
+  { href: `${home}#faq`, label: t.nav.faq },
+  { href: `${home}#contacts`, label: t.nav.contacts },
+];
+---
+
+<footer class="site-footer">
+  <div class="container site-footer__grid">
+    <div class="site-footer__brand">
+      <img src="/brand/logo.svg" width="64" height="64" alt="" loading="lazy" />
+      <p>{t.footer.about}</p>
+    </div>
+    <nav aria-label={t.footer.occasions}>
+      <p class="site-footer__title">{t.footer.occasions}</p>
+      <ul>
+        {
+          OCCASION_TYPES.map((type) => (
+            <li>
+              <a href={pathFor(locale, { kind: 'occasion', type })}>{t.eventTypes[type]}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+    <nav aria-label={t.footer.sections}>
+      <p class="site-footer__title">{t.footer.sections}</p>
+      <ul>
+        {
+          sections.map((link) => (
+            <li>
+              <a href={link.href}>{link.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+    <div>
+      <p class="site-footer__title">{t.footer.contacts}</p>
+      <ul>
+        <li><a href={`https://t.me/${site.telegram}`} target="_blank" rel="noopener">Telegram @{site.telegram}</a></li>
+        <li><a href={`tel:${site.phone}`}>{formatPhone(site.phone)}</a></li>
+        {
+          site.instagram && (
+            <li>
+              <a href={`https://instagram.com/${site.instagram}`} target="_blank" rel="noopener">
+                Instagram @{site.instagram}
+              </a>
+            </li>
+          )
+        }
+      </ul>
+    </div>
+  </div>
+  <div class="container site-footer__bottom">
+    <p>{fill(t.footer.rights, { year })}</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--c-line);
+    background: var(--c-bg-2);
+    color: var(--c-muted);
+    font-size: var(--text-s);
+  }
+
+  .site-footer__grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+    gap: var(--space-6);
+    padding-block: var(--space-7) var(--space-6);
+  }
+
+  .site-footer__brand {
+    display: grid;
+    align-content: start;
+    gap: var(--space-3);
+  }
+
+  .site-footer__title {
+    margin-bottom: var(--space-3);
+    color: var(--c-text);
+    font-weight: 700;
+  }
+
+  ul {
+    display: grid;
+    gap: var(--space-2);
+    padding: 0;
+    list-style: none;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: var(--c-text);
+    text-decoration: underline;
+  }
+
+  .site-footer__bottom {
+    padding-block: var(--space-4) var(--space-6);
+    border-top: 1px solid var(--c-line);
+  }
+
+  @media (max-width: 860px) {
+    .site-footer__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .site-footer__brand {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

@@ -1,0 +1,42 @@
+{
+  "date": "2022-12-31",
+  "type": "other",
+  "title": {
+    "ru": "Фуршет в зале"
+  },
+  "fountain": "large",
+  "cover": "cover.webp",
+  "gallery": [
+    "camphoto-126398554.webp",
+    "img-4585.webp",
+    "img-4624.webp",
+    "img-4625.webp",
+    "img-4626.webp",
+    "img-4628.webp",
+    "img-4629.webp",
+    "img-4633.webp",
+    "img-4634.webp",
+    "img-4635.webp",
+    "img-4649.webp"
+  ],
+  "videos": [
+    "img-4586.mp4",
+    "img-4589.mp4",
+    "img-4592.mp4",
+    "img-4594.mp4",
+    "img-4612.mp4",
+    "img-4614.mp4",
+    "img-4640.mp4",
+    "img-4643.mp4",
+    "img-4644.mp4",
+    "img-4647.mp4",
+    "img-4651.mp4",
+    "img-4652.mp4",
+    "img-4653.mp4",
+    "img-4654.mp4",
+    "img-4655.mp4"
+  ],
+  "description": {
+    "ru": "Фуршет в атриуме с люстрами из зелёного хрусталя: большой фонтан с молочным шоколадом, круглый стол с фруктами и десертами."
+  }
+}

@@ -1,0 +1,213 @@
+---
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import EventGrid from '../components/EventGrid.astro';
+import { dictionaryFor } from '../i18n';
+import Base from '../layouts/Base.astro';
+import { companiesOfEvent, getEvents, getWallCompanies, type EventEntry } from '../lib/content';
+import { EVENT_TYPES, type Locale } from '../lib/domain';
+import { pathFor } from '../lib/routes';
+import { breadcrumbsJsonLd } from '../lib/structured-data';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = dictionaryFor(locale);
+const [events, companies] = await Promise.all([getEvents(), getWallCompanies()]);
+// A logo on the home page leads here as ?client=<company folder> when the company has several events.
+const clientsOf = (event: EventEntry) => companiesOf(event).map((company) => company.id);
+const companiesOf = (event: EventEntry) => companiesOfEvent(event, companies);
+const clientNames = Object.fromEntries(companies.map((company) => [company.id, company.data.name]));
+const types = EVENT_TYPES.filter((type) => events.some((event) => event.data.type === type));
+const home = pathFor(locale, { kind: 'home' });
+const crumbs = [
+  { name: t.nav.home, path: home },
+  { name: t.events.title, path: pathFor(locale, { kind: 'events' }) },
+];
+---
+
+<Base
+  locale={locale}
+  page={{ kind: 'events' }}
+  title={t.eventsPage.metaTitle}
+  description={t.eventsPage.metaDescription}
+  image={events[0]?.data.cover}
+  jsonLd={[breadcrumbsJsonLd(crumbs)]}
+>
+  <section class="section events-page">
+    <div class="container">
+      <Breadcrumbs
+        label={t.eventPage.breadcrumbs}
+        items={[{ name: t.nav.home, href: home }, { name: t.events.title }]}
+      />
+      <div class="section-head">
+        <div class="section-head__text">
+          <h1>{t.events.title}</h1>
+          <p>{t.events.lead}</p>
+        </div>
+      </div>
+
+      <div
+        class="filters"
+        data-filters
+        data-client-template={t.eventsPage.clientFilter}
+        data-client-names={JSON.stringify(clientNames)}
+        hidden
+      >
+        <p class="filters__client" data-client-filter hidden>
+          <span data-client-name></span>
+          <a href={pathFor(locale, { kind: 'events' })}>{t.events.all}</a>
+        </p>
+        <div class="filters__group" role="group" aria-label={t.eventsPage.typeFilter}>
+          <button type="button" data-filter="type" data-value="" aria-pressed="true">{t.eventsPage.allTypes}</button>
+          {
+            types.map((type) => (
+              <button type="button" data-filter="type" data-value={type} aria-pressed="false">
+                {t.eventTypes[type]}
+              </button>
+            ))
+          }
+        </div>
+      </div>
+
+      <EventGrid events={events} locale={locale} layout="grid" clientsOf={clientsOf} />
+      <p class="filters__empty" data-filters-empty hidden>{t.eventsPage.empty}</p>
+    </div>
+  </section>
+</Base>
+
+<script>
+  import { fill } from '../lib/template';
+
+  // The type filter works in the browser and lives in the address (?type=wedding), so a filtered
+  // list can be shared. Without JavaScript the filter stays hidden and every event is listed.
+  // There is no filter by year on purpose: the owner does not want event dates shown.
+  // ?client=<company folder> (from a logo on the home page) narrows the list to that company's events.
+  const root = document.querySelector<HTMLElement>('[data-filters]');
+  if (root) {
+    const cards = [...document.querySelectorAll<HTMLElement>('[data-event-list] [data-event-card]')];
+    const empty = document.querySelector<HTMLElement>('[data-filters-empty]');
+    const buttons = [...root.querySelectorAll<HTMLButtonElement>('button[data-filter]')];
+    const clientLine = root.querySelector<HTMLElement>('[data-client-filter]');
+    const clientName = root.querySelector<HTMLElement>('[data-client-name]');
+    const names = JSON.parse(root.dataset.clientNames ?? '{}') as Record<string, string>;
+    const clientsOf = (card: HTMLElement) => (card.dataset.clients ?? '').split(' ').filter(Boolean);
+    const known = (key: string, value: string) =>
+      key === 'client'
+        ? cards.some((card) => clientsOf(card).includes(value))
+        : buttons.some((button) => button.dataset.filter === key && button.dataset.value === value);
+    const params = new URLSearchParams(location.search);
+    const state: Record<string, string> = {};
+    for (const key of ['type', 'client']) {
+      const value = params.get(key) ?? '';
+      state[key] = known(key, value) ? value : '';
+    }
+
+    const apply = () => {
+      let shown = 0;
+      for (const card of cards) {
+        const match =
+          (!state.type || card.dataset.type === state.type) && (!state.client || clientsOf(card).includes(state.client));
+        card.hidden = !match;
+        if (match) shown += 1;
+      }
+      if (empty) empty.hidden = shown > 0;
+      if (clientLine && clientName) {
+        clientLine.hidden = !state.client;
+        clientName.textContent = state.client
+          ? fill(root.dataset.clientTemplate ?? '', { client: names[state.client] ?? state.client })
+          : '';
+      }
+      for (const button of buttons) {
+        button.setAttribute('aria-pressed', String(state[button.dataset.filter ?? ''] === button.dataset.value));
+      }
+    };
+
+    root.addEventListener('click', (event) => {
+      const button = (event.target as HTMLElement).closest<HTMLButtonElement>('button[data-filter]');
+      if (!button?.dataset.filter) return;
+      state[button.dataset.filter] = button.dataset.value ?? '';
+      const url = new URL(location.href);
+      for (const key of ['type', 'client']) {
+        if (state[key]) url.searchParams.set(key, state[key]);
+        else url.searchParams.delete(key);
+      }
+      history.replaceState(null, '', url);
+      apply();
+    });
+
+    root.hidden = false;
+    apply();
+  }
+</script>
+
+<style>
+  .events-page {
+    padding-top: var(--space-6);
+  }
+
+  .events-page .section-head {
+    margin-top: var(--space-5);
+  }
+
+  .filters {
+    display: grid;
+    gap: var(--space-3);
+    margin-bottom: var(--space-6);
+  }
+
+  .filters__client {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-2) var(--space-4);
+  }
+
+  .filters__client span {
+    font-family: var(--font-display), Georgia, serif;
+    font-size: var(--text-h3);
+    font-weight: 600;
+  }
+
+  .filters__client a {
+    color: var(--c-accent-text);
+    font-weight: 600;
+  }
+
+  .filters__group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .filters button {
+    min-height: 2.5rem;
+    padding: 0.45rem 1rem;
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-pill);
+    background: var(--c-surface);
+    color: var(--c-text);
+    font-size: var(--text-s);
+    font-weight: 500;
+    cursor: pointer;
+    transition:
+      background-color 0.2s var(--ease),
+      border-color 0.2s var(--ease);
+  }
+
+  .filters button:hover {
+    border-color: var(--c-ghost-line);
+  }
+
+  .filters button[aria-pressed='true'] {
+    border-color: var(--c-cta-bg);
+    background: var(--c-cta-bg);
+    color: var(--c-cta-text);
+  }
+
+  .filters__empty {
+    padding: var(--space-6) 0;
+    color: var(--c-muted);
+  }
+</style>

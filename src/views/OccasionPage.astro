@@ -1,0 +1,118 @@
+---
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Calculator from '../components/Calculator.astro';
+import EventGrid from '../components/EventGrid.astro';
+import { dictionaryFor, fill } from '../i18n';
+import Base from '../layouts/Base.astro';
+import { getEventsOfType, getPrices, getSite } from '../lib/content';
+import type { Locale, OccasionType } from '../lib/domain';
+import { pathFor } from '../lib/routes';
+import { breadcrumbsJsonLd } from '../lib/structured-data';
+
+interface Props {
+  locale: Locale;
+  type: OccasionType;
+}
+
+const { locale, type } = Astro.props;
+const t = dictionaryFor(locale);
+const occasion = t.occasions.pages[type];
+const [events, site, prices] = await Promise.all([getEventsOfType(type), getSite(), getPrices()]);
+const home = pathFor(locale, { kind: 'home' });
+const crumbs = [
+  { name: t.nav.home, path: home },
+  { name: occasion.title, path: pathFor(locale, { kind: 'occasion', type }) },
+];
+---
+
+<Base
+  locale={locale}
+  page={{ kind: 'occasion', type }}
+  title={fill(t.occasions.metaTitle, { title: occasion.title })}
+  description={occasion.lead}
+  image={events[0]?.data.cover}
+  jsonLd={[breadcrumbsJsonLd(crumbs)]}
+>
+  <section class="section occasion">
+    <div class="container">
+      <Breadcrumbs label={t.eventPage.breadcrumbs} items={[{ name: t.nav.home, href: home }, { name: occasion.title }]} />
+      <p class="eyebrow">{t.occasions.title}</p>
+      <h1>{occasion.title}</h1>
+      <p class="occasion__lead">{occasion.lead}</p>
+      <div class="occasion__body">
+        {occasion.body.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+      <div class="occasion__actions" data-hides-sticky>
+        <a class="btn btn--primary" href="#prices">{t.cta.bookDate}</a>
+        <a class="btn btn--ghost" href={pathFor(locale, { kind: 'events' })}>{t.events.all}</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt" aria-labelledby="occasion-events">
+    <div class="container">
+      <h2 id="occasion-events" class="occasion__events-title">{t.occasions.eventsTitle}</h2>
+      {
+        events.length > 0 ? (
+          <EventGrid events={events} locale={locale} layout="grid" />
+        ) : (
+          <p class="occasion__empty">
+            <a href={pathFor(locale, { kind: 'events' })}>{t.occasions.noEvents}</a>
+          </p>
+        )
+      }
+    </div>
+  </section>
+
+  <Calculator locale={locale} prices={prices} telegram={site.telegram} />
+</Base>
+
+<style>
+  .occasion {
+    padding-top: var(--space-6);
+  }
+
+  .occasion .eyebrow {
+    margin-top: var(--space-6);
+  }
+
+  .occasion h1 {
+    margin-top: var(--space-3);
+    max-width: 20ch;
+  }
+
+  .occasion__lead {
+    max-width: 44rem;
+    margin-top: var(--space-4);
+    color: var(--c-muted);
+    font-size: var(--text-l);
+  }
+
+  .occasion__body {
+    display: grid;
+    gap: var(--space-3);
+    max-width: 44rem;
+    margin-top: var(--space-4);
+  }
+
+  .occasion__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-5);
+  }
+
+  .occasion__events-title {
+    margin-bottom: var(--space-5);
+  }
+
+  .occasion__empty {
+    color: var(--c-muted);
+  }
+
+  @media (max-width: 720px) {
+    .occasion__actions .btn {
+      flex: 1 1 100%;
+    }
+  }
+</style>
