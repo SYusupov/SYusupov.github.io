@@ -111,6 +111,7 @@ export const uz: Dictionary = {
     clientFilter: '{client} uchun tadbirlar',
     empty: "Bunday tadbirlar hozircha yo'q — boshqalarini ko'ring.",
     video: 'Video',
+    hasVideo: 'Video bor',
   },
   eventPage: {
     metaTitle: '{title} — shokoladli favvora | ChocoParty',

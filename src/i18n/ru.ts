@@ -109,6 +109,8 @@ export const ru = {
     clientFilter: 'Мероприятия для {client}',
     empty: 'Таких мероприятий пока нет — посмотрите другие.',
     video: 'Видео',
+    // Badge on an event card: the event has clips, while the card itself shows a photo.
+    hasVideo: 'Есть видео',
   },
   eventPage: {
     metaTitle: '{title} — шоколадный фонтан | ChocoParty',

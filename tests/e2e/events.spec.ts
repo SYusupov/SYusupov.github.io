@@ -136,3 +136,11 @@ test.describe('event cards do not show dates', () => {
     });
   }
 });
+
+test.describe('a card of an event with clips', () => {
+  test('says the event has video, without a play sign: the card itself shows a photo', async ({ page }) => {
+    await page.goto('/events/');
+    const card = page.locator('[data-event-card]').filter({ has: page.locator(`a[href="${NEWEST}"]`) });
+    await expect(card.getByText('Есть видео', { exact: true })).toBeVisible();
+  });
+});
