@@ -1,43 +1,20 @@
 {
   "date": "2024-12-31",
   "type": "new-year",
+  "client": "Pyramids Resorts",
   "fountain": "several",
   "cover": "cover.webp",
   "gallery": [
-    "img-2584.webp",
-    "img-2585.webp",
-    "img-2586.webp",
     "img-2593.webp",
-    "img-2594.webp",
-    "img-2595.webp",
-    "img-2596.webp",
-    "img-2607.webp"
+    "img-2584.webp"
   ],
   "videos": [
-    "video-2.mp4",
     "img-2582.mp4",
-    "img-2583.mp4",
-    "img-2587.mp4",
+    "video-2.mp4",
     "img-2588.mp4",
-    "img-2589.mp4",
-    "img-2590.mp4",
-    "img-2591.mp4",
-    "img-2597.mp4",
-    "img-2598.mp4",
-    "img-2599.mp4",
-    "img-2600.mp4",
     "img-2601.mp4",
-    "img-2602.mp4",
-    "img-2603.mp4",
-    "img-2604.mp4",
-    "img-2605.mp4",
-    "img-2606.mp4",
-    "img-2608.mp4",
-    "img-2609.mp4",
-    "img-2610.mp4",
     "img-2611.mp4",
-    "img-2612.mp4",
-    "img-2613.mp4"
+    "img-2583.mp4"
   ],
   "description": {
     "ru": "Новогодний праздник в зале с люстрами и стеклянным потолком: малые фонтаны с молочным и белым шоколадом, клубника на шпажках."
