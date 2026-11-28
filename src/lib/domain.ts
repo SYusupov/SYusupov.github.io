@@ -52,17 +52,15 @@ export const FOUNTAINS = ['small', 'medium', 'large', 'several'] as const;
 export type Fountain = (typeof FOUNTAINS)[number];
 
 /**
- * How many photos and clips an event page may hold. It was 15 and 2 while the pages showed only the
- * best; 150 and 60 since the whole archive went onto the site for the manager to choose the best from
- * (the biggest event has 112 photos and 44 clips). Lower them again once the choice is made.
+ * How many photos and clips an event page may hold: the owner wants at most 25 items on a page
+ * (2026-11-27). It was 150 and 60 while the whole archive was on the site for the choice of the best.
  */
-export const GALLERY_MAX = 150;
-export const VIDEOS_MAX = 60;
+export const GALLERY_MAX = 25;
+export const VIDEOS_MAX = 25;
 /**
- * File names under every photo and clip of an event page (the cover is marked «обложка»), so the
- * manager can name the ones to keep while choosing the best from the whole archive. Turn off once the
- * choice is made, together with lowering the limits above.
+ * File names under every photo and clip of an event page (the cover marked «обложка»). They served the
+ * choice of the best photos; the choice is made, so they are off.
  */
-export const SHOW_FILE_NAMES = true;
+export const SHOW_FILE_NAMES = false;
 /** Largest video file the admin may upload; the build compresses it for the site. */
 export const VIDEO_MAX_BYTES = 20 * 1024 * 1024;
