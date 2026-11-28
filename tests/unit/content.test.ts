@@ -3,7 +3,6 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { checkContentRoot } from '../../src/lib/content-check';
-import { GALLERY_MAX, VIDEOS_MAX } from '../../src/lib/domain';
 
 // Seam 3: content with a mistake stops the publication with a message the admin can act on.
 // Only what the admin form itself prevents is an error; the rest is fixed with a warning.
@@ -58,13 +57,13 @@ describe('content check before the build', () => {
     expect(checkContentRoot(invalid(fixture)).errors).toContain(message);
   });
 
-  it('an event can hold everything its folder of photos has: the biggest has 112 photos and 44 clips', () => {
-    expect(checkContentRoot(contentWithEvent(112, 44)).errors).toEqual([]);
+  it('an event can hold 25 photos and 25 clips, the most the owner wants on a page', () => {
+    expect(checkContentRoot(contentWithEvent(25, 25)).errors).toEqual([]);
   });
 
   it.each([
-    [GALLERY_MAX + 1, 1, '«Фото» — не больше'],
-    [1, VIDEOS_MAX + 1, '«Видео» — не больше'],
+    [26, 1, '«Фото» — не больше'],
+    [1, 26, '«Видео» — не больше'],
   ])('%i photos and %i clips: one over the limit stops the publication', (photos, videos, text) => {
     const { errors } = checkContentRoot(contentWithEvent(photos, videos));
     expect(errors.some((error) => error.includes(text))).toBe(true);

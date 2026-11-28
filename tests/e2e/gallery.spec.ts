@@ -1,27 +1,30 @@
 import { expect, test } from '@playwright/test';
 
-// Every photo and clip of an event carries its file name, so the manager can say which ones to keep
-// (switched by SHOW_FILE_NAMES). The fixture event corporate-1 has photos 01–03 and the clip «clip».
+// The manager's choice of photos is made, so event pages no longer carry file names under the photos
+// and clips (switched by SHOW_FILE_NAMES). The fixture event corporate-1 has photos 01–03 and the clip «clip».
 
-test.describe('file names under the photos and clips of an event', () => {
-  test('the cover is marked as the cover', async ({ page }) => {
+test.describe('an event page after the choice of photos', () => {
+  test('the cover carries no «обложка» label', async ({ page }) => {
     await page.goto('/events/corporate-1/');
-    await expect(page.locator('article.event').getByText('обложка', { exact: true })).toBeVisible();
+    await expect(page.locator('article.event img').first()).toBeVisible();
+    await expect(page.locator('article.event').getByText('обложка', { exact: true })).toHaveCount(0);
   });
 
-  test('the clip and every photo show their file names, in page order', async ({ page }) => {
+  test('photos and the clip carry no file names', async ({ page }) => {
     await page.goto('/events/corporate-1/');
-    await expect(page.locator('[data-gallery] figcaption')).toHaveText(['clip', '01', '02', '03']);
+    await expect(page.locator('[data-gallery] video, [data-gallery] img').first()).toBeVisible();
+    await expect(page.locator('[data-gallery] figcaption')).toHaveCount(0);
   });
 
-  test('a photo opened full size shows its file name next to the counter', async ({ page }) => {
+  test('a photo opened full size shows only the counter', async ({ page }) => {
     await page.goto('/events/corporate-1/');
     await page.getByRole('link', { name: 'Открыть фото 2 крупно' }).click();
-    await expect(page.locator('[data-lightbox-counter]')).toHaveText('2 из 3 · 02');
+    await expect(page.locator('[data-lightbox-counter]')).toHaveText('2 из 3');
   });
 
-  test('in English the cover is marked «cover»', async ({ page }) => {
+  test('in English the cover carries no «cover» label', async ({ page }) => {
     await page.goto('/en/events/corporate-1/');
-    await expect(page.locator('article.event').getByText('cover', { exact: true })).toBeVisible();
+    await expect(page.locator('article.event img').first()).toBeVisible();
+    await expect(page.locator('article.event').getByText('cover', { exact: true })).toHaveCount(0);
   });
 });
