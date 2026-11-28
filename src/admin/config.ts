@@ -148,7 +148,7 @@ function eventsForm(): CmsForm {
         multiple: true,
         max: GALLERY_MAX,
         choose_url: false,
-        hint: '6–15 лучших фото.',
+        hint: 'Лучшие кадры: вместе с роликами не больше 25. Как выбирать — в памятке администратора.',
       },
       {
         name: 'videos',
