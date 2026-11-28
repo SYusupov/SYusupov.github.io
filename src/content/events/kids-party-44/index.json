@@ -4,15 +4,14 @@
   "fountain": "small",
   "cover": "cover.webp",
   "gallery": [
-    "01.webp",
+    "03.webp",
     "02.webp",
-    "03.webp"
+    "01.webp"
   ],
   "videos": [
     "img-0373.mp4",
     "img-0374.mp4",
     "img-0375.mp4",
-    "img-0399.mp4",
     "img-0400.mp4"
   ],
   "description": {
